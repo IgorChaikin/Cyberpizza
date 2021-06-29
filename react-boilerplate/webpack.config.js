@@ -39,6 +39,25 @@ module.exports = function(_env, argv) {
                     ]
                 },
                 {
+                    test: /\.s[ac]ss$/,
+                    use: [
+                        isProduction ? MiniCssExtractPlugin.loader : "style-loader",
+                        {
+                            loader: "css-loader",
+                            options: {
+                                importLoaders: 2
+                            }
+                        },
+                        "resolve-url-loader",
+                        {
+                            loader: "sass-loader",
+                            options: {
+                                sourceMap: true
+                            }
+                        }
+                    ]
+                },
+                {
                     test: /\.(png|jpg|gif)$/i,
                     use: {
                     loader: "url-loader",
@@ -76,7 +95,8 @@ module.exports = function(_env, argv) {
                 )
             }),
             new HtmlWebpackPlugin({
-                template: path.resolve(__dirname, "public/index.html"),
+                //template: path.resolve(__dirname, "public/index.html"),
+                template: "./src/index.html",
                 inject: true
             })
         ].filter(Boolean),
@@ -126,7 +146,24 @@ module.exports = function(_env, argv) {
             compress: true,
             historyApiFallback: true,
             open: true,
-            overlay: true
+            overlay: true,
+
+            //contentBase: this.output.path,
+            // We want to re-use this path
+
+            //noInfo: false,
+
+            //debug: false,
+            // Makes no difference
+
+            //port: 5566,
+            //https: true,
+            //colors: true,
+
+            //hot: true,
+            // Pass this from the command line as '--hot', which sets up the HotModuleReplacementPlugin automatically
+
+            //inline: true
         }
     };
 };
