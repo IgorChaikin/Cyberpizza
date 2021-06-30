@@ -1,6 +1,5 @@
 import React from 'react'
 import withStyles from 'isomorphic-style-loader/withStyles'
-
 import s from '../styles/main.css'
 
 export class Main extends React.Component {
