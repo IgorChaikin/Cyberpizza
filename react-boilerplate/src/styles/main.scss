@@ -1,0 +1,21 @@
+@import "vars";
+
+
+.main{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+
+  .list {
+    width: 80%;
+    height: 100%;
+  }
+
+  .side-nav {
+    background-color: lightyellow;
+    color: black;
+    width: 20%;
+    height: 100%;
+  }
+}
