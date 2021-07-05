@@ -6002,7 +6002,7 @@ function attemptToDispatchEvent(domEventName, eventSystemFlags, targetContainer,
 
         targetInst = null;
       } else if (nearestMounted !== targetInst) {
-        // If we get an event (ex: img onload) before committing that
+        // If we get an event (ex: media onload) before committing that
         // component's mount, ignore it for now (that is, treat it as if it was an
         // event on a non-React tree). We might also consider queueing events and
         // dispatching them after the mount.

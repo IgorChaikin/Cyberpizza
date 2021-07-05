@@ -1,0 +1,83 @@
+@import "vars";
+
+.app{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+
+  .side-nav {
+    background-color: $main-color;
+    color: $black-color;
+    width: 25%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-left: 2em;
+
+
+    h1{
+      color: $black-color;
+      font: $bold-header-text;
+    }
+
+    p{
+      color: $grey-color;
+      font: $price-text;
+      text-transform: uppercase;
+    }
+
+    ul{
+      padding-left: 0;
+      li{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-left: 2em;
+
+
+        position: relative;
+
+        button {
+          background-color: transparent;
+          outline: none;
+          border: none;
+
+          text-transform: uppercase;
+          z-index: 1;
+          h2{
+            font: $nav-item-text;
+            color: $black-color;
+          }
+        }
+
+        .side-nav__marker{
+          width: 4em;
+          height: 4em;
+          border-radius: 2em;
+
+          background-color: $light-color;
+
+          position: absolute;
+          left: 0;
+        }
+      }
+    }
+  }
+
+  .main {
+    height: 100%;
+    width: 75%;
+    overflow-y: auto;
+    position: relative;
+
+    header {
+      min-height: 10%;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin: 1em;
+    }
+  }
+}

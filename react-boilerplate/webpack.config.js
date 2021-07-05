@@ -11,10 +11,7 @@ module.exports = function(_env, argv) {
 
     return {
         devtool: isDevelopment && "cheap-module-source-map",
-        entry: [
-            "./src/index.js",
-            "./src/index.css"
-        ],
+        entry: "./src/index.js",
         output: {
             path: path.resolve(__dirname, "dist"),
             filename: "assets/js/[name].[contenthash:8].js",
@@ -37,14 +34,16 @@ module.exports = function(_env, argv) {
                 {
                     test: /\.css$/,
                     use: [
-                        'isomorphic-style-loader',
+                        { loader: 'style-loader' },
+                        { loader:'css-loader'},
+                        /*{ loader:'isomorphic-style-loader'},
                         {
                             loader: 'css-loader',
                             options: {
                                 importLoaders: 1
                             }
                         },
-                        'postcss-loader'
+                        { loader:'postcss-loader'}*/
                     ]
                 },
                 {

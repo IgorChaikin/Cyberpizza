@@ -1,0 +1,53 @@
+@import "vars";
+
+
+.orders{
+  background-color: transparent;
+  color: $black-color;
+  outline: none;
+  border: none;
+  padding-left: 1em;
+  text-transform: uppercase;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+
+  .circle{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    width: 4em;
+    height: 4em;
+    border-radius: 2em;
+    position: absolute;
+    left: 0;
+    z-index: -1;
+
+    background-color: $main-color;
+  }
+  p {
+    margin-left: 0.5em;
+
+    .count {
+      background-color: $accent-color;
+      color: $white-color;
+
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+
+      margin-left: 1em;
+      width: 2em;
+      height: 2em;
+      border-radius: 1em;
+    }
+  }
+}

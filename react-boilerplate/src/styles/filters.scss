@@ -1,0 +1,45 @@
+@import "vars";
+
+
+.filters{
+  width: 35%;
+
+  .filters__header{
+    margin-top: 0;
+    color: $grey-color;
+    text-transform: uppercase;
+    font: $price-text;;
+  }
+
+  .tag_active{
+    background-color: $grey-color;
+    color: $white-color;
+    outline: none;
+    border: none;
+    border-radius: 1em;
+    margin-right: 1em;
+    text-transform: uppercase;
+  }
+
+  .tag{
+    background-color: transparent;
+    color: $black-color;
+    outline: none;
+    border: none;
+    margin-right: 1em;
+    text-transform: uppercase;
+  }
+
+  .all{
+    background-color: transparent;
+    color: $grey-color;
+    outline: none;
+    border: none;
+    text-transform: uppercase;
+
+    img{
+      height: 1em;
+      margin-right: 1em;
+    }
+  }
+}
