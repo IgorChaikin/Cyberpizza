@@ -6,7 +6,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  margin: 0 5em 2em 0;
+  margin: 0 2.5em 1em 2.5em;
 
   div {
     position: relative;
@@ -19,7 +19,7 @@
     img {
       width: 100%;
       border-radius: 8em;
-      box-shadow: 0 1em 2em $grey-color;
+      box-shadow: 0 1em 0.8em $grey-color;
     }
 
     button {
@@ -36,7 +36,7 @@
       background-color: $accent-color;
       color: $white-color;
 
-      box-shadow: 0 1em 2em $grey-color;
+      box-shadow: 0 1em 0.8em $grey-color;
     }
   }
 
