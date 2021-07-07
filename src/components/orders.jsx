@@ -11,11 +11,12 @@ export class Orders extends React.Component {
     }
 
     render() {
+
         return (
             <button className="orders">
                 <div className="circle">
                 </div>
-                <img src="./src/static/svg/dish.svg" alt="dish.svg"/>
+                <img src={`${this.props.staticPath}dish.svg`} alt="dish.svg"/>
                 <p>
                     order status
                     <div className="count">
