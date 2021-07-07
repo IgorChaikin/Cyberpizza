@@ -7,7 +7,7 @@ import {Filters} from "./filters";
 import {Orders} from "./orders";
 import {Service} from "../service";
 
-const domain ='http://cyber-pizza.herokuapp.com/';
+const domain ='https://cyber-pizza.herokuapp.com/';
 const service = new Service(domain);
 
 //withStyles(s)
