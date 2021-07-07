@@ -5,11 +5,16 @@ import {List} from './list'
 import '../styles/App.scss'
 import {Filters} from "./filters";
 import {Orders} from "./orders";
+import {Service} from "../service";
+
+const domain ='http://cyber-pizza.herokuapp.com/';
+const service = new Service(domain);
 
 //withStyles(s)
 export class App extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             orders: {
                 ordered:[],
@@ -46,105 +51,22 @@ export class App extends React.Component {
                 },
             ],
             isAllFilters:false,
-            categories: [
-                {
-                    id: '0',
-                    title: 'Pizza',
-                    items: [
-                        {
-                            id: '0-0',
-                            imgPath: './src/static/media/ham_and_cheese.png',
-                            price: 26.75,
-                            title: 'Ham and cheese',
-                            description: 'Ham and cheese ham and cheese ham and cheese ham and cheese ham and cheese',
-                            tags: []
-                        },
-                        {
-                            id: '0-1',
-                            imgPath: './src/static/media/margarita.png',
-                            price: 20.50,
-                            title: 'Margarita',
-                            description: 'Margarita margarita margarita margarita margarita margarita margarita',
-                            tags: []
-                        },
-                        {
-                            id: '0-2',
-                            imgPath: './src/static/media/pepperoni.png',
-                            price: 20.50,
-                            title: 'Pepperoni',
-                            description: 'Pepperoni pepperoni pepperoni pepperoni pepperoni',
-                            tags: []
-                        },
-                        {
-                            id: '0-3',
-                            imgPath: './src/static/media/vegetable.png',
-                            price: 17.30,
-                            title: 'Vegetable',
-                            description: 'Vegetable vegetable vegetable vegetable vegetable',
-                            tags: ['0', '1']
-                        }
-                    ]
-                },
-
-                {
-                    id: '1',
-                    title: 'Pasta',
-                    items: []
-                },
-
-                {
-                    id: '2',
-                    title: 'Sandwiches',
-                    items: []
-                },
-
-                {
-                    id: '3',
-                    title: 'Soup',
-                    items: []
-                },
-
-                {
-                    id: '4',
-                    title: 'Salads',
-                    items: []
-                },
-
-                {
-                    id: '5',
-                    title: 'Sides',
-                    items: []
-                },
-
-                {
-                    id: '6',
-                    title: 'Deserts',
-                    items: []
-                },
-
-                {
-                    id: '7',
-                    title: 'Drinks',
-                    items: []
-                },
-            ]
+            categories: []
         };
     }
 
-    changeCategory(id) {
-        console.log('it work');
-        this.setState({
-            selectedCategory: id
+    componentDidMount() {
+        service.getCategories().then((data)=>{
+            this.setState({
+                categories: data
+            });
         });
     }
 
-    getOrdersCount() {
-        const orders  = this.state.orders;
-
-        return orders.ordered.length +
-            orders.baking.length +
-            orders.finishing.length +
-            orders.served.length;
+    changeCategory(id) {
+        this.setState({
+            selectedCategory: id
+        });
     }
 
     addOrder(item) {
@@ -175,6 +97,7 @@ export class App extends React.Component {
     }
 
     categoriesList(id) {
+        console.log(this.state.categories);
         const categories = this.state.categories;
         return categories.map((elem) => {
             const title = id === elem.id ?
@@ -197,11 +120,13 @@ export class App extends React.Component {
     }
 
     render() {
+        console.log('render');
+
         const categoryId = this.state.selectedCategory;
         const categories = this.categoriesList(categoryId);
 
         const selectedCategory = this.state.categories.find((elem)=>elem.id === categoryId);
-        const activeFilters = this.state.filters.filter(elem=>elem.isActive).map((elem)=>elem.id);
+        const activeFilters = this.state.filters.filter(elem=>elem.isActive)?.map((elem)=>elem.id);
 
         const items = selectedCategory?.items.slice()
         const filteredItems = activeFilters.length > 0? items?.filter((elem)=> {
@@ -227,15 +152,18 @@ export class App extends React.Component {
                             onSwitch = {(id) => this.switchFilter(id)}
                             onSwitchAll = {()=>this.switchDisplayAll()}
                             all = {this.state.isAllFilters}
+                            staticPath = {domain}
                         />
                         <Orders
                             orders = {this.state.orders}
+                            staticPath = {domain}
                         />
                     </header>
                     <List
                         items = {filteredItems }
                         title = {selectedCategory?.title}
                         onAdd = {(item) => this.addOrder(item)}
+                        staticPath = {domain}
                     />
                 </div>
             </div>

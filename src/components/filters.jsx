@@ -24,7 +24,7 @@ export class Filters extends React.Component {
                 <p>
                     {tags}
                     <button className="all" onClick={()=>this.props.onSwitchAll()}>
-                        <img src="./src/static/svg/settings.svg" alt="dish.svg"/>
+                        <img src={`${this.props.staticPath}settings.svg`} alt="dish.svg"/>
                         {`${this.props.all?'hide' : 'all'} filters`}
                     </button>
                 </p>
