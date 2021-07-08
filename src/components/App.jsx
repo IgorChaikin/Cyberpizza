@@ -5,11 +5,7 @@ import {List} from './list'
 import '../styles/App.scss'
 import {Filters} from "./filters";
 import {Orders} from "./orders";
-import {Service} from "../service";
-
-//const domain ='https://cyber-pizza.herokuapp.com/';
-const domain ='http://localhost:8080/';
-const service = new Service(domain);
+import {dataSource} from "../service";
 
 //withStyles(s)
 export class App extends React.Component {
@@ -52,17 +48,18 @@ export class App extends React.Component {
                 },
             ],
             isAllFilters:false,
-            categories: []
+            categories: props.data
         };
     }
 
-    componentDidMount() {
-        service.getCategories().then((data)=>{
+    componentDidUpdate(prevProps) {
+        if(prevProps !== this.props) {
             this.setState({
-                categories: data
-            });
-        });
+                categories: this.props.data
+            })
+        }
     }
+
 
     changeCategory(id) {
         this.setState({
@@ -150,18 +147,15 @@ export class App extends React.Component {
                             onSwitch = {(id) => this.switchFilter(id)}
                             onSwitchAll = {()=>this.switchDisplayAll()}
                             all = {this.state.isAllFilters}
-                            staticPath = {domain}
                         />
                         <Orders
                             orders = {this.state.orders}
-                            staticPath = {domain}
                         />
                     </header>
                     <List
                         items = {filteredItems }
                         title = {selectedCategory?.title}
                         onAdd = {(item) => this.addOrder(item)}
-                        staticPath = {domain}
                     />
                 </div>
             </div>
