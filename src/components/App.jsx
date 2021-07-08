@@ -7,7 +7,8 @@ import {Filters} from "./filters";
 import {Orders} from "./orders";
 import {Service} from "../service";
 
-const domain ='https://cyber-pizza.herokuapp.com/';
+//const domain ='https://cyber-pizza.herokuapp.com/';
+const domain ='http://localhost:8080/';
 const service = new Service(domain);
 
 //withStyles(s)
@@ -97,7 +98,6 @@ export class App extends React.Component {
     }
 
     categoriesList(id) {
-        console.log(this.state.categories);
         const categories = this.state.categories;
         return categories.map((elem) => {
             const title = id === elem.id ?
@@ -120,8 +120,6 @@ export class App extends React.Component {
     }
 
     render() {
-        console.log('render');
-
         const categoryId = this.state.selectedCategory;
         const categories = this.categoriesList(categoryId);
 
