@@ -24,7 +24,7 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-const categories = [
+const data = {categories: [
     {
         id: '0',
         title: 'Pizza',
@@ -105,11 +105,17 @@ const categories = [
         title: 'Drinks',
         items: []
     },
-];
+],
+orders: {
+    ordered:[],
+    baking:[],
+    finishing:[],
+    served:[]
+}};
 
-app.get('/categories', function (request, response) {
+app.get('/data', function (request, response) {
     //if(!request.body) return response.sendStatus(400);
-    response.json(categories);
+    response.json(data);
 })
 
 app.listen(port);
