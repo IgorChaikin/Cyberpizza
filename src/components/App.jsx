@@ -13,12 +13,7 @@ export class App extends React.Component {
         super(props);
 
         this.state = {
-            orders: {
-                ordered:[],
-                baking:[],
-                finishing:[],
-                served:[]
-            },
+            orders: props.data.orders,
             selectedCategory: '0',
             filters:[
                 {
@@ -48,14 +43,15 @@ export class App extends React.Component {
                 },
             ],
             isAllFilters:false,
-            categories: props.data
+            categories: props.data.categories
         };
     }
 
     componentDidUpdate(prevProps) {
         if(prevProps !== this.props) {
             this.setState({
-                categories: this.props.data
+                categories: this.props.data.categories,
+                orders: this.props.data.orders
             })
         }
     }

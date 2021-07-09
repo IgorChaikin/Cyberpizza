@@ -8,23 +8,17 @@ export function higherOrderComponent(WrappedComponent, selectData) {
             super(props);
             this.handleChange = this.handleChange.bind(this);
             this.state = {
-                //data: selectData(dataSource, props)
-                data:[]
+                data: selectData(dataSource, props)
             }
         }
 
         componentDidMount() {
-            //dataSource.addChangeListener(this.handleChange);
-            dataSource.getCategories().then((data)=>{
-                this.setState({
-                    data
-                });
-            });
+            dataSource.addChangeListener(this.handleChange);
         }
 
-        /*componentWillUnmount() {
+        componentWillUnmount() {
             dataSource.removeChangeListener(this.handleChange);
-        }*/
+        }
 
         handleChange() {
             this.setState({
