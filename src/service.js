@@ -66,7 +66,7 @@ class Service{
 
 }
 
-//http://localhost:8080/
-export const domain ='https://cyber-pizza.herokuapp.com/';
+//https://cyber-pizza.herokuapp.com/
+export const domain ='http://localhost:8080/';
 export const dataSource = new Service(domain);
 dataSource.start();
