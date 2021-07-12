@@ -1,6 +1,5 @@
 import React from 'react'
 import '../styles/filters.scss'
-import {domain} from '../service'
 
 export class Filters extends React.Component {
 
@@ -25,7 +24,7 @@ export class Filters extends React.Component {
                 <p>
                     {tags}
                     <button className="all" onClick={()=>this.props.onSwitchAll()}>
-                        <img src={`${domain}settings.svg`} alt="dish.svg"/>
+                        <img src="/settings.svg" alt="settings.svg"/>
                         {`${this.props.all?'hide' : 'all'} filters`}
                     </button>
                 </p>
