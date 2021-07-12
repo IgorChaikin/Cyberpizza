@@ -5,6 +5,8 @@ import {List} from './list'
 import '../styles/App.scss'
 import {Filters} from "./filters";
 import {Orders} from "./orders";
+import {dataSource} from "../service";
+export {dataSource} from "../service"
 
 //withStyles(s)
 export class App extends React.Component {
@@ -13,7 +15,8 @@ export class App extends React.Component {
 
         this.state = {
             orders: props.data.orders,
-            selectedCategory: '0',
+            selectedCategory: props.data.selectedCategory,
+            items: props.data.items,
             filters:[
                 {
                     id:'0',
@@ -49,25 +52,21 @@ export class App extends React.Component {
     componentDidUpdate(prevProps) {
         if(prevProps !== this.props) {
             this.setState({
+                selectedCategory: this.props.data.selectedCategory,
                 categories: this.props.data.categories,
-                orders: this.props.data.orders
+                orders: this.props.data.orders,
+                items: this.props.data.items
             })
         }
     }
 
 
     changeCategory(id) {
-        this.setState({
-            selectedCategory: id
-        });
+        dataSource.getItems(id);
     }
 
     addOrder(item) {
-        const orders  = Object.assign({},this.state.orders);
-        orders.baking.push(item);
-        this.setState({
-            orders: orders
-        })
+        dataSource.postOrder(item);
     }
 
     switchFilter(id) {
@@ -113,12 +112,12 @@ export class App extends React.Component {
 
     render() {
         const categoryId = this.state.selectedCategory;
-        const categories = this.categoriesList(categoryId);
+        const categories = this.categoriesList(this.state.selectedCategory);
 
         const selectedCategory = this.state.categories.find((elem)=>elem.id === categoryId);
         const activeFilters = this.state.filters.filter(elem=>elem.isActive)?.map((elem)=>elem.id);
 
-        const items = selectedCategory?.items.slice()
+        const items = this.state.items.slice()
         const filteredItems = activeFilters.length > 0? items?.filter((elem)=> {
             const intersection = elem.tags.filter((x)=>activeFilters.includes(x));
             return intersection.length > 0 &&

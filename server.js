@@ -128,11 +128,7 @@ app.get('/items', function (request, response) {
   //if(!request.body) return response.sendStatus(400);
   const id = request.query.id;
   const selectedCategory = data.categories.find((elem)=>elem.id === id);
-  const items = {
-  title: selectedCategory.title,
-  items: selectedCategory.items
-  }
-  response.json(items);
+  response.json(selectedCategory?.items);
 });
 
 app.get('/orders', function (request, response) {
@@ -142,7 +138,7 @@ app.get('/orders', function (request, response) {
 
 app.post("/orders", function (request, response) {
   if(!request.body) return response.sendStatus(400);
-  this.orders.ordered.push(request.body.item);
+  data.orders.ordered.push(request.body.item);
   response.send(data.orders);
 });
 
