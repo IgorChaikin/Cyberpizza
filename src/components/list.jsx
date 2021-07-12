@@ -6,7 +6,8 @@ export class List extends React.Component {
 
     renderItems(items, callback) {
         return items?.map((elem)=>(
-            <Item key={elem.id} item = {elem}
+            <Item key={elem.id}
+                  item = {elem}
                   onClick = {()=>callback(elem)}/>
         ));
     }
