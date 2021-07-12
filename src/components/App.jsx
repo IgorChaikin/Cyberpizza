@@ -1,11 +1,10 @@
 //import s from '../styles/App.scss'
-import withStyles from 'isomorphic-style-loader/withStyles'
+//import withStyles from 'isomorphic-style-loader/withStyles'
 import React from 'react'
 import {List} from './list'
 import '../styles/App.scss'
 import {Filters} from "./filters";
 import {Orders} from "./orders";
-import {dataSource} from "../service";
 
 //withStyles(s)
 export class App extends React.Component {

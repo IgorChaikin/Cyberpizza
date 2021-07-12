@@ -1,6 +1,5 @@
 class Service{
-    constructor(domain) {
-        this.domain = domain;
+    constructor() {
         this.data = {
             categories:[],
             orders: {
@@ -28,7 +27,7 @@ class Service{
     }
 
     async getDataAsync(){
-        const req = `${this.domain}data`;
+        const req = '/data';
         const body = {
             method: 'GET',
         };
@@ -66,7 +65,6 @@ class Service{
 
 }
 
-//http://localhost:8080/
-export const domain ='https://cyber-pizza.herokuapp.com/';
-export const dataSource = new Service(domain);
+
+export const dataSource = new Service();
 dataSource.start();

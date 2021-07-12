@@ -31,7 +31,7 @@ const data = {categories: [
         items: [
             {
                 id: '0-0',
-                imgPath: 'ham_and_cheese.png',
+                imgPath: '/ham_and_cheese.png',
                 price: 26.75,
                 title: 'Ham and cheese',
                 description: 'Ham and cheese ham and cheese ham and cheese ham and cheese ham and cheese',
@@ -39,7 +39,7 @@ const data = {categories: [
             },
             {
                 id: '0-1',
-                imgPath: 'margarita.png',
+                imgPath: '/margarita.png',
                 price: 20.50,
                 title: 'Margarita',
                 description: 'Margarita margarita margarita margarita margarita margarita margarita',
@@ -47,7 +47,7 @@ const data = {categories: [
             },
             {
                 id: '0-2',
-                imgPath: 'pepperoni.png',
+                imgPath: '/pepperoni.png',
                 price: 20.50,
                 title: 'Pepperoni',
                 description: 'Pepperoni pepperoni pepperoni pepperoni pepperoni',
@@ -55,7 +55,7 @@ const data = {categories: [
             },
             {
                 id: '0-3',
-                imgPath: 'vegetable.png',
+                imgPath: '/vegetable.png',
                 price: 17.30,
                 title: 'Vegetable',
                 description: 'Vegetable vegetable vegetable vegetable vegetable',
