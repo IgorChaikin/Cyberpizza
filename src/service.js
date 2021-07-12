@@ -1,7 +1,9 @@
 class Service{
-    constructor() {
+    constructor(selectedId) {
         this.data = {
+            selectedCategory: null,
             categories:[],
+            items: [],
             orders: {
                 ordered:[],
                 baking:[],
@@ -9,13 +11,12 @@ class Service{
                 served:[]
             }
         };
-        this.cach = this.data;
         this.changeHandler = {};
     }
 
     start() {
         this.update();
-        this.refresh = setInterval(()=> this.update(), 30000);
+        this.refresh = setInterval(()=> this.update(), 2000);
     }
 
     stop() {
@@ -26,19 +27,14 @@ class Service{
         return this.data
     }
 
-    async getDataAsync(){
-        const req = '/data';
-        const body = {
-            method: 'GET',
-        };
-        return  fetch(req, body).then((res) => res.json()).then((data)=>{
-            this.cach = this.data;
-            this.data = data;
-        }).catch(console.error);
+    async getDataAsync(url, prop, query = {}){
+        const params = Object.entries(query).map((value)=>`${value[0]}=${value[1]}`).join('&');
+        return  fetch(`${url}?${params}`, {method: 'GET',}).then((res) => res.json())
+            .then((data)=>this.data[prop] = data).catch(console.error);
     }
 
     checkChanges(oldData, newData) {
-        if(JSON.stringify(oldData) !== JSON.stringify(newData)) {
+        if(oldData !== newData) {
             Object.keys(this.changeHandler)
                 .forEach((elem) => {
                     if(typeof this.changeHandler[elem] === 'function') {
@@ -48,11 +44,48 @@ class Service{
         }
     }
 
-    update(){
-        this.getDataAsync()
+    getItems(id) {
+        const cash = JSON.stringify(this.data);
+        this.data.selectedCategory = id;
+        this.getDataAsync('/items', 'items', {id: id})
             .then(()=>{
-                this.checkChanges(this.cach, this.data);
-            })
+                const newData = JSON.stringify(this.data);
+                this.checkChanges(cash, newData);
+            }).catch(console.error)
+    }
+
+    postOrder(item){
+        const cash = JSON.stringify(this.data);
+        fetch(`/orders`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({item: item})
+        })
+            .then((res) => res.json())
+            .then((data)=>{
+                this.data.orders = data;
+                const newData = JSON.stringify(this.data);
+                this.checkChanges(cash, newData);
+            }).catch(console.error);
+    }
+
+    update(){
+        const cash = JSON.stringify(this.data);
+        Promise.allSettled([
+                this.getDataAsync('/categories', 'categories')
+                .then(()=>{
+                    //get items of some category only after all categories titles is loaded
+                    this.data.selectedCategory = this.data.selectedCategory ?? this.data.categories[0]?.id;
+                    return this.getDataAsync('/items', 'items', {id: this.data.selectedCategory});
+                }),
+                this.getDataAsync('/orders', 'orders')])
+            .then((res)=>{
+                const newData = JSON.stringify(this.data);
+                if(res.findIndex((elem)=>elem.status==='rejected')===-1) {
+                    //handle event if no one promise rejected
+                    this.checkChanges(cash, newData);
+                }
+            });
     }
 
     addChangeListener(callback) {
