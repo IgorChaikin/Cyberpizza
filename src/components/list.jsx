@@ -4,17 +4,16 @@ import {Item} from './item'
 
 export class List extends React.Component {
 
-    renderItems(items, staticPath, callback) {
+    renderItems(items, callback) {
         return items?.map((elem)=>(
             <Item key={elem.id}
                   item = {elem}
-                  staticPath = {staticPath}
                   onClick = {()=>callback(elem)}/>
         ));
     }
 
     render() {
-        const items = this.renderItems(this.props.items, this.props.staticPath, this.props.onAdd);
+        const items = this.renderItems(this.props.items, this.props.onAdd);
 
         return (
             <main>

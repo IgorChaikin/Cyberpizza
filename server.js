@@ -24,14 +24,14 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-const categories = [
+const data = {categories: [
     {
         id: '0',
         title: 'Pizza',
         items: [
             {
                 id: '0-0',
-                imgPath: 'ham_and_cheese.png',
+                imgPath: '/ham_and_cheese.png',
                 price: 26.75,
                 title: 'Ham and cheese',
                 description: 'Ham and cheese ham and cheese ham and cheese ham and cheese ham and cheese',
@@ -39,7 +39,7 @@ const categories = [
             },
             {
                 id: '0-1',
-                imgPath: 'margarita.png',
+                imgPath: '/margarita.png',
                 price: 20.50,
                 title: 'Margarita',
                 description: 'Margarita margarita margarita margarita margarita margarita margarita',
@@ -47,7 +47,7 @@ const categories = [
             },
             {
                 id: '0-2',
-                imgPath: 'pepperoni.png',
+                imgPath: '/pepperoni.png',
                 price: 20.50,
                 title: 'Pepperoni',
                 description: 'Pepperoni pepperoni pepperoni pepperoni pepperoni',
@@ -55,7 +55,7 @@ const categories = [
             },
             {
                 id: '0-3',
-                imgPath: 'vegetable.png',
+                imgPath: '/vegetable.png',
                 price: 17.30,
                 title: 'Vegetable',
                 description: 'Vegetable vegetable vegetable vegetable vegetable',
@@ -105,11 +105,17 @@ const categories = [
         title: 'Drinks',
         items: []
     },
-];
+],
+orders: {
+    ordered:[],
+    baking:[],
+    finishing:[],
+    served:[]
+}};
 
-app.get('/categories', function (request, response) {
+app.get('/data', function (request, response) {
     //if(!request.body) return response.sendStatus(400);
-    response.json(categories);
+    response.json(data);
 })
 
 app.listen(port);
