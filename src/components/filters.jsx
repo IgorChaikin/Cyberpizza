@@ -8,7 +8,7 @@ export class Filters extends React.Component {
 
         return tagList?.map((elem)=>(
             <button key={elem.id}
-                    className={elem.isActive? "tag_active" : "tag"}
+                    className={`tag tag_${elem.isActive? '':'in'}active`}
                     onClick = {()=>callback(elem.id)}>
                 #{elem.name}
             </button>

@@ -60,7 +60,15 @@ const data = {categories: [
         title: 'Vegetable',
         description: 'Vegetable vegetable vegetable vegetable vegetable',
         tags: ['0', '1']
-      }
+      },
+      {
+        id: '0-4',
+        imgPath: '/italian.png',
+        price: 28.00,
+        title: 'Italian',
+        description: 'Italian italian italian italian italian italian italian',
+        tags: []
+      },
     ]
   },
 

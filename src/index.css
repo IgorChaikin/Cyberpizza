@@ -1,3 +1,5 @@
+
+
 html {
     width: 100vw;
     height: 100vh;
@@ -5,9 +7,49 @@ html {
     overflow-x: hidden;
 }
 
-body {
+body{
     padding: 0;
     margin: 0;
     width: 100%;
     height: 100%;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px white;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: lightgrey;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: lightgrey;
+}
+
+/* monitors and laptops */
+@media (min-width: 1240px)  {
+    body{
+        font-size: 1vw;
+    }
+}
+
+/* tablet */
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    body{
+        font-size: 1.1vw;
+    }
+}
+
+/* mobile */
+@media (max-width: 768px) {
+    body{
+        font-size: 1.3vw;
+    }
 }
