@@ -4,6 +4,7 @@
 .orders{
   background-color: transparent;
   color: $black-color;
+  font: $regular-text;
   outline: none;
   border: none;
   padding-left: 1em;
@@ -14,6 +15,10 @@
   align-items: center;
   justify-content: space-between;
   position: relative;
+
+  img{
+    height: 2em;
+  }
 
   .circle{
     display: flex;

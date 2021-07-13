@@ -1,31 +1,31 @@
 @import "vars";
 
 .list__item{
-  width: 16em;
+  width: 20em;
   display: inline-flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  margin: 0 2.5em 1em 2.5em;
+  margin: 0 3.5em 1em 0.5em;
 
   div {
     position: relative;
     width: 100%;
-    height: 18em;
+    height: 22em;
     display: flex;
     flex-direction: column;
     align-items: center;
 
     img {
       width: 100%;
-      border-radius: 8em;
+      border-radius: 10em;
       box-shadow: 0 1em 0.8em $grey-color;
     }
 
     button {
-      width: 4em;
-      height: 4em;
-      border-radius: 2em;
+      width: 3em;
+      height: 3em;
+      border-radius: 1.5em;
       outline: none;
       border: none;
 
@@ -44,11 +44,12 @@
     font: $price-text;
     text-align: center;
     color: $grey-color;
-    margin: 0.5em 0 0;
+    margin: 2em 0 0;
   }
 
   h3{
     margin: 0.5em 0 0;
+    font: $button-text;
   }
 
   .list__item__description{

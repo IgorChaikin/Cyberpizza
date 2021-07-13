@@ -15,7 +15,7 @@
 
     background-color: $main-color;
     color: $black-color;
-    width: calc( 20% + 3em);
+    width: calc( 15% + 4rem);
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -47,11 +47,11 @@
           background-color: transparent;
           outline: none;
           border: none;
+          font: $nav-item-text;
 
           text-transform: uppercase;
           z-index: 1;
           h2{
-            font: $nav-item-text;
             color: $black-color;
           }
         }
@@ -75,7 +75,7 @@
     position: absolute;
 
     height: 100%;
-    width: calc( 80% - 3em);
+    width: calc(85% - 3rem);
     right: 0;
 
     z-index: 1;
@@ -86,7 +86,7 @@
       flex-direction: row;
       align-items: flex-start;
       justify-content: space-between;
-      margin: 1em 1em 1em 3em;
+      margin: 1em 1em 0 4em;
     }
   }
 }
