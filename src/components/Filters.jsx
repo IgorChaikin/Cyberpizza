@@ -1,5 +1,5 @@
 import React from 'react'
-import '../styles/filters.scss'
+import '../styles/Filters.scss'
 
 export class Filters extends React.Component {
 
