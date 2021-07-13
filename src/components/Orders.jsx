@@ -1,5 +1,5 @@
 import React from 'react'
-import '../styles/orders.scss'
+import '../styles/Orders.scss'
 
 
 export class Orders extends React.Component {

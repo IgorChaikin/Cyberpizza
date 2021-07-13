@@ -1,5 +1,5 @@
 const express = require('express');
-const favicon = require('express-favicon');
+//const favicon = require('express-favicon');
 const path = require('path');
 const port = process.env.PORT || 8080;
 
@@ -9,8 +9,8 @@ app.use(express.json());
 //app.use(favicon(__dirname + '/build/favicon.png'));
 
 //give static
-//app.use(express.static(__dirname));
 app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, 'static')));
 app.use(express.static(path.join(__dirname, 'static/media')));
 app.use(express.static(path.join(__dirname, 'static/svg')));
 

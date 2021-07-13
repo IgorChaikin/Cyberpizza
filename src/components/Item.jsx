@@ -1,5 +1,5 @@
 import React from 'react'
-import '../styles/item.scss'
+import '../styles/Item.scss'
 
 
 export function Item(props) {

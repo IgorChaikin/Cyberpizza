@@ -16,7 +16,7 @@ class Service{
 
     start() {
         this.update();
-        this.refresh = setInterval(()=> this.update(), 2000);
+        //this.refresh = setInterval(()=> this.update(), 2000);
     }
 
     stop() {

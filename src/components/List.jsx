@@ -1,6 +1,6 @@
 import React from 'react'
-import '../styles/list.scss'
-import {Item} from './item'
+import '../styles/List.scss'
+import {Item} from './Item'
 
 export class List extends React.Component {
 
