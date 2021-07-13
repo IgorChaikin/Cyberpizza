@@ -1,10 +1,10 @@
 //import s from '../styles/App.scss'
 //import withStyles from 'isomorphic-style-loader/withStyles'
 import React from 'react'
-import {List} from './list'
+import {List} from './List'
 import '../styles/App.scss'
-import {Filters} from "./filters";
-import {Orders} from "./orders";
+import {Filters} from "./Filters";
+import {Orders} from "./Orders";
 import {dataSource} from "../service";
 export {dataSource} from "../service"
 
