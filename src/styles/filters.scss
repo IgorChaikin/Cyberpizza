@@ -14,25 +14,26 @@
   .tag_active{
     background-color: $grey-color;
     color: $white-color;
-    outline: none;
-    border: none;
-    border-radius: 1em;
-    margin-right: 1em;
-    text-transform: uppercase;
+  }
+
+  .tag_inactive{
+    background-color: transparent;
+    color: $black-color;
   }
 
   .tag{
-    background-color: transparent;
-    color: $black-color;
+    font: $regular-text;
     outline: none;
     border: none;
     margin-right: 1em;
     text-transform: uppercase;
+    border-radius: 1em;
   }
 
   .all{
     background-color: transparent;
     color: $grey-color;
+    font: $regular-text;
     outline: none;
     border: none;
     text-transform: uppercase;
