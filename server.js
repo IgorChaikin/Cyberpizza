@@ -1,12 +1,10 @@
 const express = require('express');
-//const favicon = require('express-favicon');
 const path = require('path');
 const port = process.env.PORT || 8080;
 
 // packages import
 const app = express();
 app.use(express.json());
-//app.use(favicon(__dirname + '/build/favicon.png'));
 
 //give static
 app.use(express.static(path.join(__dirname, 'dist')));
@@ -122,7 +120,6 @@ orders: {
 }};
 
 app.get('/categories', function (request, response) {
-  //if(!request.body) return response.sendStatus(400);
   const categories = data.categories.map((elem) => {
     return {
       id: elem.id,
@@ -133,14 +130,12 @@ app.get('/categories', function (request, response) {
 });
 
 app.get('/items', function (request, response) {
-  //if(!request.body) return response.sendStatus(400);
   const id = request.query.id;
   const selectedCategory = data.categories.find((elem)=>elem.id === id);
   response.json(selectedCategory?.items);
 });
 
 app.get('/orders', function (request, response) {
-  //if(!request.body) return response.sendStatus(400);
   response.json(data.orders);
 });
 
