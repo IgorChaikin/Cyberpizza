@@ -8,7 +8,8 @@
     margin-top: 0;
     color: $grey-color;
     text-transform: uppercase;
-    font: $price-text;;
+    font: $price-text;
+    padding-left: 1em;
   }
 
   .tag_active{
@@ -25,9 +26,10 @@
     font: $regular-text;
     outline: none;
     border: none;
-    margin-right: 1em;
+    margin: 0 1em 0.5em 0;
     text-transform: uppercase;
     border-radius: 1em;
+    padding: 0 1em;
   }
 
   .all{

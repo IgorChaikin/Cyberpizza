@@ -35,23 +35,37 @@ body {
 }
 
 /* monitors and laptops */
-@media (min-width: 1240px) {
+@media (min-width: 1240px),
+  (min-width: 768px) and (max-width: 1024px) and (orientation: landscape),
+  (max-width: 768px) and (orientation: landscape) {
   body {
     font-size: 1vw;
+  }
+
+  header {
+    margin-left: 3.2rem;
   }
 }
 
 /* tablet */
 
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
   body {
     font-size: 1.1vw;
+  }
+
+  header {
+    margin-left: 3.5rem;
   }
 }
 
 /* mobile */
-@media (max-width: 768px) {
+@media (max-width: 768px) and (orientation: portrait) {
   body {
     font-size: 1.3vw;
+  }
+
+  header {
+    margin-left: 2.5rem;
   }
 }
