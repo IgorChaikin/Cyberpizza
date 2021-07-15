@@ -21,5 +21,14 @@
   "plugins": [
     "react"
   ],
-  "rules": {}
+  "rules": {
+    "global-require": "off",
+    "react/destructuring-assignment": "off",
+    "react/prop-types": "off",
+    "class-methods-use-this": "off",
+    "react/no-did-update-set-state": "off",
+    "react/no-access-state-in-setstate": "off",
+    "react-perf/jsx-no-new-function-as-prop": "off",
+    "react/jsx-props-no-spreading": "off"
+  }
 }

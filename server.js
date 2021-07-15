@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+
 const port =
   process
     .env
@@ -13,7 +14,7 @@ app.use(
   express.json()
 );
 
-//give static
+// give static
 app.use(
   express.static(
     path.join(
@@ -47,26 +48,25 @@ app.use(
   )
 );
 
-//test
+// test
 app.get(
   '/ping',
-  function (
+  (
     req,
     res
-  ) {
-    return res.send(
+  ) =>
+    res.send(
       'pong'
-    );
-  }
+    )
 );
 
-//html
+// html
 app.get(
   '/',
-  function (
+  (
     req,
     res
-  ) {
+  ) => {
     res.sendFile(
       path.join(
         __dirname,
@@ -219,21 +219,19 @@ const data =
 
 app.get(
   '/categories',
-  function (
+  (
     request,
     response
-  ) {
+  ) => {
     const categories =
       data.categories.map(
         (
           elem
-        ) => {
-          return {
-            id: elem.id,
-            title:
-              elem.title,
-          };
-        }
+        ) => ({
+          id: elem.id,
+          title:
+            elem.title,
+        })
       );
     response.json(
       categories
@@ -243,14 +241,14 @@ app.get(
 
 app.get(
   '/items',
-  function (
+  (
     request,
     response
-  ) {
-    const id =
-      request
-        .query
-        .id;
+  ) => {
+    const {
+      id,
+    } =
+      request.query;
     const selectedCategory =
       data.categories.find(
         (
@@ -267,10 +265,10 @@ app.get(
 
 app.get(
   '/orders',
-  function (
+  (
     request,
     response
-  ) {
+  ) => {
     response.json(
       data.orders
     );
@@ -279,22 +277,23 @@ app.get(
 
 app.post(
   '/orders',
-  function (
+  (
     request,
     response
-  ) {
+  ) => {
     if (
       !request.body
-    )
+    ) {
       return response.sendStatus(
         400
       );
+    }
     data.orders.ordered.push(
       request
         .body
         .item
     );
-    response.send(
+    return response.send(
       data.orders
     );
   }

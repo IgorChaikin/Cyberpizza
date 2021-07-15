@@ -20,6 +20,7 @@ class Filters extends React.Component {
         elem
       ) => (
         <button
+          type="button"
           key={
             elem.id
           }
@@ -67,6 +68,7 @@ class Filters extends React.Component {
             tags
           }
           <button
+            type="button"
             className="all"
             onClick={() =>
               this.props.onSwitchAll()

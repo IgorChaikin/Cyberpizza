@@ -20,6 +20,7 @@ function Item(
           }
         />
         <button
+          type="button"
           onClick={
             props.onClick
           }
