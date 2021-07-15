@@ -5,35 +5,32 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-module.exports =
-  function (
-    _env,
-    argv
-  ) {
-    const isProduction =
-      argv.mode ===
-      'production';
-    const isDevelopment =
-      !isProduction;
+module.exports = function (
+  _env,
+  argv,
+) {
+  const isProduction = argv.mode
+      === 'production';
+  const isDevelopment = !isProduction;
 
-    return {
-      devtool:
-        isDevelopment &&
-        'cheap-module-source-map',
-      entry:
-        './src/index.js',
-      output:
+  return {
+    devtool:
+        isDevelopment
+        && 'cheap-module-source-map',
+    entry:
+        './src/index.jsx',
+    output:
         {
           path: path.resolve(
             __dirname,
-            'dist'
+            'dist',
           ),
           filename:
             'assets/js/[name].[contenthash:8].js',
           publicPath:
             '/',
         },
-      module:
+    module:
         {
           rules:
             [
@@ -129,7 +126,7 @@ module.exports =
                 test: /\.(eot|otf|ttf|woff|woff2)$/,
                 loader:
                   require.resolve(
-                    'file-loader'
+                    'file-loader',
                   ),
                 options:
                   {
@@ -138,7 +135,7 @@ module.exports =
               },
             ],
         },
-      resolve:
+    resolve:
         {
           extensions:
             [
@@ -146,16 +143,16 @@ module.exports =
               '.jsx',
             ],
         },
-      plugins:
+    plugins:
         [
-          isProduction &&
-            new MiniCssExtractPlugin(
+          isProduction
+            && new MiniCssExtractPlugin(
               {
                 filename:
                   'assets/css/[name].[contenthash:8].css',
                 chunkFilename:
                   'assets/css/[name].[contenthash:8].chunk.css',
-              }
+              },
             ),
           new webpack.DefinePlugin(
             {
@@ -163,9 +160,9 @@ module.exports =
                 JSON.stringify(
                   isProduction
                     ? 'production'
-                    : 'development'
+                    : 'development',
                 ),
-            }
+            },
           ),
           new HtmlWebpackPlugin(
             {
@@ -173,12 +170,12 @@ module.exports =
               template:
                 './src/index.html',
               inject: true,
-            }
+            },
           ),
         ].filter(
-          Boolean
+          Boolean,
         ),
-      optimization:
+    optimization:
         {
           minimize:
             isProduction,
@@ -203,7 +200,7 @@ module.exports =
                         },
                       warnings: false,
                     },
-                }
+                },
               ),
               new OptimizeCssAssetsPlugin(),
             ],
@@ -222,15 +219,14 @@ module.exports =
                       name(
                         module,
                         chunks,
-                        cacheGroupKey
+                        cacheGroupKey,
                       ) {
-                        const packageName =
-                          module.context.match(
-                            /[\\/]node_modules[\\/](.*?)([\\/]|$)/
-                          )[1];
+                        const packageName = module.context.match(
+                          /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
+                        )[1];
                         return `${cacheGroupKey}.${packageName.replace(
                           '@',
-                          ''
+                          '',
                         )}`;
                       },
                     },
@@ -245,7 +241,7 @@ module.exports =
           runtimeChunk:
             'single',
         },
-      devServer:
+    devServer:
         {
           compress: true,
           historyApiFallback: true,
@@ -279,5 +275,5 @@ module.exports =
 
           // inline: true
         },
-    };
   };
+};

@@ -1,41 +1,39 @@
 import React from 'react';
-import { dataSource } from './service';
+import dataSource from '../service';
 
-export function higherOrderComponent(
+function HigherOrderComponent(
   WrappedComponent,
-  selectData
+  selectData,
 ) {
   return class extends React.Component {
     constructor(
-      props
+      props,
     ) {
       super(
-        props
+        props,
       );
-      this.handleChange =
-        this.handleChange.bind(
-          this
-        );
-      this.state =
-        {
-          data: selectData(
-            dataSource,
-            props
-          ),
-        };
+      this.handleChange = this.handleChange.bind(
+        this,
+      );
+      this.state = {
+        data: selectData(
+          dataSource,
+          props,
+        ),
+      };
     }
 
     componentDidMount() {
       dataSource.addChangeListener(
         this
-          .handleChange
+          .handleChange,
       );
     }
 
     componentWillUnmount() {
       dataSource.removeChangeListener(
         this
-          .handleChange
+          .handleChange,
       );
     }
 
@@ -45,9 +43,9 @@ export function higherOrderComponent(
           data: selectData(
             dataSource,
             this
-              .props
+              .props,
           ),
-        }
+        },
       );
     }
 
@@ -66,3 +64,5 @@ export function higherOrderComponent(
     }
   };
 }
+
+export default HigherOrderComponent;

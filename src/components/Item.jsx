@@ -1,8 +1,8 @@
 import React from 'react';
 import '../styles/Item.scss';
 
-export function Item(
-  props
+function Item(
+  props,
 ) {
   return (
     <article className="list__item">
@@ -30,7 +30,7 @@ export function Item(
       <p className="list__item__price">
         $
         {props.item.price.toFixed(
-          2
+          2,
         )}
       </p>
       <h3>
@@ -50,3 +50,5 @@ export function Item(
     </article>
   );
 }
+
+export default Item;

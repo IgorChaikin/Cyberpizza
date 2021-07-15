@@ -1,15 +1,15 @@
 import React from 'react';
 import '../styles/List.scss';
-import { Item } from './Item';
+import Item from './Item';
 
-export class List extends React.Component {
+class List extends React.Component {
   renderItems(
     items,
-    callback
+    callback,
   ) {
     return items?.map(
       (
-        elem
+        elem,
       ) => (
         <Item
           key={
@@ -18,13 +18,11 @@ export class List extends React.Component {
           item={
             elem
           }
-          onClick={() =>
-            callback(
-              elem
-            )
-          }
+          onClick={ () => callback(
+            elem,
+          )}
         />
-      )
+      ),
     );
   }
 
@@ -57,3 +55,5 @@ export class List extends React.Component {
     );
   }
 }
+
+export default List;

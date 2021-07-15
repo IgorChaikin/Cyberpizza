@@ -1,16 +1,13 @@
 class Service {
-  constructor(
-    selectedId
-  ) {
-    this.data =
-      {
-        selectedCategory:
+  constructor() {
+    this.data = {
+      selectedCategory:
           null,
-        categories:
+      categories:
           [],
-        items:
+      items:
           [],
-        orders:
+      orders:
           {
             ordered:
               [],
@@ -21,9 +18,8 @@ class Service {
             served:
               [],
           },
-      };
-    this.changeHandler =
-      {};
+    };
+    this.changeHandler = {};
   }
 
   start() {
@@ -34,13 +30,11 @@ class Service {
   stop() {
     clearInterval(
       this
-        .refresh
+        .refresh,
     );
   }
 
-  getData(
-    props
-  ) {
+  getData() {
     return this
       .data;
   }
@@ -48,122 +42,115 @@ class Service {
   async getDataAsync(
     url,
     prop,
-    query = {}
+    query = {},
   ) {
-    const params =
-      Object.entries(
-        query
+    const params = Object.entries(
+      query,
+    )
+      .map(
+        (
+          value,
+        ) => `${value[0]}=${value[1]}`,
       )
-        .map(
-          (
-            value
-          ) =>
-            `${value[0]}=${value[1]}`
-        )
-        .join(
-          '&'
-        );
+      .join(
+        '&',
+      );
     return fetch(
       `${url}?${params}`,
       {
         method:
           'GET',
-      }
+      },
     )
       .then(
         (
-          res
-        ) =>
-          res.json()
+          res,
+        ) => res.json(),
       )
       .then(
         (
-          data
-        ) =>
-          (this.data[
+          data,
+        ) => {
+          this.data[
             prop
-          ] =
-            data)
+          ] = data;
+        },
       )
       .catch(
-        console.error
+        console.error,
       );
   }
 
   checkChanges(
     oldData,
-    newData
+    newData,
   ) {
     if (
-      oldData !==
-      newData
+      oldData
+      !== newData
     ) {
       Object.keys(
         this
-          .changeHandler
+          .changeHandler,
       ).forEach(
         (
-          elem
+          elem,
         ) => {
           if (
             typeof this
               .changeHandler[
-              elem
-            ] ===
-            'function'
+                elem
+              ]
+            === 'function'
           ) {
             this.changeHandler[
               elem
             ]();
           }
-        }
+        },
       );
     }
   }
 
   getItems(
-    id
+    id,
   ) {
-    const cash =
-      JSON.stringify(
-        this
-          .data
-      );
-    this.data.selectedCategory =
-      id;
+    const cash = JSON.stringify(
+      this
+        .data,
+    );
+    this.data.selectedCategory = id;
     this.getDataAsync(
       '/items',
       'items',
       {
         id,
-      }
+      },
     )
       .then(
         () => {
-          const newData =
-            JSON.stringify(
-              this
-                .data
-            );
+          const newData = JSON.stringify(
+            this
+              .data,
+          );
           this.checkChanges(
             cash,
-            newData
+            newData,
           );
-        }
+        },
       )
       .catch(
-        console.error
+        console.error,
       );
   }
 
   postOrder(
-    item
+    item,
   ) {
-    const cash =
-      JSON.stringify(
-        this
-          .data
-      );
+    const cash = JSON.stringify(
+      this
+        .data,
+    );
     fetch(
       '/orders',
       {
@@ -177,57 +164,52 @@ class Service {
         body: JSON.stringify(
           {
             item,
-          }
+          },
         ),
-      }
+      },
     )
       .then(
         (
-          res
-        ) =>
-          res.json()
+          res,
+        ) => res.json(),
       )
       .then(
         (
-          data
+          data,
         ) => {
-          this.data.orders =
-            data;
-          const newData =
-            JSON.stringify(
-              this
-                .data
-            );
+          this.data.orders = data;
+          const newData = JSON.stringify(
+            this
+              .data,
+          );
           this.checkChanges(
             cash,
-            newData
+            newData,
           );
-        }
+        },
       )
       .catch(
-        console.error
+        console.error,
       );
   }
 
   update() {
-    const cash =
-      JSON.stringify(
-        this
-          .data
-      );
+    const cash = JSON.stringify(
+      this
+        .data,
+    );
     Promise.allSettled(
       [
         this.getDataAsync(
           '/categories',
-          'categories'
+          'categories',
         ).then(
           () => {
             // get items of some category only after all categories titles is loaded
-            this.data.selectedCategory =
-              this
-                .data
-                .selectedCategory ??
-              this
+            this.data.selectedCategory = this
+              .data
+              .selectedCategory
+              ?? this
                 .data
                 .categories[0]
                 ?.id;
@@ -238,66 +220,64 @@ class Service {
                 id: this
                   .data
                   .selectedCategory,
-              }
+              },
             );
-          }
+          },
         ),
         this.getDataAsync(
           '/orders',
-          'orders'
+          'orders',
         ),
-      ]
+      ],
     ).then(
       (
-        res
+        res,
       ) => {
-        const newData =
-          JSON.stringify(
-            this
-              .data
-          );
+        const newData = JSON.stringify(
+          this
+            .data,
+        );
         if (
           res.findIndex(
             (
-              elem
-            ) =>
-              elem.status ===
-              'rejected'
-          ) ===
-          -1
+              elem,
+            ) => elem.status
+              === 'rejected',
+          )
+          === -1
         ) {
           // handle event if no one promise rejected
           this.checkChanges(
             cash,
-            newData
+            newData,
           );
         }
-      }
+      },
     );
   }
 
   addChangeListener(
-    callback
+    callback,
   ) {
     this.changeHandler[
       callback.name
-    ] =
-      () => {
-        callback();
-      };
+    ] = () => {
+      callback();
+    };
   }
 
   removeChangeListener(
-    callback
+    callback,
   ) {
     delete this
       .changeHandler[
-      callback
-        .name
-    ];
+        callback
+          .name
+      ];
   }
 }
 
-export const dataSource =
-  new Service();
+const dataSource = new Service();
 dataSource.start();
+
+export default dataSource;
