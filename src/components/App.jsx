@@ -10,26 +10,27 @@ import dataSource from '../service';
 // withStyles(s)
 class App extends React.Component {
   constructor(
-    props,
+    props
   ) {
     super(
-      props,
+      props
     );
 
-    this.state = {
-      orders:
+    this.state =
+      {
+        orders:
           props
             .data
             .orders,
-      selectedCategory:
+        selectedCategory:
           props
             .data
             .selectedCategory,
-      items:
+        items:
           props
             .data
             .items,
-      filters:
+        filters:
           [
             {
               id: '0',
@@ -57,20 +58,20 @@ class App extends React.Component {
               isActive: false,
             },
           ],
-      isAllFilters: false,
-      categories:
+        isAllFilters: false,
+        categories:
           props
             .data
             .categories,
-    };
+      };
   }
 
   componentDidUpdate(
-    prevProps,
+    prevProps
   ) {
     if (
-      prevProps
-      !== this
+      prevProps !==
+      this
         .props
     ) {
       this.setState(
@@ -95,96 +96,106 @@ class App extends React.Component {
               .props
               .data
               .items,
-        },
+        }
       );
     }
   }
 
   changeCategory(
-    id,
+    id
   ) {
     dataSource.getItems(
-      id,
+      id
     );
   }
 
   addOrder(
-    item,
+    item
   ) {
     dataSource.postOrder(
-      item,
+      item
     );
   }
 
   switchFilter(
-    id,
+    id
   ) {
-    const filters = this.state.filters.slice();
-    const idx = filters.findIndex(
-      (
-        elem,
-      ) => elem.id
-          === id,
-    );
+    const filters =
+      this.state.filters.slice();
+    const idx =
+      filters.findIndex(
+        (
+          elem
+        ) =>
+          elem.id ===
+          id
+      );
 
     filters[
       idx
-    ].isActive = !filters[
-      idx
-    ]
-      .isActive;
+    ].isActive =
+      !filters[
+        idx
+      ]
+        .isActive;
 
     this.setState(
       {
         filters,
-      },
+      }
     );
   }
 
   switchDisplayAll() {
     let {
       isAllFilters,
-    } = this
-      .state;
-    isAllFilters = !isAllFilters;
+    } =
+      this
+        .state;
+    isAllFilters =
+      !isAllFilters;
     this.setState(
       {
         isAllFilters,
-      },
+      }
     );
   }
 
   categoriesList(
-    id,
+    id
   ) {
     const {
       categories,
-    } = this
-      .state;
+    } =
+      this
+        .state;
     return categories.map(
       (
-        elem,
+        elem
       ) => {
-        const title = id
-          === elem.id
-          ? `—${elem.title}`
-          : elem.title;
+        const title =
+          id ===
+          elem.id
+            ? `—${elem.title}`
+            : elem.title;
         return (
           <li
             key={
               elem.id
             }
           >
-            {id
-            === elem.id ? (
+            {id ===
+            elem.id ? (
               <div className="side-nav__marker" />
-              ) : (
-                ''
-              )}
+            ) : (
+              ''
+            )}
             <button
-              onClick={() => this.changeCategory(
-                elem.id,
-              )}
+              onClick={() =>
+                this.changeCategory(
+                  elem.id
+                )
+              }
             >
               <h2>
                 {
@@ -194,65 +205,76 @@ class App extends React.Component {
             </button>
           </li>
         );
-      },
+      }
     );
   }
 
   render() {
-    const categoryId = this
-      .state
-      .selectedCategory;
-    const categories = this.categoriesList(
+    const categoryId =
       this
         .state
-        .selectedCategory,
-    );
-
-    const selectedCategory = this.state.categories.find(
-      (
-        elem,
-      ) => elem.id
-          === categoryId,
-    );
-    const activeFilters = this.state.filters
-      .filter(
-        (
-          elem,
-        ) => elem.isActive,
-      )
-      ?.map(
-        (
-          elem,
-        ) => elem.id,
+        .selectedCategory;
+    const categories =
+      this.categoriesList(
+        this
+          .state
+          .selectedCategory
       );
 
-    const items = this.state.items.slice();
-    const filteredItems = activeFilters.length
-      > 0
-      ? items?.filter(
+    const selectedCategory =
+      this.state.categories.find(
         (
-          elem,
-        ) => {
-          const intersection = elem.tags.filter(
+          elem
+        ) =>
+          elem.id ===
+          categoryId
+      );
+    const activeFilters =
+      this.state.filters
+        .filter(
+          (
+            elem
+          ) =>
+            elem.isActive
+        )
+        ?.map(
+          (
+            elem
+          ) =>
+            elem.id
+        );
+
+    const items =
+      this.state.items.slice();
+    const filteredItems =
+      activeFilters.length >
+      0
+        ? items?.filter(
             (
-              x,
-            ) => activeFilters.includes(
-              x,
-            ),
-          );
-          return (
-            intersection.length
-                  > 0
-                && intersection.length
-                  <= elem
+              elem
+            ) => {
+              const intersection =
+                elem.tags.filter(
+                  (
+                    x
+                  ) =>
+                    activeFilters.includes(
+                      x
+                    )
+                );
+              return (
+                intersection.length >
+                  0 &&
+                intersection.length <=
+                  elem
                     .tags
-                    .length
-                && intersection.length
-                  === activeFilters.length
-          );
-        },
-      )
-      : items;
+                    .length &&
+                intersection.length ===
+                  activeFilters.length
+              );
+            }
+          )
+        : items;
 
     return (
       <div className="app">
@@ -278,11 +300,15 @@ class App extends React.Component {
                   .filters
               }
               onSwitch={(
-                id,
-              ) => this.switchFilter(
-                id,
-              )}
-              onSwitchAll={() => this.switchDisplayAll()}
+                id
+              ) =>
+                this.switchFilter(
+                  id
+                )
+              }
+              onSwitchAll={() =>
+                this.switchDisplayAll()
+              }
               all={
                 this
                   .state
@@ -305,10 +331,12 @@ class App extends React.Component {
               selectedCategory?.title
             }
             onAdd={(
-              item,
-            ) => this.addOrder(
-              item,
-            )}
+              item
+            ) =>
+              this.addOrder(
+                item
+              )
+            }
           />
         </div>
       </div>

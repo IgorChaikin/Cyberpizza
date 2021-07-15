@@ -5,19 +5,21 @@ import './index.css';
 
 import HigherOrderComponent from './components/HigherOrderComponent';
 
-const EnhancedComponent = HigherOrderComponent(
-  App,
-  (
-    dataSource,
-    props,
-  ) => dataSource.getData(
-    props,
-  ),
-);
+const EnhancedComponent =
+  HigherOrderComponent(
+    App,
+    (
+      dataSource,
+      props
+    ) =>
+      dataSource.getData(
+        props
+      )
+  );
 
 ReactDOM.render(
   <EnhancedComponent />,
   document.getElementById(
-    'root',
-  ),
+    'root'
+  )
 );

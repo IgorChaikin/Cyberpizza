@@ -5,11 +5,11 @@ import Item from './Item';
 class List extends React.Component {
   renderItems(
     items,
-    callback,
+    callback
   ) {
     return items?.map(
       (
-        elem,
+        elem
       ) => (
         <Item
           key={
@@ -18,11 +18,13 @@ class List extends React.Component {
           item={
             elem
           }
-          onClick={ () => callback(
-            elem,
-          )}
+          onClick={() =>
+            callback(
+              elem
+            )
+          }
         />
-      ),
+      )
     );
   }
 

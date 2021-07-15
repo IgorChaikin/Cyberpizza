@@ -3,37 +3,39 @@ import dataSource from '../service';
 
 function HigherOrderComponent(
   WrappedComponent,
-  selectData,
+  selectData
 ) {
   return class extends React.Component {
     constructor(
-      props,
+      props
     ) {
       super(
-        props,
+        props
       );
-      this.handleChange = this.handleChange.bind(
-        this,
-      );
-      this.state = {
-        data: selectData(
-          dataSource,
-          props,
-        ),
-      };
+      this.handleChange =
+        this.handleChange.bind(
+          this
+        );
+      this.state =
+        {
+          data: selectData(
+            dataSource,
+            props
+          ),
+        };
     }
 
     componentDidMount() {
       dataSource.addChangeListener(
         this
-          .handleChange,
+          .handleChange
       );
     }
 
     componentWillUnmount() {
       dataSource.removeChangeListener(
         this
-          .handleChange,
+          .handleChange
       );
     }
 
@@ -43,9 +45,9 @@ function HigherOrderComponent(
           data: selectData(
             dataSource,
             this
-              .props,
+              .props
           ),
-        },
+        }
       );
     }
 

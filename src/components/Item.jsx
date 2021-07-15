@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/Item.scss';
 
 function Item(
-  props,
+  props
 ) {
   return (
     <article className="list__item">
@@ -30,7 +30,7 @@ function Item(
       <p className="list__item__price">
         $
         {props.item.price.toFixed(
-          2,
+          2
         )}
       </p>
       <h3>

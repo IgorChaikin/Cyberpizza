@@ -3,19 +3,19 @@ import '../styles/Orders.scss';
 
 class Orders extends React.Component {
   getOrdersCount(
-    orders,
+    orders
   ) {
     return (
       orders
         .ordered
-        ?.length
-      + orders
+        ?.length +
+      orders
         .baking
-        ?.length
-      + orders
+        ?.length +
+      orders
         .finishing
-        ?.length
-      + orders
+        ?.length +
+      orders
         .served
         ?.length
     );
@@ -23,7 +23,10 @@ class Orders extends React.Component {
 
   render() {
     return (
-      <button type="button" className="orders">
+      <button
+        type="button"
+        className="orders"
+      >
         <div className="circle" />
         <img
           src="/dish.svg"

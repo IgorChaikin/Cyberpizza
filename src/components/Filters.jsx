@@ -5,18 +5,19 @@ class Filters extends React.Component {
   renderTags(
     tags,
     callback,
-    all = false,
+    all = false
   ) {
-    const tagList = all
-      ? tags
-      : tags.slice(
-        0,
-        2,
-      );
+    const tagList =
+      all
+        ? tags
+        : tags.slice(
+            0,
+            2
+          );
 
     return tagList?.map(
       (
-        elem,
+        elem
       ) => (
         <button
           key={
@@ -27,31 +28,34 @@ class Filters extends React.Component {
               ? ''
               : 'in'
           }active`}
-          onClick={() => callback(
-            elem.id,
-          )}
+          onClick={() =>
+            callback(
+              elem.id
+            )
+          }
         >
           #
           {
             elem.name
           }
         </button>
-      ),
+      )
     );
   }
 
   render() {
-    const tags = this.renderTags(
-      this
-        .props
-        .tags,
-      this
-        .props
-        .onSwitch,
-      this
-        .props
-        .all,
-    );
+    const tags =
+      this.renderTags(
+        this
+          .props
+          .tags,
+        this
+          .props
+          .onSwitch,
+        this
+          .props
+          .all
+      );
 
     return (
       <div className="filters">
@@ -64,7 +68,9 @@ class Filters extends React.Component {
           }
           <button
             className="all"
-            onClick={() => this.props.onSwitchAll()}
+            onClick={() =>
+              this.props.onSwitchAll()
+            }
           >
             <img
               src="/settings.svg"
