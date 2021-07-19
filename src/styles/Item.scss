@@ -1,5 +1,15 @@
 @import "vars";
 
+@keyframes move {
+  0%{transform:translate(100%, 0); opacity: 0;}
+  100%{transform:translate(0, 0);opacity: 1;}
+}
+
+@keyframes pressed {
+  0%{transform:scale(1) translate(0, 0);opacity: 1; box-shadow: 0 1em 0.8em $grey-color;}
+  100%{transform:scale(0.8) translate(0, 25%); opacity: 1; box-shadow: 0 1em 0.5em $grey-color;}
+}
+
 .list__item{
   width: 20em;
   display: inline-flex;
@@ -7,6 +17,9 @@
   justify-content: space-between;
   align-items: center;
   margin: 0 3.5em 1em 0.5em;
+
+  opacity: 0;
+  animation: move 0.5s 1 linear forwards;
 
   div {
     position: relative;
@@ -36,7 +49,13 @@
       background-color: $accent-color;
       color: $white-color;
 
-      box-shadow: 0 1em 0.8em $grey-color;
+      opacity: 0;
+      animation-delay: 0.5s;
+      animation: pressed 0.5s 1 reverse linear forwards;
+
+      &:active {
+        animation: pressed 0.5s 1 alternate linear forwards;
+      }
     }
   }
 

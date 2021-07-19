@@ -15,20 +15,11 @@
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": 12,
+    "ecmaVersion": 2020,
     "sourceType": "module"
   },
   "plugins": [
     "react"
   ],
-  "rules": {
-    "global-require": "off",
-    "react/destructuring-assignment": "warn",
-    "react/prop-types": "warn",
-    "class-methods-use-this": "warn",
-    "react/no-did-update-set-state": "warn",
-    "react/no-access-state-in-setstate": "warn",
-    "react-perf/jsx-no-new-function-as-prop": "warn",
-    "react/jsx-props-no-spreading": "warn"
-  }
+  "rules": {}
 }

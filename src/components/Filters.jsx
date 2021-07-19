@@ -1,12 +1,23 @@
 import React from 'react';
 import '../styles/Filters.scss';
+import PropTypes from 'prop-types';
 
 class Filters extends React.Component {
-  renderTags(
+  static renderTags(
     tags,
     callback,
     all = false
   ) {
+    const getCallbackById =
+
+        (
+          elemId
+        ) =>
+        () =>
+          callback(
+            elemId
+          );
+
     const tagList =
       all
         ? tags
@@ -29,11 +40,9 @@ class Filters extends React.Component {
               ? ''
               : 'in'
           }active`}
-          onClick={() =>
-            callback(
-              elem.id
-            )
-          }
+          onClick={getCallbackById(
+            elem.id
+          )}
         >
           #
           {
@@ -45,17 +54,19 @@ class Filters extends React.Component {
   }
 
   render() {
-    const tags =
-      this.renderTags(
-        this
-          .props
-          .tags,
-        this
-          .props
-          .onSwitch,
-        this
-          .props
-          .all
+    const {
+      tags,
+      onSwitch,
+      onSwitchAll,
+      all,
+    } =
+      this
+        .props;
+    const tagsList =
+      Filters.renderTags(
+        tags,
+        onSwitch,
+        all
       );
 
     return (
@@ -63,15 +74,15 @@ class Filters extends React.Component {
         <p className="filters__header">
           filters
         </p>
-        <p>
+        <p className="filters__tag-container">
           {
-            tags
+            tagsList
           }
           <button
             type="button"
             className="all"
-            onClick={() =>
-              this.props.onSwitchAll()
+            onClick={
+              onSwitchAll
             }
           >
             <img
@@ -79,9 +90,7 @@ class Filters extends React.Component {
               alt="settings.svg"
             />
             {`${
-              this
-                .props
-                .all
+              all
                 ? 'hide'
                 : 'all'
             } filters`}
@@ -91,5 +100,37 @@ class Filters extends React.Component {
     );
   }
 }
+
+Filters.propTypes =
+  {
+    tags: PropTypes.arrayOf(
+      PropTypes.shape(
+        {
+          id: PropTypes
+            .number
+            .isRequired,
+          name: PropTypes
+            .string
+            .isRequired,
+          isActive:
+            PropTypes
+              .bool
+              .isRequired,
+        }
+      )
+    )
+      .isRequired,
+    onSwitch:
+      PropTypes
+        .func
+        .isRequired,
+    onSwitchAll:
+      PropTypes
+        .func
+        .isRequired,
+    all: PropTypes
+      .bool
+      .isRequired,
+  };
 
 export default Filters;

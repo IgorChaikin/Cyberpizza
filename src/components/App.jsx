@@ -1,14 +1,31 @@
 // import s from '../styles/App.scss'
 // import withStyles from 'isomorphic-style-loader/withStyles'
 import React from 'react';
+import PropTypes from 'prop-types';
 import List from './List';
 import '../styles/App.scss';
 import Filters from './Filters';
-import Orders from './Orders';
+import OrderStatus from './OrderStatus';
 import dataSource from '../service';
 
 // withStyles(s)
 class App extends React.Component {
+  static changeCategory(
+    id
+  ) {
+    dataSource.getItems(
+      id
+    );
+  }
+
+  static addOrder(
+    item
+  ) {
+    dataSource.postOrder(
+      item
+    );
+  }
+
   constructor(
     props
   ) {
@@ -16,20 +33,24 @@ class App extends React.Component {
       props
     );
 
+    const {
+      data,
+    } =
+      this
+        .props;
+    const {
+      orders,
+      selectedCategory,
+      items,
+      categories,
+    } =
+      data;
+
     this.state =
       {
-        orders:
-          props
-            .data
-            .orders,
-        selectedCategory:
-          props
-            .data
-            .selectedCategory,
-        items:
-          props
-            .data
-            .items,
+        orders,
+        selectedCategory,
+        items,
         filters:
           [
             {
@@ -59,10 +80,7 @@ class App extends React.Component {
             },
           ],
         isAllFilters: false,
-        categories:
-          props
-            .data
-            .categories,
+        categories,
       };
   }
 
@@ -74,56 +92,59 @@ class App extends React.Component {
       this
         .props
     ) {
-      this.setState(
-        {
-          selectedCategory:
-            this
-              .props
-              .data
-              .selectedCategory,
-          categories:
-            this
-              .props
-              .data
-              .categories,
-          orders:
-            this
-              .props
-              .data
-              .orders,
-          items:
-            this
-              .props
-              .data
-              .items,
-        }
-      );
+      this.updateChecks();
     }
   }
 
-  changeCategory(
-    id
-  ) {
-    dataSource.getItems(
+  get switchFilterCallback() {
+    return (
       id
-    );
+    ) =>
+      this.switchFilter(
+        id
+      );
   }
 
-  addOrder(
-    item
-  ) {
-    dataSource.postOrder(
-      item
+  get switchDisplayAllCallback() {
+    return () =>
+      this.switchDisplayAll();
+  }
+
+  updateChecks() {
+    const {
+      data,
+    } =
+      this
+        .props;
+    const {
+      orders,
+      selectedCategory,
+      items,
+      categories,
+    } =
+      data;
+    this.setState(
+      {
+        selectedCategory,
+        categories,
+        orders,
+        items,
+      }
     );
   }
 
   switchFilter(
     id
   ) {
-    const filters =
-      this.state.filters.slice();
+    const {
+      filters,
+    } =
+      this
+        .state;
+    const changedFilters =
+      filters.slice();
     const idx =
-      filters.findIndex(
+      changedFilters.findIndex(
         (
           elem
         ) =>
@@ -131,17 +152,18 @@ class App extends React.Component {
           id
       );
 
-    filters[
+    changedFilters[
       idx
     ].isActive =
-      !filters[
+      !changedFilters[
         idx
       ]
         .isActive;
 
     this.setState(
       {
-        filters,
+        filters:
+          changedFilters,
       }
     );
   }
@@ -169,6 +191,17 @@ class App extends React.Component {
     } =
       this
         .state;
+
+    const getCallbackById =
+
+        (
+          categoryId
+        ) =>
+        () =>
+          App.changeCategory(
+            categoryId
+          );
+
     return categories.map(
       (
         elem
@@ -186,17 +219,18 @@ class App extends React.Component {
           >
             {id ===
             elem.id ? (
-              <div className="side-nav__marker" />
+              <div
+                id="marker"
+                className="side-nav__marker"
+              />
             ) : (
               ''
             )}
             <button
               type="button"
-              onClick={() =>
-                this.changeCategory(
-                  elem.id
-                )
-              }
+              onClick={getCallbackById(
+                elem.id
+              )}
             >
               <h2>
                 {
@@ -211,27 +245,32 @@ class App extends React.Component {
   }
 
   render() {
-    const categoryId =
+    const {
+      selectedCategory,
+      categories,
+      filters,
+      items,
+      orders,
+      isAllFilters,
+    } =
       this
-        .state
-        .selectedCategory;
-    const categories =
-      this.categoriesList(
-        this
-          .state
-          .selectedCategory
-      );
+        .state;
 
-    const selectedCategory =
-      this.state.categories.find(
+    const categoriesList =
+      this.categoriesList(
+        selectedCategory
+      );
+    const categoryTitle =
+      categories.find(
         (
           elem
         ) =>
           elem.id ===
-          categoryId
-      );
+          selectedCategory
+      )?.title;
+
     const activeFilters =
-      this.state.filters
+      filters
         .filter(
           (
             elem
@@ -245,8 +284,6 @@ class App extends React.Component {
             elem.id
         );
 
-    const items =
-      this.state.items.slice();
     const filteredItems =
       activeFilters.length >
       0
@@ -288,7 +325,7 @@ class App extends React.Component {
           </p>
           <ul>
             {
-              categories
+              categoriesList
             }
           </ul>
         </nav>
@@ -296,31 +333,23 @@ class App extends React.Component {
           <header>
             <Filters
               tags={
+                filters
+              }
+              onSwitch={
                 this
-                  .state
-                  .filters
+                  .switchFilterCallback
               }
-              onSwitch={(
-                id
-              ) =>
-                this.switchFilter(
-                  id
-                )
-              }
-              onSwitchAll={() =>
-                this.switchDisplayAll()
+              onSwitchAll={
+                this
+                  .switchDisplayAllCallback
               }
               all={
-                this
-                  .state
-                  .isAllFilters
+                isAllFilters
               }
             />
-            <Orders
+            <OrderStatus
               orders={
-                this
-                  .state
-                  .orders
+                orders
               }
             />
           </header>
@@ -329,14 +358,10 @@ class App extends React.Component {
               filteredItems
             }
             title={
-              selectedCategory?.title
+              categoryTitle
             }
-            onAdd={(
-              item
-            ) =>
-              this.addOrder(
-                item
-              )
+            onAdd={
+              App.addOrder
             }
           />
         </div>
@@ -344,5 +369,77 @@ class App extends React.Component {
     );
   }
 }
+
+App.propTypes =
+  {
+    data: PropTypes.shape(
+      {
+        selectedCategory:
+          PropTypes.oneOfType(
+            [
+              PropTypes
+                .string
+                .isRequired,
+              PropTypes.oneOf(
+                [
+                  null,
+                ]
+              )
+                .isRequired,
+            ]
+          )
+            .isRequired,
+        categories:
+          PropTypes.arrayOf(
+            PropTypes
+              .any
+              .isRequired
+          )
+            .isRequired,
+        items:
+          PropTypes.arrayOf(
+            PropTypes
+              .any
+              .isRequired
+          )
+            .isRequired,
+        orders:
+          PropTypes.shape(
+            {
+              ordered:
+                PropTypes.arrayOf(
+                  PropTypes
+                    .any
+                    .isRequired
+                )
+                  .isRequired,
+              baking:
+                PropTypes.arrayOf(
+                  PropTypes
+                    .any
+                    .isRequired
+                )
+                  .isRequired,
+              finishing:
+                PropTypes.arrayOf(
+                  PropTypes
+                    .any
+                    .isRequired
+                )
+                  .isRequired,
+              served:
+                PropTypes.arrayOf(
+                  PropTypes
+                    .any
+                    .isRequired
+                )
+                  .isRequired,
+            }
+          )
+            .isRequired,
+      }
+    )
+      .isRequired,
+  };
 
 export default App;

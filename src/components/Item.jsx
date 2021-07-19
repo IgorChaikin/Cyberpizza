@@ -1,28 +1,38 @@
 import React from 'react';
 import '../styles/Item.scss';
+import PropTypes from 'prop-types';
 
 function Item(
   props
 ) {
+  const {
+    item,
+    onClick,
+  } =
+    props;
+  const {
+    imgPath,
+    title,
+    price,
+    description,
+  } =
+    item;
+
   return (
     <article className="list__item">
       <div>
         <img
           src={
-            props
-              .item
-              .imgPath
+            imgPath
           }
           alt={
-            props
-              .item
-              .title
+            title
           }
         />
         <button
           type="button"
           onClick={
-            props.onClick
+            onClick
           }
         >
           +
@@ -30,26 +40,51 @@ function Item(
       </div>
       <p className="list__item__price">
         $
-        {props.item.price.toFixed(
+        {price.toFixed(
           2
         )}
       </p>
       <h3>
         {
-          props
-            .item
-            .title
+          title
         }
       </h3>
       <p className="list__item__description">
         {
-          props
-            .item
-            .description
+          description
         }
       </p>
     </article>
   );
 }
+
+Item.propTypes =
+  {
+    item: PropTypes.shape(
+      {
+        price:
+          PropTypes
+            .number
+            .isRequired,
+        title:
+          PropTypes
+            .string
+            .isRequired,
+        description:
+          PropTypes
+            .string
+            .isRequired,
+        imgPath:
+          PropTypes
+            .string
+            .isRequired,
+      }
+    )
+      .isRequired,
+    onClick:
+      PropTypes
+        .func
+        .isRequired,
+  };
 
 export default Item;
