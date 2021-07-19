@@ -1,12 +1,23 @@
 import React from 'react';
 import '../styles/List.scss';
+import PropTypes from 'prop-types';
 import Item from './Item';
 
 class List extends React.Component {
-  renderItems(
+  static renderItems(
     items,
     callback
   ) {
+    const getCallbackByElem =
+
+        (
+          elem
+        ) =>
+        () =>
+          callback(
+            elem
+          );
+
     return items?.map(
       (
         elem
@@ -18,44 +29,63 @@ class List extends React.Component {
           item={
             elem
           }
-          onClick={() =>
-            callback(
-              elem
-            )
-          }
+          onClick={getCallbackByElem(
+            elem
+          )}
         />
       )
     );
   }
 
   render() {
-    const items =
-      this.renderItems(
-        this
-          .props
-          .items,
-        this
-          .props
-          .onAdd
+    const {
+      items,
+      onAdd,
+      title,
+    } =
+      this
+        .props;
+
+    const itemsList =
+      List.renderItems(
+        items,
+        onAdd
       );
 
     return (
       <main>
         <h1>
           {
-            this
-              .props
-              .title
+            title
           }
         </h1>
         <div className="list">
           {
-            items
+            itemsList
           }
         </div>
       </main>
     );
   }
 }
+
+List.propTypes =
+  {
+    items:
+      PropTypes.arrayOf(
+        PropTypes
+          .any
+          .isRequired
+      )
+        .isRequired,
+    title:
+      PropTypes
+        .string
+        .isRequired,
+    onAdd:
+      PropTypes
+        .func
+        .isRequired,
+  };
 
 export default List;

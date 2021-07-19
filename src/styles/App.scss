@@ -1,5 +1,10 @@
 @import "vars";
 
+@keyframes appear {
+  0%{transform:scale(0); opacity: 1;}
+  100%{transform:scale(1);opacity: 1;}
+}
+
 .app{
   width: 100vw;
   height: 100vh;
@@ -66,6 +71,9 @@
 
           position: absolute;
           left: 0;
+
+          opacity: 0;
+          animation: appear 0.25s 1 linear forwards;
         }
       }
     }

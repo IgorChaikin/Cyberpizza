@@ -52,13 +52,18 @@ function HigherOrderComponent(
     }
 
     render() {
+      const {
+        data,
+      } =
+        this
+          .state;
+
       return (
         <WrappedComponent
           data={
-            this
-              .state
-              .data
+            data
           }
+          /* eslint-disable-next-line react/jsx-props-no-spreading */
           {...this
             .props}
         />
