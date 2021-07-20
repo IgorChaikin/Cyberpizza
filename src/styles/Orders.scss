@@ -1,58 +1,99 @@
 @import "vars";
 
+@keyframes modal-move {
+  0%{transform:translate(100%, 0);}
+  100%{transform:translate(0, 0);}
+}
 
-.orders{
-  background-color: transparent;
-  color: $black-color;
-  font: $regular-text;
-  outline: none;
-  border: none;
-  padding-left: 1em;
-  text-transform: uppercase;
+@keyframes shadow {
+  0%{opacity: 0;}
+  100%{opacity: 1;}
+}
 
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
+.closing{
+  opacity: 1;
+  animation-delay: 0.5s;
+  animation: shadow 0.5s 1 reverse linear forwards;
+  .modal{
+    transform:translate(0, 0);
+    animation: modal-move 0.5s 1 reverse linear forwards;
+  }
+}
 
-  img{
-    height: 2em;
+.opening{
+  opacity: 0;
+  animation: shadow 0.5s 1 linear forwards;
+  .modal{
+    transform:translate(100%, 0);
+    animation-delay: 0.5s;
+    animation: modal-move 0.5s 1 linear forwards;
+  }
+}
+
+.wrapper {
+  overflow-x: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background-color: rgba($grey-color, 0.5);
+  margin: 0;
+  padding: 0;
+
+  /* monitors and laptops */
+  @media (min-width: 1240px),
+  (min-width: 768px) and (max-width: 1024px) and (orientation: landscape),
+  (max-width: 768px) and (orientation: landscape) {
+    .modal{
+      width: 30%;
+    }
   }
 
-  .circle{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+  /* tablet, mobile */
 
-    width: 4em;
-    height: 4em;
-    border-radius: 2em;
+  @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait),
+  (max-width: 768px) and (orientation: portrait){
+    .modal{
+      width: 50%;
+    }
+  }
+
+  .modal{
     position: absolute;
-    left: 0;
-    z-index: -1;
+    height: 100%;
+    right: 0;
+    z-index: 2;
+    background-color: $white-color;
 
-    background-color: $main-color;
-  }
-  p {
-    margin-left: 0.5em;
-
-    .count {
-      background-color: $accent-color;
-      color: $white-color;
-
-      display: inline-flex;
-      flex-direction: column;
+    header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      text-align: center;
+      margin: 0;
+      padding: 0 1rem;
 
-      margin-left: 1em;
-      width: 2em;
-      height: 2em;
-      border-radius: 1em;
+      button{
+        outline: none;
+        border: none;
+        background-color: transparent;
+
+        color: $black-color;
+        font: $price-text;
+        text-transform: uppercase;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5em;
+
+        padding: 0;
+
+        img {
+          height: 1em;
+        }
+      }
     }
   }
 }

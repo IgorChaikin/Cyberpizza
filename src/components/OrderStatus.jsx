@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/Orders.scss';
+import '../styles/OrdersStatus.scss';
 import PropTypes from 'prop-types';
 
 class OrderStatus extends React.Component {
@@ -25,6 +25,7 @@ class OrderStatus extends React.Component {
   render() {
     const {
       orders,
+      onClick,
     } =
       this
         .props;
@@ -32,6 +33,9 @@ class OrderStatus extends React.Component {
       <button
         type="button"
         className="orders"
+        onClick={
+          onClick
+        }
       >
         <div className="circle" />
         <img
@@ -54,6 +58,10 @@ class OrderStatus extends React.Component {
 
 OrderStatus.propTypes =
   {
+    onClick:
+      PropTypes
+        .func
+        .isRequired,
     orders:
       PropTypes.shape(
         {

@@ -7,6 +7,7 @@ import '../styles/App.scss';
 import Filters from './Filters';
 import OrderStatus from './OrderStatus';
 import dataSource from '../service';
+import Orders from './Orders';
 
 // withStyles(s)
 class App extends React.Component {
@@ -80,6 +81,7 @@ class App extends React.Component {
             },
           ],
         isAllFilters: false,
+        isOrdersVisible: false,
         categories,
       };
   }
@@ -99,15 +101,72 @@ class App extends React.Component {
   get switchFilterCallback() {
     return (
       id
-    ) =>
-      this.switchFilter(
-        id
+    ) => {
+      const {
+        filters,
+      } =
+        this
+          .state;
+      const changedFilters =
+        filters.slice();
+      const idx =
+        changedFilters.findIndex(
+          (
+            elem
+          ) =>
+            elem.id ===
+            id
+        );
+
+      changedFilters[
+        idx
+      ].isActive =
+        !changedFilters[
+          idx
+        ]
+          .isActive;
+
+      this.setState(
+        {
+          filters:
+            changedFilters,
+        }
       );
+    };
+  }
+
+  get switchOrdersCallback() {
+    return () => {
+      let {
+        isOrdersVisible,
+      } =
+        this
+          .state;
+      isOrdersVisible =
+        !isOrdersVisible;
+      this.setState(
+        {
+          isOrdersVisible,
+        }
+      );
+    };
   }
 
   get switchDisplayAllCallback() {
-    return () =>
-      this.switchDisplayAll();
+    return () => {
+      let {
+        isAllFilters,
+      } =
+        this
+          .state;
+      isAllFilters =
+        !isAllFilters;
+      this.setState(
+        {
+          isAllFilters,
+        }
+      );
+    };
   }
 
   updateChecks() {
@@ -129,56 +188,6 @@ class App extends React.Component {
         categories,
         orders,
         items,
-      }
-    );
-  }
-
-  switchFilter(
-    id
-  ) {
-    const {
-      filters,
-    } =
-      this
-        .state;
-    const changedFilters =
-      filters.slice();
-    const idx =
-      changedFilters.findIndex(
-        (
-          elem
-        ) =>
-          elem.id ===
-          id
-      );
-
-    changedFilters[
-      idx
-    ].isActive =
-      !changedFilters[
-        idx
-      ]
-        .isActive;
-
-    this.setState(
-      {
-        filters:
-          changedFilters,
-      }
-    );
-  }
-
-  switchDisplayAll() {
-    let {
-      isAllFilters,
-    } =
-      this
-        .state;
-    isAllFilters =
-      !isAllFilters;
-    this.setState(
-      {
-        isAllFilters,
       }
     );
   }
@@ -252,6 +261,7 @@ class App extends React.Component {
       items,
       orders,
       isAllFilters,
+      isOrdersVisible,
     } =
       this
         .state;
@@ -351,6 +361,10 @@ class App extends React.Component {
               orders={
                 orders
               }
+              onClick={
+                this
+                  .switchOrdersCallback
+              }
             />
           </header>
           <List
@@ -365,6 +379,19 @@ class App extends React.Component {
             }
           />
         </div>
+        {isOrdersVisible ? (
+          <Orders
+            orders={
+              orders
+            }
+            onClose={
+              this
+                .switchOrdersCallback
+            }
+          />
+        ) : (
+          ''
+        )}
       </div>
     );
   }
