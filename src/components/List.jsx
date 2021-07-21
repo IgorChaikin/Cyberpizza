@@ -8,14 +8,14 @@ class List extends React.Component {
     items,
     callback
   ) {
-    const getCallbackByElem =
+    const getCallbackById =
 
         (
-          elem
+          id
         ) =>
         () =>
           callback(
-            elem
+            id
           );
 
     return items?.map(
@@ -29,8 +29,8 @@ class List extends React.Component {
           item={
             elem
           }
-          onClick={getCallbackByElem(
-            elem
+          onClick={getCallbackById(
+            elem.id
           )}
         />
       )

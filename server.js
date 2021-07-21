@@ -288,11 +288,40 @@ app.post(
         400
       );
     }
-    data.orders.ordered.push(
-      request
-        .body
-        .item
+
+    let order =
+      null;
+
+    data.categories.forEach(
+      (
+        category
+      ) =>
+        category.items.forEach(
+          (
+            item
+          ) => {
+            if (
+              item.id ===
+              request
+                .body
+                .id
+            ) {
+              order =
+                item;
+            }
+          }
+        )
     );
+
+    data.orders.ordered.push(
+      {
+        item: order,
+        time: request
+          .body
+          .time,
+      }
+    );
+
     return response.send(
       data.orders
     );

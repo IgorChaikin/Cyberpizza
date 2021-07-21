@@ -20,10 +20,11 @@ class App extends React.Component {
   }
 
   static addOrder(
-    item
+    id
   ) {
     dataSource.postOrder(
-      item
+      id,
+      Date.now()
     );
   }
 

@@ -154,7 +154,8 @@ class Service {
   }
 
   postOrder(
-    item
+    id,
+    time
   ) {
     const cash =
       JSON.stringify(
@@ -173,7 +174,8 @@ class Service {
           },
         body: JSON.stringify(
           {
-            item,
+            id,
+            time,
           }
         ),
       }

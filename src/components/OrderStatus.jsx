@@ -2,58 +2,49 @@ import React from 'react';
 import '../styles/OrdersStatus.scss';
 import PropTypes from 'prop-types';
 
-class OrderStatus extends React.Component {
-  static getOrdersCount(
-    orders
-  ) {
-    return (
-      orders
-        .ordered
-        ?.length +
-      orders
-        .baking
-        ?.length +
-      orders
-        .finishing
-        ?.length +
-      orders
-        .served
-        ?.length
-    );
-  }
-
-  render() {
-    const {
-      orders,
-      onClick,
-    } =
-      this
-        .props;
-    return (
-      <button
-        type="button"
-        className="orders"
-        onClick={
-          onClick
-        }
-      >
-        <div className="circle" />
-        <img
-          src="/dish.svg"
-          alt="dish.svg"
-        />
-        <p>
-          order
-          status
-          <div className="count">
-            {OrderStatus.getOrdersCount(
-              orders
-            )}
-          </div>
-        </p>
-      </button>
-    );
-  }
+function OrderStatus(
+  props
+) {
+  const {
+    orders,
+    onClick,
+  } =
+    props;
+  return (
+    <button
+      type="button"
+      className="orders"
+      onClick={
+        onClick
+      }
+    >
+      <div className="circle" />
+      <img
+        src="/dish.svg"
+        alt="dish.svg"
+      />
+      <p>
+        order
+        status
+        <div className="count">
+          {Object.keys(
+            orders
+          ).reduce(
+            (
+              acc,
+              key
+            ) =>
+              acc +
+              orders[
+                key
+              ]
+                ?.length,
+            0
+          )}
+        </div>
+      </p>
+    </button>
+  );
 }
 
 OrderStatus.propTypes =
