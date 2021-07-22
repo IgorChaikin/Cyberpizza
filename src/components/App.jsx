@@ -11,463 +11,191 @@ import Orders from './Orders';
 
 // withStyles(s)
 class App extends React.Component {
-  static changeCategory(
-    id
-  ) {
-    dataSource.getItems(
-      id
-    );
+  static changeCategory(id) {
+    dataSource.getItems(id);
   }
 
-  static addOrder(
-    id
-  ) {
-    dataSource.postOrder(
-      id,
-      Date.now()
-    );
+  static addOrder(id) {
+    dataSource.postOrder(id, Date.now());
   }
 
-  constructor(
-    props
-  ) {
-    super(
-      props
-    );
+  constructor(props) {
+    super(props);
 
+    const { data } = this.props;
     const {
-      data,
-    } =
-      this
-        .props;
-    const {
+      orders, selectedCategory, items, categories,
+    } = data;
+
+    this.state = {
       orders,
       selectedCategory,
       items,
+      filters: [
+        {
+          id: '0',
+          name: 'vegetarian',
+          isActive: false,
+        },
+        {
+          id: '1',
+          name: 'vegan',
+          isActive: false,
+        },
+        {
+          id: '2',
+          name: 'tag0',
+          isActive: false,
+        },
+        {
+          id: '3',
+          name: 'tag1',
+          isActive: false,
+        },
+        {
+          id: '4',
+          name: 'tag2',
+          isActive: false,
+        },
+      ],
+      isAllFilters: false,
+      isOrdersVisible: false,
       categories,
-    } =
-      data;
-
-    this.state =
-      {
-        orders,
-        selectedCategory,
-        items,
-        filters:
-          [
-            {
-              id: '0',
-              name: 'vegetarian',
-              isActive: false,
-            },
-            {
-              id: '1',
-              name: 'vegan',
-              isActive: false,
-            },
-            {
-              id: '2',
-              name: 'tag0',
-              isActive: false,
-            },
-            {
-              id: '3',
-              name: 'tag1',
-              isActive: false,
-            },
-            {
-              id: '4',
-              name: 'tag2',
-              isActive: false,
-            },
-          ],
-        isAllFilters: false,
-        isOrdersVisible: false,
-        categories,
-      };
+    };
   }
 
-  componentDidUpdate(
-    prevProps
-  ) {
-    if (
-      prevProps !==
-      this
-        .props
-    ) {
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
       this.updateChecks();
     }
   }
 
   get switchFilterCallback() {
-    return (
-      id
-    ) => {
-      const {
-        filters,
-      } =
-        this
-          .state;
-      const changedFilters =
-        filters.slice();
-      const idx =
-        changedFilters.findIndex(
-          (
-            elem
-          ) =>
-            elem.id ===
-            id
-        );
+    return (id) => {
+      const { filters } = this.state;
+      const changedFilters = filters.slice();
+      const idx = changedFilters.findIndex((elem) => elem.id === id);
 
-      changedFilters[
-        idx
-      ].isActive =
-        !changedFilters[
-          idx
-        ]
-          .isActive;
+      changedFilters[idx].isActive = !changedFilters[idx].isActive;
 
-      this.setState(
-        {
-          filters:
-            changedFilters,
-        }
-      );
+      this.setState({
+        filters: changedFilters,
+      });
     };
   }
 
   get switchOrdersCallback() {
     return () => {
-      let {
+      let { isOrdersVisible } = this.state;
+      isOrdersVisible = !isOrdersVisible;
+      this.setState({
         isOrdersVisible,
-      } =
-        this
-          .state;
-      isOrdersVisible =
-        !isOrdersVisible;
-      this.setState(
-        {
-          isOrdersVisible,
-        }
-      );
+      });
     };
   }
 
   get switchDisplayAllCallback() {
     return () => {
-      let {
+      let { isAllFilters } = this.state;
+      isAllFilters = !isAllFilters;
+      this.setState({
         isAllFilters,
-      } =
-        this
-          .state;
-      isAllFilters =
-        !isAllFilters;
-      this.setState(
-        {
-          isAllFilters,
-        }
-      );
+      });
     };
   }
 
   updateChecks() {
+    const { data } = this.props;
     const {
-      data,
-    } =
-      this
-        .props;
-    const {
-      orders,
+      orders, selectedCategory, items, categories,
+    } = data;
+    this.setState({
       selectedCategory,
-      items,
       categories,
-    } =
-      data;
-    this.setState(
-      {
-        selectedCategory,
-        categories,
-        orders,
-        items,
-      }
-    );
+      orders,
+      items,
+    });
   }
 
-  categoriesList(
-    id
-  ) {
-    const {
-      categories,
-    } =
-      this
-        .state;
+  categoriesList(id) {
+    const { categories } = this.state;
 
-    const getCallbackById =
+    const getCallbackById = (categoryId) => () => App.changeCategory(categoryId);
 
-        (
-          categoryId
-        ) =>
-        () =>
-          App.changeCategory(
-            categoryId
-          );
-
-    return categories.map(
-      (
-        elem
-      ) => {
-        const title =
-          id ===
-          elem.id
-            ? `—${elem.title}`
-            : elem.title;
-        return (
-          <li
-            key={
-              elem.id
-            }
-          >
-            {id ===
-            elem.id ? (
-              <div
-                id="marker"
-                className="side-nav__marker"
-              />
-            ) : (
-              ''
-            )}
-            <button
-              type="button"
-              onClick={getCallbackById(
-                elem.id
-              )}
-            >
-              <h2>
-                {
-                  title
-                }
-              </h2>
-            </button>
-          </li>
-        );
-      }
-    );
+    return categories.map((elem) => {
+      const title = id === elem.id ? `—${elem.title}` : elem.title;
+      return (
+        <li key={elem.id}>
+          {id === elem.id ? <div id="marker" className="circle" /> : ''}
+          <button type="button" onClick={getCallbackById(elem.id)}>
+            <h2>{title}</h2>
+          </button>
+        </li>
+      );
+    });
   }
 
   render() {
     const {
-      selectedCategory,
-      categories,
-      filters,
-      items,
-      orders,
-      isAllFilters,
-      isOrdersVisible,
-    } =
-      this
-        .state;
+      selectedCategory, categories, filters, items, orders, isAllFilters, isOrdersVisible,
+    } = this.state;
 
-    const categoriesList =
-      this.categoriesList(
-        selectedCategory
-      );
-    const categoryTitle =
-      categories.find(
-        (
-          elem
-        ) =>
-          elem.id ===
-          selectedCategory
-      )?.title;
+    const categoriesList = this.categoriesList(selectedCategory);
+    const categoryTitle = categories.find((elem) => elem.id === selectedCategory)?.title;
 
-    const activeFilters =
-      filters
-        .filter(
-          (
-            elem
-          ) =>
-            elem.isActive
-        )
-        ?.map(
-          (
-            elem
-          ) =>
-            elem.id
+    const activeFilters = filters.filter((elem) => elem.isActive)?.map((elem) => elem.id);
+
+    const filteredItems = activeFilters.length > 0
+      ? items?.filter((elem) => {
+        const intersection = elem.tags.filter((x) => activeFilters.includes(x));
+        return (
+          intersection.length > 0
+              && intersection.length <= elem.tags.length
+              && intersection.length === activeFilters.length
         );
-
-    const filteredItems =
-      activeFilters.length >
-      0
-        ? items?.filter(
-            (
-              elem
-            ) => {
-              const intersection =
-                elem.tags.filter(
-                  (
-                    x
-                  ) =>
-                    activeFilters.includes(
-                      x
-                    )
-                );
-              return (
-                intersection.length >
-                  0 &&
-                intersection.length <=
-                  elem
-                    .tags
-                    .length &&
-                intersection.length ===
-                  activeFilters.length
-              );
-            }
-          )
-        : items;
+      })
+      : items;
 
     return (
       <div className="app">
         <nav className="side-nav">
-          <h1>
-            P.
-          </h1>
-          <p>
-            categories
-          </p>
-          <ul>
-            {
-              categoriesList
-            }
-          </ul>
+          <h1>P.</h1>
+          <p>categories</p>
+          <ul>{categoriesList}</ul>
         </nav>
         <div className="main">
           <header>
             <Filters
-              tags={
-                filters
-              }
-              onSwitch={
-                this
-                  .switchFilterCallback
-              }
-              onSwitchAll={
-                this
-                  .switchDisplayAllCallback
-              }
-              all={
-                isAllFilters
-              }
+              tags={filters}
+              onSwitch={this.switchFilterCallback}
+              onSwitchAll={this.switchDisplayAllCallback}
+              all={isAllFilters}
             />
-            <OrderStatus
-              orders={
-                orders
-              }
-              onClick={
-                this
-                  .switchOrdersCallback
-              }
-            />
+            <OrderStatus orders={orders} onClick={this.switchOrdersCallback} />
           </header>
-          <List
-            items={
-              filteredItems
-            }
-            title={
-              categoryTitle
-            }
-            onAdd={
-              App.addOrder
-            }
-          />
+          <List items={filteredItems} title={categoryTitle} onAdd={App.addOrder} />
         </div>
-        {isOrdersVisible ? (
-          <Orders
-            orders={
-              orders
-            }
-            onClose={
-              this
-                .switchOrdersCallback
-            }
-          />
-        ) : (
-          ''
-        )}
+        {isOrdersVisible ? <Orders orders={orders} onClose={this.switchOrdersCallback} /> : ''}
       </div>
     );
   }
 }
 
-App.propTypes =
-  {
-    data: PropTypes.shape(
-      {
-        selectedCategory:
-          PropTypes.oneOfType(
-            [
-              PropTypes
-                .string
-                .isRequired,
-              PropTypes.oneOf(
-                [
-                  null,
-                ]
-              )
-                .isRequired,
-            ]
-          )
-            .isRequired,
-        categories:
-          PropTypes.arrayOf(
-            PropTypes
-              .any
-              .isRequired
-          )
-            .isRequired,
-        items:
-          PropTypes.arrayOf(
-            PropTypes
-              .any
-              .isRequired
-          )
-            .isRequired,
-        orders:
-          PropTypes.shape(
-            {
-              ordered:
-                PropTypes.arrayOf(
-                  PropTypes
-                    .any
-                    .isRequired
-                )
-                  .isRequired,
-              baking:
-                PropTypes.arrayOf(
-                  PropTypes
-                    .any
-                    .isRequired
-                )
-                  .isRequired,
-              finishing:
-                PropTypes.arrayOf(
-                  PropTypes
-                    .any
-                    .isRequired
-                )
-                  .isRequired,
-              served:
-                PropTypes.arrayOf(
-                  PropTypes
-                    .any
-                    .isRequired
-                )
-                  .isRequired,
-            }
-          )
-            .isRequired,
-      }
-    )
-      .isRequired,
-  };
+App.propTypes = {
+  data: PropTypes.shape({
+    selectedCategory: PropTypes.oneOfType([
+      PropTypes.string.isRequired,
+      PropTypes.oneOf([null]).isRequired,
+    ]).isRequired,
+    categories: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+    items: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+    orders: PropTypes.shape({
+      ordered: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+      baking: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+      finishing: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+      served: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+    }).isRequired,
+  }).isRequired,
+};
 
 export default App;

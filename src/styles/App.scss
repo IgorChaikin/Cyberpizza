@@ -62,15 +62,8 @@
           }
         }
 
-        .side-nav__marker{
-          width: 4em;
-          height: 4em;
-          border-radius: 2em;
-
+        .circle{
           background-color: $light-color;
-
-          position: absolute;
-          left: 0;
 
           opacity: 0;
           animation: appear 0.25s 1 linear forwards;

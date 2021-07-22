@@ -1,4 +1,4 @@
-
+//colors
 $main-color: #ffdf8c;
 $dark-color: #fdd478;
 $light-color: #ffe9b0;
@@ -8,6 +8,7 @@ $black-color: #000000;
 $white-color: #ffffff;
 $grey-color: #837f7f;
 
+//fonts
 $regular-text: 1em sans-serif;
 
 $nav-item-text: bold 1em serif;
@@ -16,3 +17,28 @@ $price-text: 1.3em sans-serif;
 
 $description-text: italic 1em sans-serif;
 $button-text: bold 2em serif;
+
+//details reused in different components
+.count {
+  background-color: $accent-color;
+  color: $white-color;
+
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  margin-left: 1em;
+  width: 2em;
+  height: 2em;
+  border-radius: 1em;
+}
+
+.circle{
+  width: 4em;
+  height: 4em;
+  border-radius: 2em;
+  position: absolute;
+  left: 0;
+}
