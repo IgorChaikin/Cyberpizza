@@ -10,6 +10,8 @@ class Service {
         finishing: [],
         served: [],
       },
+      filters: [],
+      discounts: [],
     };
     this.changeHandler = {};
   }
@@ -96,6 +98,8 @@ class Service {
         });
       }),
       this.getDataAsync('/orders', 'orders'),
+      this.getDataAsync('/filters', 'filters'),
+      this.getDataAsync('/discounts', 'discounts'),
     ]).then((res) => {
       const newData = JSON.stringify(this.data);
       if (res.findIndex((elem) => elem.status === 'rejected') === -1) {

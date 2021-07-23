@@ -24,7 +24,7 @@ class Orders extends React.Component {
       : `${Math.floor(diff / stringParams[0])}${stringParams[1]} ago`;
   }
 
-  static getSubTotal(orders) {
+  static getSubtotal(orders) {
     const countOrderStage = (acc, curVal) => acc + curVal.item.price;
     return Object.keys(orders).reduce(
       (accumulator, currentValue) => accumulator + orders[currentValue].reduce(countOrderStage, 0),
@@ -41,7 +41,8 @@ class Orders extends React.Component {
   }
 
   render() {
-    const { orders, onClose } = this.props;
+    const { orders, onClose, discounts } = this.props;
+    const subtotal = Orders.getSubtotal(orders);
     return (
       <div className="wrapper opening">
         <div className="modal">
@@ -62,20 +63,27 @@ class Orders extends React.Component {
 
             <p className="price">
               $
-              {Orders.getSubTotal(orders).toFixed(2)}
+              {subtotal.toFixed(2)}
             </p>
           </div>
 
           <div className="modal__price">
-            <p className="title">Total</p>
+            <p className="title">Discount</p>
 
-            <p className="price">Total</p>
+            <p className="price">
+              -
+              {(discounts.reduce((acc, curVal) => acc + curVal, 0) * 100).toFixed(2)}
+              %
+            </p>
           </div>
 
           <div className="modal__price total">
             <p className="title">Total</p>
 
-            <p className="price">Total</p>
+            <p className="price">
+              $
+              {(subtotal * (1 - discounts.reduce((acc, curVal) => acc + curVal, 0))).toFixed(2)}
+            </p>
           </div>
         </div>
       </div>
@@ -85,6 +93,7 @@ class Orders extends React.Component {
 
 Orders.propTypes = {
   onClose: PropTypes.func.isRequired,
+  discounts: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
   orders: PropTypes.shape({
     ordered: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
     baking: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,

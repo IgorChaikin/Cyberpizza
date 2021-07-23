@@ -24,43 +24,18 @@ class App extends React.Component {
 
     const { data } = this.props;
     const {
-      orders, selectedCategory, items, categories,
+      orders, selectedCategory, items, categories, filters, discounts,
     } = data;
 
     this.state = {
       orders,
       selectedCategory,
       items,
-      filters: [
-        {
-          id: '0',
-          name: 'vegetarian',
-          isActive: false,
-        },
-        {
-          id: '1',
-          name: 'vegan',
-          isActive: false,
-        },
-        {
-          id: '2',
-          name: 'tag0',
-          isActive: false,
-        },
-        {
-          id: '3',
-          name: 'tag1',
-          isActive: false,
-        },
-        {
-          id: '4',
-          name: 'tag2',
-          isActive: false,
-        },
-      ],
+      filters,
+      categories,
+      discounts,
       isAllFilters: false,
       isOrdersVisible: false,
-      categories,
     };
   }
 
@@ -137,7 +112,14 @@ class App extends React.Component {
 
   render() {
     const {
-      selectedCategory, categories, filters, items, orders, isAllFilters, isOrdersVisible,
+      selectedCategory,
+      categories,
+      filters,
+      items,
+      orders,
+      isAllFilters,
+      isOrdersVisible,
+      discounts,
     } = this.state;
 
     const categoriesList = this.categoriesList(selectedCategory);
@@ -175,7 +157,11 @@ class App extends React.Component {
           </header>
           <List items={filteredItems} title={categoryTitle} onAdd={App.addOrder} />
         </div>
-        {isOrdersVisible ? <Orders orders={orders} onClose={this.switchOrdersCallback} /> : ''}
+        {isOrdersVisible ? (
+          <Orders orders={orders} discounts={discounts} onClose={this.switchOrdersCallback} />
+        ) : (
+          ''
+        )}
       </div>
     );
   }
@@ -189,6 +175,8 @@ App.propTypes = {
     ]).isRequired,
     categories: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
     items: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+    filters: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+    discounts: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
     orders: PropTypes.shape({
       ordered: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
       baking: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
