@@ -30,8 +30,6 @@ class App extends React.Component {
       orders, selectedCategory, items, categories, filters, discounts,
     } = data;
 
-    console.log('FROM APP', filters, discounts, orders);
-
     this.state = {
       orders,
       selectedCategory,
