@@ -76,7 +76,7 @@
         background-color: transparent;
 
         color: $black-color;
-        font: $nav-item-text;
+        font: $price-text-serif;
         text-transform: uppercase;
 
         display: flex;
@@ -101,12 +101,42 @@
       &:before{
         content:"";
         display: inline-block;
-        width: 0.25em;
+        width: 0.2em;
         background: $grey-color;
         position: absolute;
-        left:0.375em;
-        top:0.625em;
+        left:0.3em;
+        top:0.25em;
         height: calc( 100% + 0.8em );
+      }
+    }
+
+    .modal__price {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 1rem;
+      border-bottom: rgba($grey-color, 0.5) solid 1px;
+
+      .title {
+        font: $price-text-serif;
+        color: $grey-color;
+      }
+      .price {
+        font: $bold-header-text-serif;
+        color: $grey-color;
+      }
+    }
+
+    .total {
+      border-bottom: none;
+      .title {
+        font: $bold-header-text-serif;
+        color: $black-color;
+      }
+      .price {
+        font: $button-text;
+        color: $black-color;
       }
     }
   }

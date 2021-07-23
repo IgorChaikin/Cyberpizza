@@ -48,6 +48,24 @@ class Orders extends React.Component {
             </header>
             <ul>{Orders.getOrderStages(orders)}</ul>
           </div>
+
+          <div className="modal__price">
+            <p className="title">Total</p>
+
+            <p className="price">Total</p>
+          </div>
+
+          <div className="modal__price">
+            <p className="title">Total</p>
+
+            <p className="price">Total</p>
+          </div>
+
+          <div className="modal__price total">
+            <p className="title">Total</p>
+
+            <p className="price">Total</p>
+          </div>
         </div>
       </div>
     );

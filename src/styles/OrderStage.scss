@@ -2,6 +2,10 @@
 
 
 li{
+  position: relative;
+  padding: 0 1rem 0 1.875em;
+  margin-bottom:1.875em;
+
   section {
     h2 {
       text-transform: capitalize;
@@ -57,18 +61,15 @@ li{
     }
   }
 
-  position: relative;
-  padding: 0 1rem 0 1.875em;
-  margin-bottom:1.875em;
   &:before{
     content:"";
     display: inline-block;
-    width: 1em;
-    height: 1em;
+    width: 0.8em;
+    height: 0.8em;
     position: absolute;
     left:0;
-    top:0.625em;
-    border-radius: 1.25em;
+    top:0.25em;
+    border-radius: 1em;
   }
 }
 
