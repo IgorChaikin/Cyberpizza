@@ -166,6 +166,14 @@ app.get('/orders', (request, response) => {
   response.json(data.orders);
 });
 
+app.get('/filters', (request, response) => {
+  response.json(data.filters);
+});
+
+app.get('/discounts', (request, response) => {
+  response.json(data.discounts);
+});
+
 app.post('/orders', (request, response) => {
   if (!request.body) {
     return response.sendStatus(400);
