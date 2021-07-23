@@ -24,6 +24,14 @@ class Orders extends React.Component {
       : `${Math.floor(diff / stringParams[0])}${stringParams[1]} ago`;
   }
 
+  static getSubTotal(orders) {
+    const countOrderStage = (acc, curVal) => acc + curVal.item.price;
+    return Object.keys(orders).reduce(
+      (accumulator, currentValue) => accumulator + orders[currentValue].reduce(countOrderStage, 0),
+      0,
+    );
+  }
+
   static getOrderStages(orders) {
     return Object.keys(orders).map((elem) => {
       const orderStage = orders[elem];
@@ -50,9 +58,12 @@ class Orders extends React.Component {
           </div>
 
           <div className="modal__price">
-            <p className="title">Total</p>
+            <p className="title">Subtotal</p>
 
-            <p className="price">Total</p>
+            <p className="price">
+              $
+              {Orders.getSubTotal(orders).toFixed(2)}
+            </p>
           </div>
 
           <div className="modal__price">
