@@ -23,15 +23,20 @@ class App extends React.Component {
     super(props);
 
     const { data } = this.props;
+
+    console.log('FROM APP', data);
+
     const {
       orders, selectedCategory, items, categories, filters, discounts,
     } = data;
+
+    console.log('FROM APP', filters, discounts, orders);
 
     this.state = {
       orders,
       selectedCategory,
       items,
-      filters,
+      filters: filters.map((elem) => ({ isActive: false, ...elem })),
       categories,
       discounts,
       isAllFilters: false,
@@ -41,7 +46,7 @@ class App extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps !== this.props) {
-      this.updateChecks();
+      this.applyUpdate();
     }
   }
 
@@ -79,16 +84,18 @@ class App extends React.Component {
     };
   }
 
-  updateChecks() {
+  applyUpdate() {
     const { data } = this.props;
     const {
-      orders, selectedCategory, items, categories,
+      orders, selectedCategory, items, categories, filters, discounts,
     } = data;
     this.setState({
       selectedCategory,
       categories,
       orders,
       items,
+      filters,
+      discounts,
     });
   }
 

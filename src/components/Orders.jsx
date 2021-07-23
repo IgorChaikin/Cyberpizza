@@ -72,7 +72,7 @@ class Orders extends React.Component {
 
             <p className="price">
               -
-              {(discounts.reduce((acc, curVal) => acc + curVal, 0) * 100).toFixed(2)}
+              {Math.trunc(discounts.reduce((acc, curVal) => acc + curVal, 0) * 100)}
               %
             </p>
           </div>

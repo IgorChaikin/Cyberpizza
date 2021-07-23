@@ -122,27 +122,22 @@ const data = {
     {
       id: '0',
       name: 'vegetarian',
-      isActive: false,
     },
     {
       id: '1',
       name: 'vegan',
-      isActive: false,
     },
     {
       id: '2',
       name: 'tag0',
-      isActive: false,
     },
     {
       id: '3',
       name: 'tag1',
-      isActive: false,
     },
     {
       id: '4',
       name: 'tag2',
-      isActive: false,
     },
   ],
   discounts: [0.1],
