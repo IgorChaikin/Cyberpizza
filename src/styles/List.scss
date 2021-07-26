@@ -11,4 +11,9 @@ main{
     height: calc(5% + 1rem);
     margin: 0.5em 0;
   }
+
+  .list{
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 }

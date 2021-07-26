@@ -1,28 +1,35 @@
-import React from 'react'
-import '../styles/List.scss'
-import {Item} from './Item'
+import React from 'react';
+import '../styles/List.scss';
+import PropTypes from 'prop-types';
+import Item from './Item';
 
-export class List extends React.Component {
+class List extends React.Component {
+  static renderItems(items, callback) {
+    const getCallbackById = (id) => () => callback(id);
 
-    renderItems(items, callback) {
-        return items?.map((elem)=>(
-            <Item key={elem.id}
-                  item = {elem}
-                  onClick = {()=>callback(elem)}/>
-        ));
-    }
+    return items?.map((elem) => (
+      <Item key={elem.id} item={elem} onClick={getCallbackById(elem.id)} />
+    ));
+  }
 
-    render() {
-        const items = this.renderItems(this.props.items, this.props.onAdd);
+  render() {
+    const { items, onAdd, title } = this.props;
 
-        return (
-            <main>
-                <h1>{this.props.title}</h1>
-                <div className="list">
-                    {items}
-                </div>
-            </main>
-        )
-    }
+    const itemsList = List.renderItems(items, onAdd);
+
+    return (
+      <main>
+        <h1>{title}</h1>
+        <div className="list">{itemsList}</div>
+      </main>
+    );
+  }
 }
 
+List.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+  title: PropTypes.string.isRequired,
+  onAdd: PropTypes.func.isRequired,
+};
+
+export default List;

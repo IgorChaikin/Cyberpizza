@@ -1,29 +1,105 @@
-import React from 'react'
-import '../styles/Orders.scss'
+import React from 'react';
+import '../styles/Orders.scss';
+import PropTypes from 'prop-types';
+import OrderStage from './OrderStage';
 
+class Orders extends React.Component {
+  static getFormatTime(time) {
+    const diff = Math.floor((Date.now() - time) / 1000);
 
-export class Orders extends React.Component {
-    getOrdersCount(orders) {
-        return orders.ordered?.length +
-            orders.baking?.length +
-            orders.finishing?.length +
-            orders.served?.length;
-    }
+    const intervals = [
+      [3600, ' hours'],
+      [60, ' minutes'],
+      [10, '0 seconds'],
+    ];
+    const stringParams = intervals.reduce(
+      (accumulator, currentValue) => (currentValue[0] <= accumulator[0] && accumulator[1] === 'just now'
+        ? currentValue
+        : accumulator),
+      [diff, 'just now'],
+    );
 
-    render() {
+    return stringParams[1] === 'just now'
+      ? stringParams[1]
+      : `${Math.floor(diff / stringParams[0])}${stringParams[1]} ago`;
+  }
 
-        return (
-            <button className="orders">
-                <div className="circle">
-                </div>
-                <img src="/dish.svg" alt="dish.svg"/>
-                <p>
-                    order status
-                    <div className="count">
-                        {this.getOrdersCount(this.props.orders)}
-                    </div>
-                </p>
-            </button>
-        );
-    }
+  static getSubtotal(orders) {
+    const countOrderStage = (acc, curVal) => acc + curVal.item.price;
+    return Object.keys(orders).reduce(
+      (accumulator, currentValue) => accumulator + orders[currentValue].reduce(countOrderStage, 0),
+      0,
+    );
+  }
+
+  static getOrderStages(orders) {
+    return Object.keys(orders).map((elem) => {
+      const orderStage = orders[elem];
+      const time = Math.max(...orderStage.map((order) => order.time));
+      return <OrderStage time={Orders.getFormatTime(time)} orders={orderStage} title={elem} />;
+    });
+  }
+
+  render() {
+    const { orders, onClose, discounts } = this.props;
+    const subtotal = Orders.getSubtotal(orders);
+    return (
+      <div className="wrapper opening">
+        <div className="modal">
+          <div className="modal__divided-part">
+            <header>
+              <h1>Order Status</h1>
+
+              <button type="button" onClick={onClose}>
+                <span>Hide</span>
+                <img src="/right-arrow.svg" alt="right-arrow.svg" />
+              </button>
+            </header>
+            <ul>{Orders.getOrderStages(orders)}</ul>
+          </div>
+
+          <div className="modal__price">
+            <p className="title">Subtotal</p>
+
+            <p className="price">
+              $
+              {subtotal.toFixed(2)}
+            </p>
+          </div>
+
+          <div className="modal__price">
+            <p className="title">Discount</p>
+
+            <p className="price">
+              -
+              {Math.trunc(discounts.reduce((acc, curVal) => acc + curVal, 0) * 100)}
+              %
+            </p>
+          </div>
+
+          <div className="modal__price total">
+            <p className="title">Total</p>
+
+            <p className="price">
+              $
+              {(subtotal * (1 - discounts.reduce((acc, curVal) => acc + curVal, 0))).toFixed(2)}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
+
+Orders.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  discounts: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+  orders: PropTypes.shape({
+    ordered: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+    baking: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+    finishing: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+    served: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+  }).isRequired,
+};
+
+export default Orders;
