@@ -4,7 +4,12 @@ class Service {
       selectedCategory: null,
       categories: [],
       items: [],
-      orders: [],
+      orders: {
+        ordered: [],
+        baking: [],
+        finishing: [],
+        served: [],
+      },
       filters: [],
       discounts: [],
     };
@@ -87,7 +92,7 @@ class Service {
     Promise.allSettled([
       this.getDataAsync('/categories', 'categories').then(() => {
         // get items of some category only after all categories titles is loaded
-        this.data.selectedCategory = this.data.selectedCategory ?? this.data.categories[0]?._id;
+        this.data.selectedCategory = this.data.selectedCategory ?? this.data.categories[0]?.id;
         return this.getDataAsync('/items', 'items', {
           id: this.data.selectedCategory,
         });

@@ -8,7 +8,7 @@ class List extends React.Component {
     const getCallbackById = (id) => () => callback(id);
 
     return items?.map((elem) => (
-      <Item key={elem._id} item={elem} onClick={getCallbackById(elem._id)} />
+      <Item key={elem.id} item={elem} onClick={getCallbackById(elem.id)} />
     ));
   }
 

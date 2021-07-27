@@ -11,7 +11,7 @@ function OrderStatus(props) {
       <p>
         order status
         <div className="count">
-          {orders.reduce((acc, curVal) => acc + curVal?.orders?.length, 0)}
+          {Object.keys(orders).reduce((acc, key) => acc + orders[key]?.length, 0)}
         </div>
       </p>
     </button>
@@ -20,7 +20,12 @@ function OrderStatus(props) {
 
 OrderStatus.propTypes = {
   onClick: PropTypes.func.isRequired,
-  orders: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+  orders: PropTypes.shape({
+    ordered: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+    baking: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+    finishing: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+    served: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+  }).isRequired,
 };
 
 export default OrderStatus;

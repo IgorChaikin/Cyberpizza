@@ -4,17 +4,16 @@
   "description": "Pizza-shop site",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js --mode production",
+    "start": "node server.js",
     "build": "webpack --mode production",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server:watch": "nodemon server.js --mode development",
+    "server:watch": "nodemon server.js",
     "client:watch": "webpack serve",
     "lint": "eslint \"{,!(node_modules|dist)/**/}*.+(js|jsx)\" --fix",
     "format": "prettier --write \"{,!(node_modules|dist)/**/}*.+(js|jsx|json|css|md)\"",
     "prepare": "husky install",
     "deploy": "git push heroku -f production:master",
-    "commit-deploy": "git add . && git commit -m \"deploy on heroku\" && npm run deploy",
-    "seed": "node db.init.js"
+    "commit-deploy": "git add . && git commit -m \"deploy on heroku\" && npm run deploy"
   },
   "prettier": {
     "singleQuote": true,
@@ -68,11 +67,8 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "heroku": "^7.56.1",
-    "mongodb": "^4.0.1",
-    "mongoose": "^5.13.3",
     "postcss-import": "^14.0.2",
     "postcss-preset-env": "^6.7.0",
     "postcss-url": "^10.1.3",

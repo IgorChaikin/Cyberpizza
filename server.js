@@ -1,21 +1,7 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const path = require('path');
 
-// env from --mode param
-require('dotenv').config({
-  path: path.join(__dirname, `${process.argv[process.argv.indexOf('--mode') + 1]}.env`),
-});
-const models = require('./models');
-
-const { Types } = mongoose;
-const { ObjectId } = Types;
-const {
-  Category, Order, OrderStage, Item, Filter, Discount,
-} = models;
-
 const port = process.env.PORT || 8080;
-const dbConn = process.env.DB_CONN;
 
 // packages import
 const app = express();
@@ -35,54 +21,152 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-function getOrders() {
-  return OrderStage.aggregate([
+const data = {
+  categories: [
     {
-      $lookup: {
-        from: 'orders',
-        localField: '_id',
-        foreignField: 'orderStageId',
-        pipeline: [
-          {
-            $lookup: {
-              from: 'items',
-              localField: 'itemId',
-              foreignField: '_id',
-              as: 'item',
-            },
-          },
-          {
-            $unwind: {
-              path: '$item',
-              preserveNullAndEmptyArrays: true,
-            },
-          },
-        ],
-        as: 'orders',
-      },
+      id: '0',
+      title: 'Pizza',
+      items: [
+        {
+          id: '0-0',
+          imgPath: '/ham_and_cheese.png',
+          price: 26.75,
+          title: 'Ham and cheese',
+          description: 'Ham and cheese ham and cheese ham and cheese ham and cheese ham and cheese',
+          tags: [],
+        },
+        {
+          id: '0-1',
+          imgPath: '/margarita.png',
+          price: 20.5,
+          title: 'Margarita',
+          description: 'Margarita margarita margarita margarita margarita margarita margarita',
+          tags: [],
+        },
+        {
+          id: '0-2',
+          imgPath: '/pepperoni.png',
+          price: 20.5,
+          title: 'Pepperoni',
+          description: 'Pepperoni pepperoni pepperoni pepperoni pepperoni',
+          tags: [],
+        },
+        {
+          id: '0-3',
+          imgPath: '/vegetable.png',
+          price: 17.3,
+          title: 'Vegetable',
+          description: 'Vegetable vegetable vegetable vegetable vegetable',
+          tags: ['0', '1'],
+        },
+        {
+          id: '0-4',
+          imgPath: '/italian.png',
+          price: 28.0,
+          title: 'Italian',
+          description: 'Italian italian italian italian italian italian italian',
+          tags: [],
+        },
+      ],
     },
-  ]);
-}
+
+    {
+      id: '1',
+      title: 'Pasta',
+      items: [],
+    },
+
+    {
+      id: '2',
+      title: 'Sandwiches',
+      items: [],
+    },
+
+    {
+      id: '3',
+      title: 'Soup',
+      items: [],
+    },
+
+    {
+      id: '4',
+      title: 'Salads',
+      items: [],
+    },
+
+    {
+      id: '5',
+      title: 'Sides',
+      items: [],
+    },
+
+    {
+      id: '6',
+      title: 'Deserts',
+      items: [],
+    },
+
+    {
+      id: '7',
+      title: 'Drinks',
+      items: [],
+    },
+  ],
+  orders: {
+    ordered: [],
+    baking: [],
+    finishing: [],
+    served: [],
+  },
+  filters: [
+    {
+      id: '0',
+      name: 'vegetarian',
+    },
+    {
+      id: '1',
+      name: 'vegan',
+    },
+    {
+      id: '2',
+      name: 'tag0',
+    },
+    {
+      id: '3',
+      name: 'tag1',
+    },
+    {
+      id: '4',
+      name: 'tag2',
+    },
+  ],
+  discounts: [0.1],
+};
 
 app.get('/categories', (request, response) => {
-  Category.find({}, (err, categories) => response.json(categories));
+  const categories = data.categories.map((elem) => ({
+    id: elem.id,
+    title: elem.title,
+  }));
+  response.json(categories);
 });
 
 app.get('/items', (request, response) => {
   const { id } = request.query;
-  Item.find({ categoryId: id }, (err, items) => response.json(items));
+  const selectedCategory = data.categories.find((elem) => elem.id === id);
+  response.json(selectedCategory?.items);
 });
 
 app.get('/orders', (request, response) => {
-  getOrders().then((res) => response.json(res));
+  response.json(data.orders);
 });
 
 app.get('/filters', (request, response) => {
-  Filter.find({}, (err, filters) => response.json(filters));
+  response.json(data.filters);
 });
 
 app.get('/discounts', (request, response) => {
-  Discount.find({}, (err, discounts) => response.json(discounts.map((elem) => elem.value)));
+  response.json(data.discounts);
 });
 
 app.post('/orders', (request, response) => {
@@ -90,20 +174,22 @@ app.post('/orders', (request, response) => {
     return response.sendStatus(400);
   }
 
-  const order = new Order({
-    orderStageId: ObjectId('000000000000000000000000'),
-    itemId: request.body.id,
+  let order = null;
+
+  data.categories.forEach((category) => category.items.forEach((item) => {
+    if (item.id === request.body.id) {
+      order = item;
+    }
+  }));
+
+  data.orders.ordered.push({
+    item: order,
     time: request.body.time,
   });
-  return order.save().then(() => getOrders().then((res) => response.json(res)));
+
+  return response.send(data.orders);
 });
 
-mongoose.connect(dbConn, { useUnifiedTopology: true, useNewUrlParser: true }, (err) => {
-  if (err) {
-    return console.log(err);
-  }
-
-  return app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
-  });
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`);
 });

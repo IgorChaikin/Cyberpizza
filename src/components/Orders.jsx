@@ -26,17 +26,17 @@ class Orders extends React.Component {
 
   static getSubtotal(orders) {
     const countOrderStage = (acc, curVal) => acc + curVal.item.price;
-    return orders.reduce(
-      (accumulator, currentValue) => accumulator + currentValue.orders.reduce(countOrderStage, 0),
+    return Object.keys(orders).reduce(
+      (accumulator, currentValue) => accumulator + orders[currentValue].reduce(countOrderStage, 0),
       0,
     );
   }
 
-  static getOrderStages(orderStages) {
-    return orderStages.map((elem) => {
-      const { orders, title, _id } = elem;
-      const time = Orders.getFormatTime(Math.max(...orders.map((order) => order.time)));
-      return <OrderStage time={time} orders={orders} title={title} id={_id} />;
+  static getOrderStages(orders) {
+    return Object.keys(orders).map((elem) => {
+      const orderStage = orders[elem];
+      const time = Math.max(...orderStage.map((order) => order.time));
+      return <OrderStage time={Orders.getFormatTime(time)} orders={orderStage} title={elem} />;
     });
   }
 
