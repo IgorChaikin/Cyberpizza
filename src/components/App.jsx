@@ -24,8 +24,6 @@ class App extends React.Component {
 
     const { data } = this.props;
 
-    console.log('FROM APP', data);
-
     const {
       orders, selectedCategory, items, categories, filters, discounts,
     } = data;
@@ -52,7 +50,7 @@ class App extends React.Component {
     return (id) => {
       const { filters } = this.state;
       const changedFilters = filters.slice();
-      const idx = changedFilters.findIndex((elem) => elem.id === id);
+      const idx = changedFilters.findIndex((elem) => elem._id === id);
 
       changedFilters[idx].isActive = !changedFilters[idx].isActive;
 
@@ -103,11 +101,11 @@ class App extends React.Component {
     const getCallbackById = (categoryId) => () => App.changeCategory(categoryId);
 
     return categories.map((elem) => {
-      const title = id === elem.id ? `—${elem.title}` : elem.title;
+      const title = id === elem._id ? `—${elem.title}` : elem.title;
       return (
-        <li key={elem.id}>
-          {id === elem.id ? <div id="marker" className="circle" /> : ''}
-          <button type="button" onClick={getCallbackById(elem.id)}>
+        <li key={elem._id}>
+          {id === elem._id ? <div id="marker" className="circle" /> : ''}
+          <button type="button" onClick={getCallbackById(elem._id)}>
             <h2>{title}</h2>
           </button>
         </li>
@@ -128,16 +126,16 @@ class App extends React.Component {
     } = this.state;
 
     const categoriesList = this.categoriesList(selectedCategory);
-    const categoryTitle = categories.find((elem) => elem.id === selectedCategory)?.title;
+    const categoryTitle = categories.find((elem) => elem._id === selectedCategory)?.title;
 
-    const activeFilters = filters.filter((elem) => elem.isActive)?.map((elem) => elem.id);
+    const activeFilters = filters.filter((elem) => elem.isActive)?.map((elem) => elem._id);
 
     const filteredItems = activeFilters.length > 0
       ? items?.filter((elem) => {
-        const intersection = elem.tags.filter((x) => activeFilters.includes(x));
+        const intersection = elem.filterIds.filter((x) => activeFilters.includes(x));
         return (
           intersection.length > 0
-              && intersection.length <= elem.tags.length
+              && intersection.length <= elem.filterIds.length
               && intersection.length === activeFilters.length
         );
       })

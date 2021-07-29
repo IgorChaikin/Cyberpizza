@@ -11,9 +11,9 @@ class Filters extends React.Component {
     return tagList?.map((elem) => (
       <button
         type="button"
-        key={elem.id}
+        key={elem._id}
         className={`tag tag_${elem.isActive ? '' : 'in'}active`}
-        onClick={getCallbackById(elem.id)}
+        onClick={getCallbackById(elem._id)}
       >
         #
         {elem.name}
