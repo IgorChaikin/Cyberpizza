@@ -38,9 +38,11 @@ const discountScheme = new Schema({
 
 // models definition
 
-module.exports.Category = model('Category', categoryScheme);
-module.exports.Order = model('Order', orderScheme);
-module.exports.OrderStage = model('OrderStage', orderStageScheme);
-module.exports.Item = model('Item', itemScheme);
-module.exports.Filter = model('Filter', filterScheme);
-module.exports.Discount = model('Discount', discountScheme);
+module.exports = {
+  Category: model('Category', categoryScheme),
+  Order: model('Order', orderScheme),
+  OrderStage: model('OrderStage', orderStageScheme),
+  Item: model('Item', itemScheme),
+  Filter: model('Filter', filterScheme),
+  Discount: model('Discount', discountScheme),
+};

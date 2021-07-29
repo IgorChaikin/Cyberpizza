@@ -28,7 +28,7 @@ class Service {
     const params = Object.entries(query)
       .map((value) => `${value[0]}=${value[1]}`)
       .join('&');
-    return fetch(`${url}?${params}`, {
+    return fetch(`/api${url}?${params}`, {
       method: 'GET',
     })
       .then((res) => res.json())
@@ -63,7 +63,7 @@ class Service {
 
   postOrder(id, time) {
     const cash = JSON.stringify(this.data);
-    fetch('/orders', {
+    fetch('/api/orders', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

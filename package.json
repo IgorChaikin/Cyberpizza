@@ -4,10 +4,10 @@
   "description": "Pizza-shop site",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js --mode production",
+    "start": "node server.js",
     "build": "webpack --mode production",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server:watch": "nodemon server.js --mode development",
+    "server:watch": "nodemon server.js",
     "client:watch": "webpack serve",
     "lint": "eslint \"{,!(node_modules|dist)/**/}*.+(js|jsx)\" --fix",
     "format": "prettier --write \"{,!(node_modules|dist)/**/}*.+(js|jsx|json|css|md)\"",

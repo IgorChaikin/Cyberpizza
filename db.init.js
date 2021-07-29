@@ -1,8 +1,3 @@
-const path = require('path');
-
-// env from --mode param
-require('dotenv').config({ path: path.join(__dirname, `${process.argv[2]}.env`) });
-
 const mongoose = require('mongoose');
 const models = require('./models');
 
@@ -12,7 +7,7 @@ const {
   Category, Order, OrderStage, Item, Filter, Discount,
 } = models;
 
-const dbConn = process.env.DB_CONN;
+const dbConn = process.argv[2];
 
 const initialData = {
   categories: [
@@ -76,7 +71,6 @@ const initialData = {
   orders: [],
   items: [
     {
-      _id: ObjectId('000000000000000000000000'),
       imgPath: '/ham_and_cheese.png',
       price: 26.75,
       title: 'Ham and cheese',
@@ -158,5 +152,11 @@ mongoose.connect(dbConn, { useUnifiedTopology: true, useNewUrlParser: true }, (e
     Discount.remove({}).then(() => Discount.insertMany(initialData.discounts)),
     Order.remove({}),
     OrderStage.remove({}).then(() => OrderStage.insertMany(initialData.orderStages)),
-  ]).then(() => mongoose.connection.close().then(() => console.log('Database initialised')));
+  ]).then((res) => {
+    if (res.findIndex((elem) => elem.status === 'rejected') === -1) {
+      mongoose.connection.close().then(() => console.log('Database initialised'));
+    } else {
+      console.log('Database initialisation failed');
+    }
+  });
 });
