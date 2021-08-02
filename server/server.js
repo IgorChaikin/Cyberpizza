@@ -4,7 +4,6 @@ const api = require('./routers/api');
 const main = require('./routers/main');
 const createApp = require('./app');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
-require('dotenv').config({ path: path.join(__dirname, '../.env.sample') });
 
 const port = process.env.PORT || 8080;
 const dbConn = process.env.DB_CONN;

@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const path = require('path');
 const models = require('../models');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
-require('dotenv').config({ path: path.join(__dirname, '../../.env.sample') });
 
 const { Types } = mongoose;
 const { ObjectId } = Types;
