@@ -55,7 +55,6 @@
     "mini-css-extract-plugin": "^1.6.2",
     "node-sass": "^6.0.1",
     "nodemon": "^2.0.12",
-    "optimize-css-assets-webpack-plugin": "^6.0.1",
     "postcss-loader": "^6.1.1",
     "prettier": "^2.3.2",
     "resolve-url-loader": "^4.0.0",
@@ -68,11 +67,14 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
+    "cssnano": "^5.0.7",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "heroku": "^7.56.1",
     "mongodb": "^4.0.1",
     "mongoose": "^5.13.3",
+    "optimize-css-assets-webpack-plugin": "^6.0.1",
+    "postcss-discard-comments": "^5.0.1",
     "postcss-import": "^14.0.2",
     "postcss-preset-env": "^6.7.0",
     "postcss-url": "^10.1.3",
