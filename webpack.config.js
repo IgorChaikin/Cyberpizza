@@ -11,7 +11,7 @@ module.exports = function (_env, argv) {
 
   return {
     devtool: isDevelopment && 'cheap-module-source-map',
-    entry: './src/index.jsx',
+    entry: './client/index.jsx',
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'assets/js/[name].[contenthash:8].js',
@@ -112,7 +112,7 @@ module.exports = function (_env, argv) {
       }),
       new HtmlWebpackPlugin({
         // template: path.resolve(__dirname, "public/index.html"),
-        template: './src/index.html',
+        template: './client/index.html',
         inject: true,
       }),
     ].filter(Boolean),

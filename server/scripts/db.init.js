@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
-const models = require('./models');
+const path = require('path');
+const models = require('../models');
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
+require('dotenv').config({ path: path.join(__dirname, '../../.env.sample') });
 
 const { Types } = mongoose;
 const { ObjectId } = Types;
@@ -7,7 +10,7 @@ const {
   Category, Order, OrderStage, Item, Filter, Discount,
 } = models;
 
-const dbConn = process.argv[2];
+const dbConn = process.env.DB_CONN;
 
 const initialData = {
   categories: [
@@ -109,6 +112,29 @@ const initialData = {
       description: 'Italian italian italian italian italian italian italian',
       filterIds: [],
       categoryId: ObjectId('000000000000000000000000'),
+    },
+    {
+      imgPath: '/carbonara.png',
+      price: 31.5,
+      title: 'Carbonara',
+      description: 'Carbonara carbonara carbonara carbonara carbonara carbonara carbonara',
+      filterIds: [ObjectId('000000000000000000000000')],
+      categoryId: ObjectId('000000000000000000000001'),
+    },
+    {
+      imgPath: '/spaghetti_bolognese.png',
+      price: 33.9,
+      title: 'Spaghetti bolognese',
+      description: 'Spaghetti spaghetti spaghetti spaghetti spaghetti spaghetti spaghetti',
+      filterIds: [],
+      categoryId: ObjectId('000000000000000000000001'),
+    },
+    {
+      imgPath: '/cola.png',
+      price: 11.1,
+      title: 'Cola',
+      filterIds: [],
+      categoryId: ObjectId('000000000000000000000007'),
     },
   ],
   filters: [
