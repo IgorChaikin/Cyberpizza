@@ -4,12 +4,7 @@ class Service {
       selectedCategory: null,
       categories: [],
       items: [],
-      orders: {
-        ordered: [],
-        baking: [],
-        finishing: [],
-        served: [],
-      },
+      orders: [],
       filters: [],
       discounts: [],
     };
@@ -33,7 +28,7 @@ class Service {
     const params = Object.entries(query)
       .map((value) => `${value[0]}=${value[1]}`)
       .join('&');
-    return fetch(`${url}?${params}`, {
+    return fetch(`/api${url}?${params}`, {
       method: 'GET',
     })
       .then((res) => res.json())
@@ -68,7 +63,7 @@ class Service {
 
   postOrder(id, time) {
     const cash = JSON.stringify(this.data);
-    fetch('/orders', {
+    fetch('/api/orders', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -92,7 +87,7 @@ class Service {
     Promise.allSettled([
       this.getDataAsync('/categories', 'categories').then(() => {
         // get items of some category only after all categories titles is loaded
-        this.data.selectedCategory = this.data.selectedCategory ?? this.data.categories[0]?.id;
+        this.data.selectedCategory = this.data.selectedCategory ?? this.data.categories[0]?._id;
         return this.getDataAsync('/items', 'items', {
           id: this.data.selectedCategory,
         });
