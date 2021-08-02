@@ -32,11 +32,14 @@ class App extends React.Component {
       orders,
       selectedCategory,
       items,
-      filters: filters.map((elem) => ({ isActive: false, ...elem })),
+      filters,
       categories,
       discounts,
       isAllFilters: false,
       isOrdersVisible: false,
+      activeFilters: [],
+      /* notificationCount: 0,
+      notifications: [], */
     };
   }
 
@@ -48,14 +51,18 @@ class App extends React.Component {
 
   get switchFilterCallback() {
     return (id) => {
-      const { filters } = this.state;
-      const changedFilters = filters.slice();
-      const idx = changedFilters.findIndex((elem) => elem._id === id);
+      const { activeFilters } = this.state;
+      const changedFilters = activeFilters.slice();
+      const idx = changedFilters.findIndex((elem) => elem === id);
 
-      changedFilters[idx].isActive = !changedFilters[idx].isActive;
+      if (idx === -1) {
+        changedFilters.push(id);
+      } else {
+        changedFilters.splice(idx, 1);
+      }
 
       this.setState({
-        filters: changedFilters,
+        activeFilters: changedFilters,
       });
     };
   }
@@ -118,6 +125,7 @@ class App extends React.Component {
       selectedCategory,
       categories,
       filters,
+      activeFilters,
       items,
       orders,
       isAllFilters,
@@ -127,8 +135,6 @@ class App extends React.Component {
 
     const categoriesList = this.categoriesList(selectedCategory);
     const categoryTitle = categories.find((elem) => elem._id === selectedCategory)?.title;
-
-    const activeFilters = filters.filter((elem) => elem.isActive)?.map((elem) => elem._id);
 
     const filteredItems = activeFilters.length > 0
       ? items?.filter((elem) => {
@@ -151,7 +157,10 @@ class App extends React.Component {
         <div className="main">
           <header>
             <Filters
-              tags={filters}
+              tags={filters.map((elem) => ({
+                isActive: activeFilters.includes(elem._id),
+                ...elem,
+              }))}
               onSwitch={this.switchFilterCallback}
               onSwitchAll={this.switchDisplayAllCallback}
               all={isAllFilters}
@@ -176,16 +185,15 @@ App.propTypes = {
       PropTypes.string.isRequired,
       PropTypes.oneOf([null]).isRequired,
     ]).isRequired,
+    boughtItem: PropTypes.oneOfType([
+      PropTypes.string.isRequired,
+      PropTypes.oneOf([null]).isRequired,
+    ]).isRequired,
     categories: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
     items: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
     filters: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
     discounts: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
-    orders: PropTypes.shape({
-      ordered: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
-      baking: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
-      finishing: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
-      served: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
-    }).isRequired,
+    orders: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
   }).isRequired,
 };
 

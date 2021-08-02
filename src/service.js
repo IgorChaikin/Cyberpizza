@@ -7,13 +7,14 @@ class Service {
       orders: [],
       filters: [],
       discounts: [],
+      isSucceeded: true,
     };
     this.changeHandler = {};
   }
 
   start() {
     this.update();
-    // this.refresh = setInterval(()=> this.update(), 2000);
+    // this.refresh = setInterval(() => this.update(), 2000);
   }
 
   stop() {
@@ -21,7 +22,7 @@ class Service {
   }
 
   getData() {
-    return this.data;
+    return JSON.parse(JSON.stringify(this.data));
   }
 
   async getDataAsync(url, prop, query = {}) {
@@ -34,8 +35,12 @@ class Service {
       .then((res) => res.json())
       .then((data) => {
         this.data[prop] = data;
+        this.data.isSucceeded = true;
       })
-      .catch(console.error);
+      .catch((err) => {
+        this.data.isSucceeded = false;
+        console.log(err);
+      });
   }
 
   checkChanges(oldData, newData) {
@@ -58,7 +63,7 @@ class Service {
         const newData = JSON.stringify(this.data);
         this.checkChanges(cash, newData);
       })
-      .catch(console.error);
+      .catch((err) => console.error(err));
   }
 
   postOrder(id, time) {
@@ -79,7 +84,10 @@ class Service {
         const newData = JSON.stringify(this.data);
         this.checkChanges(cash, newData);
       })
-      .catch(console.error);
+      .catch((err) => {
+        this.data.isSucceeded = false;
+        console.log(err);
+      });
   }
 
   update() {
