@@ -20,16 +20,18 @@ module.exports = function (_env, argv) {
     module: {
       rules: [
         {
-          test: /\.jsx?$/,
+          test: /\.(js|jsx)$/,
           exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              cacheDirectory: true,
-              cacheCompression: false,
-              envName: isProduction ? 'production' : 'development',
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                cacheDirectory: true,
+                cacheCompression: false,
+                envName: isProduction ? 'production' : 'development',
+              },
             },
-          },
+          ],
         },
         {
           test: /\.css$/,
