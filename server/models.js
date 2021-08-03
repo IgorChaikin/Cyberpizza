@@ -5,12 +5,11 @@ const { ObjectId } = Types;
 
 // schemas definition
 const categoryScheme = new Schema({
-  _id: ObjectId,
-  title: String,
+  title: { type: String, required: true },
 });
 
 const orderStageScheme = new Schema({
-  title: String,
+  title: { type: String, required: true },
 });
 
 const orderScheme = new Schema({
@@ -20,20 +19,20 @@ const orderScheme = new Schema({
 });
 
 const itemScheme = new Schema({
-  imgPath: String,
-  price: Number,
-  title: String,
+  imgPath: { type: String, required: true },
+  price: { type: Number, required: true },
+  title: { type: String, required: true },
   description: String,
   filterIds: [ObjectId],
   categoryId: ObjectId,
 });
 
 const filterScheme = new Schema({
-  name: String,
+  name: { type: String, required: true },
 });
 
 const discountScheme = new Schema({
-  value: String,
+  value: { type: Number, required: true },
 });
 
 // models definition
