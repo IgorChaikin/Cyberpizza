@@ -1,13 +1,18 @@
 // import s from '../styles/App.scss'
 // import withStyles from 'isomorphic-style-loader/withStyles'
 import React from 'react';
+// import {useDispatch, useSelector} from "react-redux";
+
 import PropTypes from 'prop-types';
 import List from './List';
 import '../styles/App.scss';
 import Filters from './Filters';
 import OrderStatus from './OrderStatus';
-import dataSource from '../service';
 import Orders from './Orders';
+
+import dataSource from '../service';
+
+// import {setCategory, postOrder, fetchData, selectByPropName} from '../service/serviceSlice';
 
 // withStyles(s)
 class App extends React.Component {
