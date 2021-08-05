@@ -21,7 +21,7 @@ module.exports = function (_env, argv) {
     module: {
       rules: [
         {
-          test: /\.(js|jsx)$/,
+          test: /\.jsx?$/,
           exclude: /node_modules/,
           use: [
             {
