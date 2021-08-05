@@ -9,7 +9,7 @@ function OrderStatus(props) {
       <div className="circle" />
       <img src="/dish.svg" alt="dish.svg" />
       <p>
-        order status
+        <span>order status</span>
         <div className="count">
           {orders.reduce((acc, curVal) => acc + curVal?.orders?.length, 0)}
         </div>

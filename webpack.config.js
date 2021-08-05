@@ -43,14 +43,6 @@ module.exports = function (_env, argv) {
             {
               loader: 'css-loader',
             },
-            /* { loader:'isomorphic-style-loader'},
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                importLoaders: 1
-                            }
-                        },
-                        { loader:'postcss-loader'} */
           ],
         },
         {
@@ -58,12 +50,6 @@ module.exports = function (_env, argv) {
           use: [
             isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
             {
-              /* loader: 'css-loader',
-                            options: {
-                                importLoaders: 1,
-                                esModule: false,
-                            }, */
-
               loader: 'css-loader',
               options: {
                 importLoaders: 2,
@@ -114,7 +100,6 @@ module.exports = function (_env, argv) {
         'process.env.NODE_ENV': JSON.stringify(isProduction ? 'production' : 'development'),
       }),
       new HtmlWebpackPlugin({
-        // template: path.resolve(__dirname, "public/index.html"),
         template: './client/index.html',
         inject: true,
       }),
@@ -180,23 +165,6 @@ module.exports = function (_env, argv) {
           target: 'http://localhost:8080',
         },
       },
-
-      // contentBase: this.output.path,
-      // We want to re-use this path
-
-      // noInfo: false,
-
-      // debug: false,
-      // Makes no difference
-
-      // https: true,
-      // colors: true,
-
-      // hot: true,
-      // Pass this from the command line as '--hot',
-      // which sets up the HotModuleReplacementPlugin automatically
-
-      // inline: true
     },
   };
 };
