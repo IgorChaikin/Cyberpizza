@@ -39,18 +39,22 @@ function getOrders() {
         ],
       },
     },
-  ]);
+  ]).sort({ _id: 1 });
 }
 
 api.use(express.json());
 
 api.get('/categories', (request, response) => {
-  Category.find({}, (err, categories) => response.json(categories));
+  Category.find({})
+    .sort({ _id: 1 })
+    .exec((err, categories) => response.json(categories));
 });
 
 api.get('/items', (request, response) => {
   const { id } = request.query;
-  Item.find({ categoryId: id }, (err, items) => response.json(items));
+  Item.find({ categoryId: id })
+    .sort({ title: 1 })
+    .exec((err, items) => response.json(items));
 });
 
 api.get('/orders', (request, response) => {
@@ -58,7 +62,9 @@ api.get('/orders', (request, response) => {
 });
 
 api.get('/filters', (request, response) => {
-  Filter.find({}, (err, filters) => response.json(filters));
+  Filter.find({})
+    .sort({ _id: -1 })
+    .exec((err, filters) => response.json(filters));
 });
 
 api.get('/discounts', (request, response) => {
