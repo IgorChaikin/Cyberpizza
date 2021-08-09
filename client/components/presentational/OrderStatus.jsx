@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/OrdersStatus.scss';
+import '../../styles/OrdersStatus.scss';
 import PropTypes from 'prop-types';
 
 function OrderStatus(props) {
