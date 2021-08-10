@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import Filters from '../components/Filters/Filters';
 
-import { switchFilter, switchAll } from '../actions/filters';
+import { switchFilter, switchAll } from '../actions/actions.filters';
 
 const mapDispatchToProps = (dispatch) => ({
   onSwitch: (id) => dispatch(switchFilter(id)),

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import List from '../components/List/List';
 
-import { postOrder } from '../actions/orders';
+import { postOrder } from '../actions/actions.orders';
 
 const mapDispatchToProps = (dispatch) => ({
   onAdd: (id) => dispatch(postOrder(id)),

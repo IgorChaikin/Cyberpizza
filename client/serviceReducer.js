@@ -1,7 +1,7 @@
-import { INIT_FULFILLED } from './actions/init';
-import { FETCH_ITEMS_FULFILLED } from './actions/items';
-import { SWITCH_ORDERS, POST_ORDER_FULFILLED } from './actions/orders';
-import { SWITCH_ALL, SWITCH_FILTER } from './actions/filters';
+import { INIT_FULFILLED } from './actions/actions.init';
+import { FETCH_ITEMS_FULFILLED } from './actions/actions.items';
+import { SWITCH_ORDERS, POST_ORDER_FULFILLED } from './actions/actions.orders';
+import { SWITCH_ALL, SWITCH_FILTER } from './actions/actions.filters';
 
 export const initialState = {
   activeFilters: [],

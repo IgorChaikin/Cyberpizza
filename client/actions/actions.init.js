@@ -1,7 +1,7 @@
 import { ActionType } from 'redux-promise-middleware';
 
-export const INIT = 'INIT';
-export const INIT_FULFILLED = `${INIT}_${ActionType.Fulfilled}`;
+export const ActionsInit = 'ActionsInit';
+export const INIT_FULFILLED = `${ActionsInit}_${ActionType.Fulfilled}`;
 
 export function init() {
   const getDataAsync = async () => {
@@ -20,7 +20,7 @@ export function init() {
   };
 
   return {
-    type: INIT,
+    type: ActionsInit,
     payload: getDataAsync(),
   };
 }
