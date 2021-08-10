@@ -1,0 +1,43 @@
+@import "../../vars";
+
+.categories-list {
+  p{
+    color: $grey-color;
+    font: $price-text;
+    text-transform: uppercase;
+  }
+
+  ul{
+    padding-left: 0;
+    li{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding-left: 2em;
+
+
+      position: relative;
+
+      button {
+        background-color: transparent;
+        outline: none;
+        border: none;
+        font: $nav-item-text;
+
+        text-transform: uppercase;
+        z-index: 1;
+        h2{
+          margin: 6px 0;
+          color: $black-color;
+        }
+      }
+
+      .circle{
+        background-color: $light-color;
+
+        opacity: 0;
+        animation: appear 0.25s 1 linear forwards;
+      }
+    }
+  }
+}

@@ -1,11 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import serviceReducer, { init } from './service/serviceSlice';
+import { applyMiddleware, createStore } from 'redux';
+import promise from 'redux-promise-middleware';
+import serviceReducer, { initialState } from './serviceReducer';
 
-const store = configureStore({
-  reducer: {
-    service: serviceReducer,
-  },
-});
+import { init } from './actions/init';
+
+const store = createStore(serviceReducer, initialState, applyMiddleware(promise));
 
 store.dispatch(init());
 
