@@ -9,8 +9,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const { isAllFilters, activeFilters } = state;
-  const { filters } = state.data;
+  const { isAllFilters, activeFilters, filters } = state;
   const tags = filters.map((elem) => ({ isActive: activeFilters.includes(elem._id), ...elem }));
 
   return {

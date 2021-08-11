@@ -8,7 +8,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  orders: state.data.orders,
+  orders: state.orders,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderStatus);

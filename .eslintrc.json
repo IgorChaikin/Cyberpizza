@@ -9,7 +9,8 @@
     "plugin:react-hooks/recommended",
     "plugin:react-redux/recommended",
     "plugin:react-perf/all",
-    "airbnb"
+    "airbnb",
+    "plugin:prettier/recommended"
   ],
   "parserOptions": {
     "ecmaFeatures": {
@@ -18,7 +19,7 @@
     "ecmaVersion": 2020,
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": ["react", "prettier"],
   "rules": {
     "no-underscore-dangle": "off",
     "no-param-reassign": "off",

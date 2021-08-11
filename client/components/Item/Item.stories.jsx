@@ -16,7 +16,7 @@ DescFull.args = {
     price: 80.0,
     title: 'Example',
     description: 'Pepperoni pepperoni pepperoni pepperoni pepperoni pepperoni pepperoni',
-    imgPath: 'https://cyber-pizza.herokuapp.com/pepperoni.png',
+    imgPath: '/pepperoni.png',
   },
 };
 
@@ -25,7 +25,7 @@ DescLess.args = {
   item: {
     price: 80.0,
     title: 'Example',
-    imgPath: 'https://cyber-pizza.herokuapp.com/pepperoni.png',
+    imgPath: '/pepperoni.png',
   },
 };
 

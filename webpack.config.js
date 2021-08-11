@@ -91,8 +91,8 @@ module.exports = function (_env, argv) {
       extensions: ['.js', '.jsx'],
     },
     plugins: [
-      isProduction
-        && new MiniCssExtractPlugin({
+      isProduction &&
+        new MiniCssExtractPlugin({
           filename: 'assets/css/[name].[contenthash:8].css',
           chunkFilename: 'assets/css/[name].[contenthash:8].chunk.css',
         }),

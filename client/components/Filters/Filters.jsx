@@ -3,9 +3,7 @@ import './Filters.scss';
 import PropTypes from 'prop-types';
 
 function Filters(props) {
-  const {
-    tags, onSwitch, onSwitchAll, all,
-  } = props;
+  const { tags, onSwitch, onSwitchAll, all } = props;
 
   const getCallbackById = (elemId) => () => onSwitch(elemId);
 
@@ -18,8 +16,7 @@ function Filters(props) {
       className={`tag tag_${elem.isActive ? '' : 'in'}active`}
       onClick={getCallbackById(elem._id)}
     >
-      #
-      {elem.name}
+      #{elem.name}
     </button>
   ));
 
@@ -43,7 +40,7 @@ Filters.propTypes = {
       _id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       isActive: PropTypes.bool.isRequired,
-    }),
+    })
   ).isRequired,
   onSwitch: PropTypes.func.isRequired,
   onSwitchAll: PropTypes.func.isRequired,

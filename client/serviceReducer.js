@@ -7,14 +7,12 @@ export const initialState = {
   activeFilters: [],
   isAllFilters: false,
   isOrdersVisible: false,
-  data: {
-    selectedCategory: null,
-    categories: [],
-    items: [],
-    orders: [],
-    filters: [],
-    discounts: [],
-  },
+  selectedCategory: null,
+  categories: [],
+  items: [],
+  orders: [],
+  filters: [],
+  discounts: [],
 };
 
 function serviceReducer(state, action) {
@@ -37,22 +35,19 @@ function serviceReducer(state, action) {
     case POST_ORDER_FULFILLED:
       return {
         ...state,
-        data: {
-          ...state.data,
-          orders: action.payload,
-        },
+        orders: action.payload,
       };
     case FETCH_ITEMS_FULFILLED:
       return {
         ...state,
-        data: {
-          ...state.data,
-          items: action.payload.items,
-          selectedCategory: action.payload.id,
-        },
+        items: action.payload.items,
+        selectedCategory: action.payload.id,
       };
     case INIT_FULFILLED:
-      return { ...state, data: action.payload };
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }

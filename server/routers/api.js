@@ -5,9 +5,7 @@ const models = require('../models');
 const api = express.Router();
 const { Types } = mongoose;
 const { ObjectId } = Types;
-const {
-  Category, Order, OrderStage, Item, Filter, Discount,
-} = models;
+const { Category, Order, OrderStage, Item, Filter, Discount } = models;
 
 function getOrders() {
   return OrderStage.aggregate([

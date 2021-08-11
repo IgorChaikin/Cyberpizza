@@ -11,7 +11,7 @@ export function init() {
       requests.map(async (elem) => {
         const response = await fetch(`/api/${elem}`, { method: 'GET' });
         data[elem] = await response.json();
-      }),
+      })
     );
     data.selectedCategory = data.categories[0]?._id;
     const response = await fetch(`/api/items?id=${data.selectedCategory}`, { method: 'GET' });

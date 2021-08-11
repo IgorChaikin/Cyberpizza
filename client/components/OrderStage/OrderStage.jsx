@@ -3,9 +3,7 @@ import React from 'react';
 import './OrderStage.scss';
 
 function OrderStage(props) {
-  const {
-    title, time, orders, id,
-  } = props;
+  const { title, time, orders, id } = props;
 
   const counts = {};
 

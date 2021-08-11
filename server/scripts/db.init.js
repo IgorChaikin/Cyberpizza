@@ -5,9 +5,7 @@ require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const { Types } = mongoose;
 const { ObjectId } = Types;
-const {
-  Category, Order, OrderStage, Item, Filter, Discount,
-} = models;
+const { Category, Order, OrderStage, Item, Filter, Discount } = models;
 
 const dbConn = process.env.DB_CONN;
 
