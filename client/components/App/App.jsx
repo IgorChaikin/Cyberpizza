@@ -2,11 +2,11 @@ import React from 'react';
 
 import './App.scss';
 import PropTypes from 'prop-types';
-import FiltersContainer from '../../containers/Filters';
-import OrderStatusContainer from '../../containers/OrderStatus';
-import OrdersContainer from '../../containers/Orders';
-import CategoriesContainer from '../../containers/Categories';
-import ListContainer from '../../containers/List';
+import Filters from '../../containers/Filters';
+import OrderStatus from '../../containers/OrderStatus';
+import Orders from '../../containers/Orders';
+import Categories from '../../containers/Categories';
+import List from '../../containers/List';
 
 function App(props) {
   const { isOrdersVisible } = props;
@@ -15,16 +15,16 @@ function App(props) {
     <div className="app">
       <nav className="side-nav">
         <h1>P.</h1>
-        <CategoriesContainer />
+        <Categories />
       </nav>
       <div className="main">
         <header>
-          <FiltersContainer />
-          <OrderStatusContainer />
+          <Filters />
+          <OrderStatus />
         </header>
-        <ListContainer />
+        <List />
       </div>
-      {isOrdersVisible ? <OrdersContainer /> : ''}
+      {isOrdersVisible ? <Orders /> : ''}
     </div>
   );
 }

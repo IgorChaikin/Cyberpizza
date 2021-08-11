@@ -6,7 +6,10 @@ import OrderStage from '../OrderStage/OrderStage';
 function Orders(props) {
   const { stages, onClose, discounts } = props;
 
-  const getFormatTime = (time) => {
+  const stagesList = stages.map((elem) => {
+    const { orders, title, _id } = elem;
+
+    const time = Math.max(...orders.map((order) => order.time));
     const diff = Math.floor((Date.now() - time) / 1000);
 
     const intervals = [
@@ -21,26 +24,19 @@ function Orders(props) {
       [diff, 'just now'],
     );
 
-    return stringParams[1] === 'just now'
+    const timeString = stringParams[1] === 'just now'
       ? stringParams[1]
       : `${Math.floor(diff / stringParams[0])}${stringParams[1]} ago`;
-  };
 
-  const getSubtotal = (orders) => {
-    const countOrderStage = (acc, curVal) => acc + curVal.item.price;
-    return orders.reduce(
-      (accumulator, currentValue) => accumulator + currentValue.orders.reduce(countOrderStage, 0),
-      0,
-    );
-  };
-
-  const getOrderStages = (orderStages) => orderStages.map((elem) => {
-    const { orders, title, _id } = elem;
-    const time = getFormatTime(Math.max(...orders.map((order) => order.time)));
-    return <OrderStage time={time} orders={orders} title={title} id={_id} />;
+    return <OrderStage time={timeString} orders={orders} title={title} id={_id} />;
   });
 
-  const subtotal = getSubtotal(stages);
+  const countOrderStage = (acc, curVal) => acc + curVal.item.price;
+  const subtotal = stages.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.orders.reduce(countOrderStage, 0),
+    0,
+  );
+
   return (
     <div className="wrapper opening">
       <div className="modal">
@@ -53,7 +49,7 @@ function Orders(props) {
               <img src="/right-arrow.svg" alt="right-arrow.svg" />
             </button>
           </header>
-          <ul>{getOrderStages(stages)}</ul>
+          <ul>{stagesList}</ul>
         </div>
 
         <div className="modal__price">

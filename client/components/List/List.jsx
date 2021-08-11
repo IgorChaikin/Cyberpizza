@@ -4,17 +4,12 @@ import PropTypes from 'prop-types';
 import Item from '../Item/Item';
 
 function List(props) {
-  const renderItems = (items, callback) => {
-    const getCallbackById = (id) => () => callback(id);
-
-    return items?.map((elem) => (
-      <Item key={elem._id} item={elem} onClick={getCallbackById(elem._id)} />
-    ));
-  };
-
   const { items, onAdd, title } = props;
+  const getCallbackById = (id) => () => onAdd(id);
 
-  const itemsList = renderItems(items, onAdd);
+  const itemsList = items?.map((elem) => (
+    <Item key={elem._id} item={elem} onClick={getCallbackById(elem._id)} />
+  ));
 
   return (
     <main>
