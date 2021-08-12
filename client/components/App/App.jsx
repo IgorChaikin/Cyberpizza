@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import './App.scss';
 import PropTypes from 'prop-types';
@@ -9,7 +9,14 @@ import Categories from '../../containers/Categories';
 import List from '../../containers/List';
 
 function App(props) {
-  const { isOrdersVisible } = props;
+  const { isOrdersVisible, categories, onMount } = props;
+
+  useEffect(() => {
+    const firstCategoryId = categories[0]?._id;
+    if (firstCategoryId) {
+      onMount(firstCategoryId);
+    }
+  }, [categories]);
 
   return (
     <div className="app">
@@ -31,6 +38,8 @@ function App(props) {
 
 App.propTypes = {
   isOrdersVisible: PropTypes.bool.isRequired,
+  onMount: PropTypes.func.isRequired,
+  categories: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
 };
 
 export default App;

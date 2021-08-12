@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
 import Orders from '../components/Orders/Orders';
 
-import { switchOrders } from '../actions/actions.orders';
+import { switchOrders, fetchOrders } from '../actions/actions.orders';
 
 const mapDispatchToProps = (dispatch) => ({
   onClose: () => dispatch(switchOrders()),
+  onMount: () => dispatch(fetchOrders()),
 });
 
 const mapStateToProps = (state) => ({

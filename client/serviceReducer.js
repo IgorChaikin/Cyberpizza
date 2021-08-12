@@ -1,7 +1,12 @@
-import { INIT_FULFILLED } from './actions/actions.init';
 import { FETCH_ITEMS_FULFILLED } from './actions/actions.items';
-import { SWITCH_ORDERS, POST_ORDER_FULFILLED } from './actions/actions.orders';
-import { SWITCH_ALL, SWITCH_FILTER } from './actions/actions.filters';
+import { FETCH_CATEGORIES_FULFILLED } from './actions/actions.categories';
+import { FETCH_DISCOUNTS_FULFILLED } from './actions/actions.discounts';
+import { SWITCH_ALL, SWITCH_FILTER, FETCH_FILTERS_FULFILLED } from './actions/actions.filters';
+import {
+  SWITCH_ORDERS,
+  POST_ORDER_FULFILLED,
+  FETCH_ORDERS_FULFILLED,
+} from './actions/actions.orders';
 
 export const initialState = {
   activeFilters: [],
@@ -43,10 +48,25 @@ function serviceReducer(state, action) {
         items: action.payload.items,
         selectedCategory: action.payload.id,
       };
-    case INIT_FULFILLED:
+    case FETCH_CATEGORIES_FULFILLED:
       return {
         ...state,
-        ...action.payload,
+        categories: action.payload,
+      };
+    case FETCH_DISCOUNTS_FULFILLED:
+      return {
+        ...state,
+        discounts: action.payload,
+      };
+    case FETCH_FILTERS_FULFILLED:
+      return {
+        ...state,
+        filters: action.payload,
+      };
+    case FETCH_ORDERS_FULFILLED:
+      return {
+        ...state,
+        orders: action.payload,
       };
     default:
       return state;

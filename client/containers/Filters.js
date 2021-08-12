@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
 import Filters from '../components/Filters/Filters';
 
-import { switchFilter, switchAll } from '../actions/actions.filters';
+import { switchFilter, switchAll, fetchFilters } from '../actions/actions.filters';
 
 const mapDispatchToProps = (dispatch) => ({
   onSwitch: (id) => dispatch(switchFilter(id)),
   onSwitchAll: () => dispatch(switchAll()),
+  onMount: () => dispatch(fetchFilters()),
 });
 
 const mapStateToProps = (state) => {

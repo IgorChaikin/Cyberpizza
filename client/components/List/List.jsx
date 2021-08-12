@@ -5,6 +5,7 @@ import Item from '../Item/Item';
 
 function List(props) {
   const { items, onAdd, title } = props;
+
   const getCallbackById = (id) => () => onAdd(id);
 
   const itemsList = items?.map((elem) => (
