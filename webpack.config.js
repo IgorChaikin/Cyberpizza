@@ -1,6 +1,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
+const cssnano = require('cssnano');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -11,7 +12,7 @@ module.exports = function (_env, argv) {
 
   return {
     devtool: isDevelopment && 'cheap-module-source-map',
-    entry: './src/index.jsx',
+    entry: './client/index.jsx',
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'assets/js/[name].[contenthash:8].js',
@@ -22,14 +23,16 @@ module.exports = function (_env, argv) {
         {
           test: /\.jsx?$/,
           exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              cacheDirectory: true,
-              cacheCompression: false,
-              envName: isProduction ? 'production' : 'development',
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                cacheDirectory: true,
+                cacheCompression: false,
+                envName: isProduction ? 'production' : 'development',
+              },
             },
-          },
+          ],
         },
         {
           test: /\.css$/,
@@ -40,14 +43,6 @@ module.exports = function (_env, argv) {
             {
               loader: 'css-loader',
             },
-            /* { loader:'isomorphic-style-loader'},
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                importLoaders: 1
-                            }
-                        },
-                        { loader:'postcss-loader'} */
           ],
         },
         {
@@ -55,12 +50,6 @@ module.exports = function (_env, argv) {
           use: [
             isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
             {
-              /* loader: 'css-loader',
-                            options: {
-                                importLoaders: 1,
-                                esModule: false,
-                            }, */
-
               loader: 'css-loader',
               options: {
                 importLoaders: 2,
@@ -102,8 +91,8 @@ module.exports = function (_env, argv) {
       extensions: ['.js', '.jsx'],
     },
     plugins: [
-      isProduction
-        && new MiniCssExtractPlugin({
+      isProduction &&
+        new MiniCssExtractPlugin({
           filename: 'assets/css/[name].[contenthash:8].css',
           chunkFilename: 'assets/css/[name].[contenthash:8].chunk.css',
         }),
@@ -111,8 +100,7 @@ module.exports = function (_env, argv) {
         'process.env.NODE_ENV': JSON.stringify(isProduction ? 'production' : 'development'),
       }),
       new HtmlWebpackPlugin({
-        // template: path.resolve(__dirname, "public/index.html"),
-        template: './src/index.html',
+        template: './client/index.html',
         inject: true,
       }),
     ].filter(Boolean),
@@ -134,7 +122,14 @@ module.exports = function (_env, argv) {
             warnings: false,
           },
         }),
-        new OptimizeCssAssetsPlugin(),
+        new OptimizeCssAssetsPlugin({
+          assetNameRegExp: /\.optimize\.css$/g,
+          cssProcessor: cssnano,
+          cssProcessorPluginOptions: {
+            preset: ['default', { discardComments: { removeAll: true } }],
+          },
+          canPrint: true,
+        }),
       ],
       splitChunks: {
         chunks: 'all',
@@ -170,23 +165,6 @@ module.exports = function (_env, argv) {
           target: 'http://localhost:8080',
         },
       },
-
-      // contentBase: this.output.path,
-      // We want to re-use this path
-
-      // noInfo: false,
-
-      // debug: false,
-      // Makes no difference
-
-      // https: true,
-      // colors: true,
-
-      // hot: true,
-      // Pass this from the command line as '--hot',
-      // which sets up the HotModuleReplacementPlugin automatically
-
-      // inline: true
     },
   };
 };

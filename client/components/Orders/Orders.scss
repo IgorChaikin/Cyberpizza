@@ -1,0 +1,143 @@
+@import "../../vars";
+
+@keyframes modal-move {
+  0%{transform:translate(100%, 0);}
+  100%{transform:translate(0, 0);}
+}
+
+@keyframes shadow {
+  0%{opacity: 0;}
+  100%{opacity: 1;}
+}
+
+.opening{
+  opacity: 0;
+  animation: shadow 0.5s 1 linear forwards;
+  .modal{
+    transform:translate(100%, 0);
+    animation-delay: 0.5s;
+    animation: modal-move 0.5s 1 linear forwards;
+  }
+}
+
+.wrapper {
+  overflow-x: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background-color: rgba($grey-color, 0.5);
+  margin: 0;
+  padding: 0;
+
+  /* monitors and laptops */
+  @media (min-width: 1240px),
+  (min-width: 768px) and (max-width: 1024px) and (orientation: landscape),
+  (max-width: 768px) and (orientation: landscape) {
+    .modal{
+      width: 30%;
+    }
+  }
+
+  /* tablet, mobile */
+
+  @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait),
+  (max-width: 768px) and (orientation: portrait){
+    .modal{
+      width: 50%;
+    }
+  }
+
+  .modal{
+    position: absolute;
+    height: 100%;
+    right: 0;
+    z-index: 2;
+    background-color: $white-color;
+    overflow-y: auto;
+
+    .modal__divided-part {
+      margin: 0;
+      padding: 0;
+      border-bottom: rgba($grey-color, 0.5) solid 1px;
+    }
+
+    header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0;
+      padding: 0 1rem;
+
+      button{
+        outline: none;
+        border: none;
+        background-color: transparent;
+
+        color: $black-color;
+        font: $price-text-serif;
+        text-transform: uppercase;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5em;
+
+        padding: 0;
+
+        img {
+          height: 1em;
+        }
+      }
+    }
+
+    ul{
+      list-style: none;
+      margin: 0 0 0 1rem;
+      padding:0;
+      position: relative;
+      &:before{
+        content:"";
+        display: inline-block;
+        width: 0.2em;
+        background: $grey-color;
+        position: absolute;
+        left:0.3em;
+        top:0.25em;
+        height: calc( 100% + 0.8em );
+      }
+    }
+
+    .modal__price {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 1rem;
+      border-bottom: rgba($grey-color, 0.5) solid 1px;
+
+      .title {
+        font: $price-text-serif;
+        color: $grey-color;
+      }
+      .price {
+        font: $bold-header-text-serif;
+        color: $grey-color;
+      }
+    }
+
+    .total {
+      border-bottom: none;
+      .title {
+        font: $bold-header-text-serif;
+        color: $black-color;
+      }
+      .price {
+        font: $button-text;
+        color: $black-color;
+      }
+    }
+  }
+}
