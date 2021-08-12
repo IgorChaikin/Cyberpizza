@@ -1,11 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App';
+import { Provider } from 'react-redux';
+import App from './containers/App';
 import './index.css';
 
-import HigherOrderComponent from './components/HigherOrderComponent';
+import store from './store';
 
-const selectData = (dataSource, props) => dataSource.getData(props);
-const EnhancedComponent = HigherOrderComponent(App, selectData);
-
-ReactDOM.render(<EnhancedComponent />, document.getElementById('root'));
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);

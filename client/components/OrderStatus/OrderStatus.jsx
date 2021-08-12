@@ -1,15 +1,18 @@
-import React from 'react';
-import '../styles/OrdersStatus.scss';
+import React, { useEffect } from 'react';
+import './OrderStatus.scss';
 import PropTypes from 'prop-types';
 
 function OrderStatus(props) {
-  const { orders, onClick } = props;
+  const { orders, onClick, onMount } = props;
+
+  useEffect(() => onMount(), []);
+
   return (
     <button type="button" className="orders" onClick={onClick}>
       <div className="circle" />
       <img src="/dish.svg" alt="dish.svg" />
       <p>
-        order status
+        <span>order status</span>
         <div className="count">
           {orders.reduce((acc, curVal) => acc + curVal?.orders?.length, 0)}
         </div>
@@ -20,6 +23,7 @@ function OrderStatus(props) {
 
 OrderStatus.propTypes = {
   onClick: PropTypes.func.isRequired,
+  onMount: PropTypes.func.isRequired,
   orders: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
 };
 
