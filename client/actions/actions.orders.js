@@ -9,20 +9,22 @@ export function switchOrders() {
 }
 
 export function postOrder(id) {
-  const postOrderAsync = async () => {
-    const response = await fetch('/api/orders', {
+  const payload = new Promise((resolve) => {
+    fetch('/api/orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id,
         time: Date.now(),
       }),
-    });
-    const result = await response.json();
-    return result;
-  };
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        resolve(result);
+      });
+  });
   return {
     type: POST_ORDER,
-    payload: postOrderAsync(),
+    payload,
   };
 }
