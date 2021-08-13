@@ -9,12 +9,13 @@ import Categories from '../../containers/Categories';
 import List from '../../containers/List';
 
 function App(props) {
-  const { isOrdersVisible, categories, onMount } = props;
+  const { isOrdersVisible, categories, onMount, onCategoriesLoad } = props;
 
+  useEffect(() => onMount(), []);
   useEffect(() => {
-    const firstCategoryId = categories[0]?._id;
-    if (firstCategoryId) {
-      onMount(firstCategoryId);
+    const firstId = categories[0]?._id;
+    if (firstId) {
+      onCategoriesLoad(firstId);
     }
   }, [categories]);
 
@@ -39,6 +40,7 @@ function App(props) {
 App.propTypes = {
   isOrdersVisible: PropTypes.bool.isRequired,
   onMount: PropTypes.func.isRequired,
+  onCategoriesLoad: PropTypes.func.isRequired,
   categories: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
 };
 
