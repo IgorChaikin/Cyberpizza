@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './OrderStatus.scss';
 import PropTypes from 'prop-types';
 
 function OrderStatus(props) {
-  const { orders, onClick, onMount } = props;
-
-  useEffect(() => onMount(), []);
+  const { orders, onClick } = props;
 
   return (
     <button type="button" className="orders" onClick={onClick}>
@@ -23,7 +21,6 @@ function OrderStatus(props) {
 
 OrderStatus.propTypes = {
   onClick: PropTypes.func.isRequired,
-  onMount: PropTypes.func.isRequired,
   orders: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
 };
 

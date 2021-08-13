@@ -1,11 +1,9 @@
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React from 'react';
 import './Categories.scss';
 
 function Categories(props) {
-  const { categories, selectedId, onSelect, onMount } = props;
-
-  useEffect(() => onMount(), []);
+  const { categories, selectedId, onSelect } = props;
 
   const getCallbackById = (id) => () => onSelect(id);
 
@@ -32,7 +30,6 @@ function Categories(props) {
 Categories.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
   onSelect: PropTypes.func.isRequired,
-  onMount: PropTypes.func.isRequired,
   selectedId: PropTypes.string,
 };
 

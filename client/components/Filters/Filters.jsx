@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './Filters.scss';
 import PropTypes from 'prop-types';
 
 function Filters(props) {
-  const { tags, onSwitch, onSwitchAll, onMount, all } = props;
-
-  useEffect(() => onMount(), []);
+  const { tags, onSwitch, onSwitchAll, all } = props;
 
   const getCallbackById = (elemId) => () => onSwitch(elemId);
 
@@ -46,7 +44,6 @@ Filters.propTypes = {
   ).isRequired,
   onSwitch: PropTypes.func.isRequired,
   onSwitchAll: PropTypes.func.isRequired,
-  onMount: PropTypes.func.isRequired,
   all: PropTypes.bool.isRequired,
 };
 

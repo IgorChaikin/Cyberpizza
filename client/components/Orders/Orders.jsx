@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './Orders.scss';
 import PropTypes from 'prop-types';
 import OrderStage from '../OrderStage/OrderStage';
 
 function Orders(props) {
-  const { stages, onClose, discounts, onMount } = props;
-
-  useEffect(() => onMount(), []);
+  const { stages, onClose, discounts } = props;
 
   const stagesList = stages.map((elem) => {
     const { orders, title, _id } = elem;
@@ -84,7 +82,6 @@ function Orders(props) {
 
 Orders.propTypes = {
   onClose: PropTypes.func.isRequired,
-  onMount: PropTypes.func.isRequired,
   discounts: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
   stages: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
 };
