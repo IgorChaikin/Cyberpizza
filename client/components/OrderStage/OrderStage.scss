@@ -48,6 +48,16 @@ li{
       }
     }
 
+    span {
+      button{
+        background-color: transparent;
+        outline: none;
+        border: none;
+        font: $regular-text;
+        color: $grey-color;
+      }
+    }
+
     border-bottom: rgba($grey-color, 0.5) solid 1px;
 
     &:before {

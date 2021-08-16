@@ -13,9 +13,10 @@ export const initialState = {
   isAllFilters: false,
   isOrdersVisible: false,
   selectedCategory: null,
+  price: 0,
   categories: [],
   items: [],
-  orders: [],
+  stages: [],
   filters: [],
   discounts: [],
 };
@@ -37,11 +38,6 @@ function serviceReducer(state, action) {
       }
       return { ...state, activeFilters: filters };
     }
-    case POST_ORDER_FULFILLED:
-      return {
-        ...state,
-        orders: action.payload,
-      };
     case FETCH_ITEMS_FULFILLED:
       return {
         ...state,
@@ -64,9 +60,11 @@ function serviceReducer(state, action) {
         filters: action.payload,
       };
     case FETCH_ORDERS_FULFILLED:
+    case POST_ORDER_FULFILLED:
       return {
         ...state,
-        orders: action.payload,
+        stages: action.payload.stages,
+        price: action.payload.price,
       };
     default:
       return state;

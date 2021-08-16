@@ -15,7 +15,7 @@ const orderStageScheme = new Schema({
 const orderScheme = new Schema({
   orderStageId: ObjectId,
   itemId: ObjectId,
-  time: Number,
+  time: { type: Number, required: true },
 });
 
 const itemScheme = new Schema({
@@ -23,7 +23,7 @@ const itemScheme = new Schema({
   price: { type: Number, required: true },
   title: { type: String, required: true },
   description: String,
-  filterIds: [ObjectId],
+  filterIds: { type: [ObjectId], default: [] },
   categoryId: ObjectId,
 });
 
@@ -35,6 +35,11 @@ const discountScheme = new Schema({
   value: { type: Number, required: true },
 });
 
+const cartScheme = new Schema({
+  orderIds: { type: [ObjectId], default: [] },
+  price: { type: Number, required: true, default: 0 },
+});
+
 // models definition
 
 module.exports = {
@@ -44,4 +49,5 @@ module.exports = {
   Item: model('Item', itemScheme),
   Filter: model('Filter', filterScheme),
   Discount: model('Discount', discountScheme),
+  Cart: model('Cart', cartScheme),
 };

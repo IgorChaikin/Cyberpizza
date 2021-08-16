@@ -3,7 +3,28 @@ import React from 'react';
 import './OrderStage.scss';
 
 function OrderStage(props) {
-  const { title, time, orders, id } = props;
+  const { title, orders, id } = props;
+
+  const time = Math.max(...orders.map((order) => order.time));
+  const diff = Math.floor((Date.now() - time) / 1000);
+
+  const intervals = [
+    [3600, ' hours'],
+    [60, ' minutes'],
+    [10, '0 seconds'],
+  ];
+  const stringParams = intervals.reduce(
+    (accumulator, currentValue) =>
+      currentValue[0] <= accumulator[0] && accumulator[1] === 'just now'
+        ? currentValue
+        : accumulator,
+    [diff, 'just now']
+  );
+
+  const timeString =
+    stringParams[1] === 'just now'
+      ? stringParams[1]
+      : `${Math.floor(diff / stringParams[0])}${stringParams[1]} ago`;
 
   const counts = {};
 
@@ -19,7 +40,10 @@ function OrderStage(props) {
           <img src={item?.imgPath} alt={item?.title} />
           <span>{item?.title}</span>
         </figure>
-        <div className="count">{counts[key]}</div>
+        <span>
+          <div className="count">{counts[key]}</div>
+          <button type="button">X</button>
+        </span>
       </div>
     );
   });
@@ -28,7 +52,7 @@ function OrderStage(props) {
     <li key={id} className={`${orders.length <= 0 ? 'in' : ''}active`}>
       <section>
         <h2>{title}</h2>
-        {orders?.length > 0 ? <span>{time}</span> : ''}
+        {orders?.length > 0 ? <span>{timeString}</span> : ''}
       </section>
       {orderList}
     </li>
@@ -38,7 +62,6 @@ function OrderStage(props) {
 OrderStage.propTypes = {
   id: PropTypes.string.isRequired,
   orders: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
-  time: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
 };
 

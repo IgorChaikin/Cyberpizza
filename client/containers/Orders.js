@@ -8,8 +8,9 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  stages: state.orders,
+  stages: state.stages,
   discounts: state.discounts,
+  price: state.price,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Orders);

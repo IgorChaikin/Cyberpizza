@@ -81,6 +81,7 @@
     "@storybook/addon-postcss": "^2.0.0",
     "@storybook/builder-webpack5": "^6.3.6",
     "@storybook/manager-webpack5": "^6.3.6",
+    "cookie-parser": "^1.4.5",
     "cssnano": "^5.0.7",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
