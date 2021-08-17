@@ -3,8 +3,7 @@ import React from 'react';
 import './OrderStage.scss';
 
 function OrderStage(props) {
-  const { title, orders, id } = props;
-
+  const { title, orders, id, onDelete } = props;
   const time = Math.max(...orders.map((order) => order.time));
   const diff = Math.floor((Date.now() - time) / 1000);
 
@@ -32,8 +31,10 @@ function OrderStage(props) {
     counts[elem.item._id] = (counts[elem.item._id] || 0) + 1;
   });
 
+  const getCallbackById = (orderId) => () => onDelete(orderId);
+
   const orderList = Object.keys(counts).map((key) => {
-    const item = orders.find((elem) => elem.item._id === key)?.item;
+    const { item, _id } = orders.find((elem) => elem.item._id === key);
     return (
       <div className="order">
         <figure>
@@ -42,7 +43,9 @@ function OrderStage(props) {
         </figure>
         <span>
           <div className="count">{counts[key]}</div>
-          <button type="button">X</button>
+          <button type="button" onClick={getCallbackById(_id)}>
+            X
+          </button>
         </span>
       </div>
     );
@@ -63,6 +66,7 @@ OrderStage.propTypes = {
   id: PropTypes.string.isRequired,
   orders: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
   title: PropTypes.string.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default OrderStage;

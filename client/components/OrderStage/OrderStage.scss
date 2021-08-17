@@ -55,6 +55,9 @@ li{
         border: none;
         font: $regular-text;
         color: $grey-color;
+        &:active {
+          color: $black-color;
+        }
       }
     }
 

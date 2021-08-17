@@ -5,53 +5,41 @@ const models = require('../models');
 const api = express.Router();
 const { Types } = mongoose;
 const { ObjectId } = Types;
-const { Category, Item, Filter, Discount, Order, Cart } = models;
+const { Category, Item, Filter, Discount, Order, Cart, OrderStage } = models;
 
 function getOrders(cartId) {
-  return Cart.aggregate([
-    { $match: { $expr: { $eq: ['$_id', ObjectId(cartId)] } } },
-    {
-      $lookup: {
-        from: 'orderstages',
-        let: { orderIds: '$orderIds' },
-        as: 'stages',
-        pipeline: [
-          { $sort: { _id: 1 } },
-          {
-            $lookup: {
-              from: 'orders',
-              let: { orderStageId: '$_id' },
-              as: 'orders',
-              pipeline: [
-                {
-                  $match: {
-                    $expr: {
-                      $and: [
-                        { $eq: ['$$orderStageId', '$orderStageId'] },
-                        { $in: ['$_id', '$$orderIds'] },
-                      ],
-                    },
-                  },
-                },
-                { $sort: { time: -1 } },
-                {
-                  $lookup: {
-                    from: 'items',
-                    localField: 'itemId',
-                    foreignField: '_id',
-                    as: 'item',
-                  },
-                },
-                {
-                  $unwind: { path: '$item', preserveNullAndEmptyArrays: true },
-                },
-              ],
+  return Promise.allSettled([
+    OrderStage.aggregate([
+      { $sort: { _id: 1 } },
+      {
+        $lookup: {
+          from: 'orders',
+          let: { orderStageId: '$_id' },
+          as: 'orders',
+          pipeline: [
+            { $match: { $expr: { $eq: ['$$orderStageId', '$orderStageId'] } } },
+            { $sort: { time: -1 } },
+            {
+              $lookup: {
+                from: 'items',
+                localField: 'itemId',
+                foreignField: '_id',
+                as: 'item',
+              },
             },
-          },
-        ],
+            { $unwind: { path: '$item', preserveNullAndEmptyArrays: true } },
+          ],
+        },
       },
-    },
-  ]).then((query) => query[0]);
+    ]),
+    Cart.find({ _id: cartId }),
+  ]).then((results) => ({
+    stages: results[0].value.map((elem) => ({
+      ...elem,
+      orders: elem.orders.filter((order) => results[1].value[0]?.orderIds.includes(order._id)),
+    })),
+    price: results[1].value[0]?.price ?? 0,
+  }));
 }
 
 function getPrice(orderId) {
@@ -68,7 +56,7 @@ function getPrice(orderId) {
     {
       $unwind: { path: '$item', preserveNullAndEmptyArrays: true },
     },
-  ]).then((query) => query[0].item.price);
+  ]).then((query) => query[0]?.item.price);
 }
 
 function createCart() {
@@ -81,8 +69,7 @@ function updateCart(cartId, orderId, isDelete = false) {
     const update = isDelete
       ? { $pull: { orderIds: orderId }, $inc: { price: -price } }
       : { $push: { orderIds: orderId }, $inc: { price } };
-
-    return Cart.updateMany({ _id: cartId }, update);
+    return Cart.updateOne({ _id: cartId }, update);
   });
 }
 
@@ -117,28 +104,38 @@ api.post('/orders', (request, response) => {
   if (!request.body) {
     return response.sendStatus(400);
   }
-
   const order = new Order({
     orderStageId: ObjectId('000000000000000000000000'),
     itemId: request.body.id,
     time: request.body.time,
   });
-
   // add order firstly
   return order.save().then((item) => {
     const { cartId } = request.cookies;
-
     if (!cartId) {
       // create new cart if order is first and no cart id in cookies
       createCart().then((id) => {
         // set new cart id in cookies
-        response.cookie('cartId', id);
+        response.cookie('cartId', id, { secure: false, maxAge: 3600 * 24 });
         updateCart(id, item._id).then(() => getOrders(id).then((res) => response.json(res)));
       });
     } else {
       updateCart(cartId, item._id).then(() => getOrders(cartId).then((res) => response.json(res)));
     }
   });
+});
+
+api.delete('/orders', (request, response) => {
+  if (!request.body) {
+    return response.sendStatus(400);
+  }
+  const { cartId } = request.cookies;
+  const { id } = request.body;
+  // remove order from cart
+  return updateCart(cartId, id, true).then(() =>
+    // then delete order from db
+    Order.deleteOne({ _id: id }).then(() => getOrders(cartId).then((res) => response.json(res)))
+  );
 });
 
 module.exports = api;

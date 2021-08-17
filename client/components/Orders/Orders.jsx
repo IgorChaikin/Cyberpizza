@@ -1,14 +1,15 @@
 import React from 'react';
 import './Orders.scss';
 import PropTypes from 'prop-types';
-import OrderStage from '../OrderStage/OrderStage';
+/* import OrderStage from '../OrderStage/OrderStage'; */
+import OrderStage from '../../containers/OrderStage';
 
 function Orders(props) {
   const { stages, price, onClose, discounts } = props;
 
   const stagesList = stages.map((elem) => {
-    const { orders, title, _id } = elem;
-    return <OrderStage orders={orders} title={title} id={_id} />;
+    const Stage = OrderStage(elem._id);
+    return <Stage />;
   });
 
   return (
