@@ -31,10 +31,6 @@ function OrderStage(props) {
     counts[elem.item._id] = (counts[elem.item._id] || 0) + 1;
   });
 
-  const getCallbackById = (orderId) => () => onDelete(orderId);
-  const getIncById = (orderId) => () => onInc(orderId);
-  const getDecById = (orderId) => () => onDec(orderId);
-
   const orderList = orders.map((order) => {
     const { item, _id, count } = order;
     return (
@@ -45,15 +41,15 @@ function OrderStage(props) {
         </figure>
         <span>
           <div className="counter">
-            <button type="button" disabled={count <= 1} onClick={getDecById(_id)}>
+            <button type="button" disabled={count <= 1} id={`${_id}_DEC`}>
               -
             </button>
             <div className="count">{count}</div>
-            <button type="button" onClick={getIncById(_id)}>
+            <button type="button" id={`${_id}_INC`}>
               +
             </button>
           </div>
-          <button type="button" onClick={getCallbackById(_id)}>
+          <button type="button" id={`${_id}_DEL`}>
             x
           </button>
         </span>
@@ -62,7 +58,26 @@ function OrderStage(props) {
   });
 
   return (
-    <li key={id} className={`${orders.length <= 0 ? 'in' : ''}active`}>
+    <li
+      key={id}
+      className={`${orders.length <= 0 ? 'in' : ''}active`}
+      onClick={(e) => {
+        const args = e.target.id.split('_');
+        switch (args[1]) {
+          case 'INC':
+            onInc(args[0]);
+            break;
+          case 'DEC':
+            onDec(args[0]);
+            break;
+          case 'DEL':
+            onDelete(args[0]);
+            break;
+          default:
+            break;
+        }
+      }}
+    >
       <section>
         <h2>{title}</h2>
         {orders?.length > 0 ? <span>{timeString}</span> : ''}
