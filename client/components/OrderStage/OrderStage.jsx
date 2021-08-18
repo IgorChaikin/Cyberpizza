@@ -3,7 +3,7 @@ import React from 'react';
 import './OrderStage.scss';
 
 function OrderStage(props) {
-  const { title, orders, id, onDelete } = props;
+  const { title, orders, id, onDelete, onInc, onDec } = props;
   const time = Math.max(...orders.map((order) => order.time));
   const diff = Math.floor((Date.now() - time) / 1000);
 
@@ -32,9 +32,11 @@ function OrderStage(props) {
   });
 
   const getCallbackById = (orderId) => () => onDelete(orderId);
+  const getIncById = (orderId) => () => onInc(orderId);
+  const getDecById = (orderId) => () => onDec(orderId);
 
-  const orderList = Object.keys(counts).map((key) => {
-    const { item, _id } = orders.find((elem) => elem.item._id === key);
+  const orderList = orders.map((order) => {
+    const { item, _id, count } = order;
     return (
       <div className="order">
         <figure>
@@ -42,9 +44,15 @@ function OrderStage(props) {
           <span>{item?.title}</span>
         </figure>
         <span>
-          <div className="count">{counts[key]}</div>
+          <div className="count">{count}</div>
+          <button type="button" onClick={getIncById(_id)}>
+            +
+          </button>
+          <button type="button" onClick={getDecById(_id)}>
+            -
+          </button>
           <button type="button" onClick={getCallbackById(_id)}>
-            X
+            x
           </button>
         </span>
       </div>
@@ -67,6 +75,8 @@ OrderStage.propTypes = {
   orders: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
   title: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
+  onInc: PropTypes.func.isRequired,
+  onDec: PropTypes.func.isRequired,
 };
 
 export default OrderStage;

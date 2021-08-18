@@ -42,7 +42,7 @@ function getOrders(cartId) {
   }));
 }
 
-function getPrice(orderId) {
+function getOrderWithPrice(orderId) {
   return Order.aggregate([
     { $match: { $expr: { $eq: ['$_id', ObjectId(orderId)] } } },
     {
@@ -56,7 +56,7 @@ function getPrice(orderId) {
     {
       $unwind: { path: '$item', preserveNullAndEmptyArrays: true },
     },
-  ]).then((query) => query[0]?.item.price);
+  ]).then((query) => query[0]);
 }
 
 function createCart() {
@@ -64,11 +64,17 @@ function createCart() {
   return cart.save().then((item) => item._id);
 }
 
-function updateCart(cartId, orderId, isDelete = false) {
-  return getPrice(orderId).then((price) => {
-    const update = isDelete
-      ? { $pull: { orderIds: orderId }, $inc: { price: -price } }
-      : { $push: { orderIds: orderId }, $inc: { price } };
+function updateCart(cartId, orderId, isDelete = false, amount = null) {
+  return getOrderWithPrice(orderId).then((order) => {
+    const validatedAmount = amount * -1 >= order?.count ? 0 : amount;
+    const count = validatedAmount ?? order?.count * (isDelete ? -1 : 1);
+
+    const update = {
+      $inc: { price: order?.item.price * count },
+    };
+    if (!amount) {
+      update[isDelete ? '$pull' : '$push'] = { orderIds: orderId };
+    }
     return Cart.updateOne({ _id: cartId }, update);
   });
 }
@@ -123,6 +129,24 @@ api.post('/orders', (request, response) => {
       updateCart(cartId, item._id).then(() => getOrders(cartId).then((res) => response.json(res)));
     }
   });
+});
+
+api.patch('/orders', (request, response) => {
+  if (!request.body) {
+    return response.sendStatus(400);
+  }
+  const { cartId } = request.cookies;
+  const { id, amount } = request.body;
+
+  return updateCart(cartId, id, false, amount).then(() =>
+    Order.updateOne(
+      {
+        _id: id,
+        count: { $gt: amount * -1 },
+      },
+      { $inc: { count: amount } }
+    ).then(() => getOrders(cartId).then((res) => response.json(res)))
+  );
 });
 
 api.delete('/orders', (request, response) => {

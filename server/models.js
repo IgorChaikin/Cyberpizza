@@ -15,6 +15,7 @@ const orderStageScheme = new Schema({
 const orderScheme = new Schema({
   orderStageId: ObjectId,
   itemId: ObjectId,
+  count: { type: Number, default: 1 },
   time: { type: Number, required: true },
 });
 

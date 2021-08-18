@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import OrderStage from '../components/OrderStage/OrderStage';
 
-import { deleteOrder } from '../actions/actions.orders';
+import { deleteOrder, updateOrder } from '../actions/actions.orders';
 
 function getOrderStage(id) {
   const mapStateToProps = (state) => {
@@ -15,6 +15,8 @@ function getOrderStage(id) {
 
   const mapDispatchToProps = (dispatch) => ({
     onDelete: (deletedId) => dispatch(deleteOrder(deletedId)),
+    onInc: (updatedId) => dispatch(updateOrder(updatedId, 1)),
+    onDec: (updatedId) => dispatch(updateOrder(updatedId, -1)),
   });
 
   return connect(mapStateToProps, mapDispatchToProps)(OrderStage);

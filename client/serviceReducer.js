@@ -7,6 +7,7 @@ import {
   POST_ORDER_FULFILLED,
   FETCH_ORDERS_FULFILLED,
   DELETE_ORDER_FULFILLED,
+  UPDATE_ORDER_FULFILLED,
 } from './actions/actions.orders';
 
 export const initialState = {
@@ -63,6 +64,7 @@ function serviceReducer(state, action) {
     case FETCH_ORDERS_FULFILLED:
     case POST_ORDER_FULFILLED:
     case DELETE_ORDER_FULFILLED:
+    case UPDATE_ORDER_FULFILLED:
       return {
         ...state,
         stages: action.payload.stages,
