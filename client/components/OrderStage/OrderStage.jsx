@@ -38,19 +38,21 @@ function OrderStage(props) {
   const orderList = orders.map((order) => {
     const { item, _id, count } = order;
     return (
-      <div className="order">
+      <div className="order" key={_id}>
         <figure>
           <img src={item?.imgPath} alt={item?.title} />
           <span>{item?.title}</span>
         </figure>
         <span>
-          <div className="count">{count}</div>
-          <button type="button" onClick={getIncById(_id)}>
-            +
-          </button>
-          <button type="button" onClick={getDecById(_id)}>
-            -
-          </button>
+          <div className="counter">
+            <button type="button" disabled={count <= 1} onClick={getDecById(_id)}>
+              -
+            </button>
+            <div className="count">{count}</div>
+            <button type="button" onClick={getIncById(_id)}>
+              +
+            </button>
+          </div>
           <button type="button" onClick={getCallbackById(_id)}>
             x
           </button>

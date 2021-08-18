@@ -93,3 +93,27 @@ export function deleteOrder(id) {
     payload,
   };
 }
+
+const initialState = {
+  price: 0,
+  stages: [],
+  isOrdersVisible: false,
+};
+
+export default function reducer(state = initialState, action) {
+  switch (action.type) {
+    case FETCH_ORDERS_FULFILLED:
+    case POST_ORDER_FULFILLED:
+    case DELETE_ORDER_FULFILLED:
+    case UPDATE_ORDER_FULFILLED:
+      return {
+        ...state,
+        stages: action.payload.stages,
+        price: action.payload.price,
+      };
+    case SWITCH_ORDERS:
+      return { ...state, isOrdersVisible: !state.isOrdersVisible };
+    default:
+      return state;
+  }
+}

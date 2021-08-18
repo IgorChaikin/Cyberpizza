@@ -8,11 +8,13 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const { categories, selectedCategory, items, activeFilters } = state;
+  const { categories, filters, items } = state;
+  const { activeFilters } = filters;
+  const { products, selectedCategory } = items;
   const categoryTitle = categories.find((elem) => elem._id === selectedCategory)?.title;
   const filteredItems =
     activeFilters.length > 0
-      ? items?.filter((elem) => {
+      ? products?.filter((elem) => {
           const intersection = elem.filterIds.filter((x) => activeFilters.includes(x));
           return (
             intersection.length > 0 &&
@@ -20,7 +22,7 @@ const mapStateToProps = (state) => {
             intersection.length === activeFilters.length
           );
         })
-      : items;
+      : products;
 
   return {
     items: filteredItems,

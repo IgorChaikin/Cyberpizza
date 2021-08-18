@@ -52,14 +52,29 @@ li{
       display: flex;
       flex-direction: row;
       align-items: center;
+      .counter{
+        height: 2.4em;
+        border-radius: 1.2em;
+        margin: 0;
+        padding: 0;
+        border: rgba($grey-color, 0.5) solid 1px;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+
       button{
         background-color: transparent;
         outline: none;
         border: none;
         font: $bold-header-text;
         color: $grey-color;
-        &:active {
-          color: $black-color;
+        &:disabled {
+          opacity: 0.3;
+        }
+        &:active{
+          transform:translate(0, 5%);
         }
       }
     }

@@ -1,20 +1,16 @@
 import React from 'react';
 import './Orders.scss';
 import PropTypes from 'prop-types';
-/* import OrderStage from '../OrderStage/OrderStage'; */
 import OrderStage from '../../containers/OrderStage';
 
 function Orders(props) {
   const { stages, price, onClose, discounts } = props;
 
-  const stagesList = stages.map((elem) => {
-    const Stage = OrderStage(elem._id);
-    return <Stage />;
-  });
+  const stagesList = stages.map((elem) => <OrderStage key={elem._id} id={elem._id} />);
 
   return (
-    <div className="wrapper opening">
-      <div className="modal">
+    <div className="wrapper opening" onClick={onClose}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal__divided-part">
           <header>
             <h1>Order Status</h1>

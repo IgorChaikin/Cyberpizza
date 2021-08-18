@@ -17,7 +17,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  isOrdersVisible: state.isOrdersVisible,
+  isOrdersVisible: state.orders.isOrdersVisible,
   categories: state.categories,
 });
 

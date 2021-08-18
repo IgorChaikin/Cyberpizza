@@ -7,10 +7,15 @@ const mapDispatchToProps = (dispatch) => ({
   onClose: () => dispatch(switchOrders()),
 });
 
-const mapStateToProps = (state) => ({
-  stages: state.stages,
-  discounts: state.discounts,
-  price: state.price,
-});
+const mapStateToProps = (state) => {
+  const { orders, discounts } = state;
+  const { stages, price } = orders;
+
+  return {
+    stages,
+    discounts,
+    price,
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Orders);
