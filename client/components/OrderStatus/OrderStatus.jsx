@@ -9,12 +9,8 @@ function OrderStatus(props) {
     <button type="button" className="orders" onClick={onClick}>
       <div className="circle" />
       <img src="/dish.svg" alt="dish.svg" />
-      <p>
-        <span>order status</span>
-        <div className="count">
-          {orders.reduce((acc, curVal) => acc + curVal?.orders?.length, 0)}
-        </div>
-      </p>
+      <span>order status</span>
+      <div className="count">{orders.reduce((acc, curVal) => acc + curVal?.orders?.length, 0)}</div>
     </button>
   );
 }

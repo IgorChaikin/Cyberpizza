@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const api = require('./routers/api');
 const main = require('./routers/main');
 const createApp = require('./app');
@@ -7,8 +8,12 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const port = process.env.PORT || 8080;
 const dbConn = process.env.DB_CONN;
+const cookieKey = process.env.COOKIE_KEY;
 
-createApp(dbConn).then((app) => {
+createApp(dbConn, cookieKey).then((app) => {
+  app.use(express.json());
+  app.use(cookieParser(cookieKey));
+
   // routing
   app.use('/api', api);
   app.use('/', main);

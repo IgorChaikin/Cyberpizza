@@ -17,3 +17,20 @@ export function fetchItems(id) {
     payload,
   };
 }
+
+const initialState = {
+  selectedCategory: null,
+  products: [],
+};
+
+export default function reducer(state = initialState, action) {
+  switch (action.type) {
+    case FETCH_ITEMS_FULFILLED:
+      return {
+        products: action.payload.items,
+        selectedCategory: action.payload.id,
+      };
+    default:
+      return state;
+  }
+}

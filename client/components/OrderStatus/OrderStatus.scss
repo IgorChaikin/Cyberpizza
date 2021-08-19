@@ -9,6 +9,7 @@
   border: none;
   padding-left: 1em;
   text-transform: uppercase;
+  height: 4em;
 
   display: flex;
   flex-direction: row;
@@ -16,8 +17,14 @@
   justify-content: space-between;
   position: relative;
 
+  cursor: pointer;
+
   img{
     height: 2em;
+  }
+
+  span {
+    margin: 0 1em;
   }
 
   .circle{
@@ -30,8 +37,5 @@
     z-index: -1;
 
     background-color: $main-color;
-  }
-  p {
-    margin-left: 0.5em;
   }
 }

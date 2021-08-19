@@ -17,3 +17,12 @@ export function fetchCategories() {
     payload,
   };
 }
+
+export default function reducer(state = [], action) {
+  switch (action.type) {
+    case FETCH_CATEGORIES_FULFILLED:
+      return action.payload;
+    default:
+      return state;
+  }
+}
