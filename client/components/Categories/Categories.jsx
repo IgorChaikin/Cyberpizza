@@ -5,14 +5,12 @@ import './Categories.scss';
 function Categories(props) {
   const { categories, selectedId, onSelect } = props;
 
-  const getCallbackById = (id) => () => onSelect(id);
-
   const categoriesList = categories.map((elem) => {
     const title = selectedId === elem._id ? `—${elem.title}` : elem.title;
     return (
       <li key={elem._id}>
         {selectedId === elem._id ? <div id="marker" className="circle" /> : ''}
-        <button type="button" onClick={getCallbackById(elem._id)}>
+        <button type="button" id={`${elem._id}_SELECT`}>
           <h2>{title}</h2>
         </button>
       </li>
@@ -22,7 +20,17 @@ function Categories(props) {
   return (
     <div className="categories-list">
       <p>categories</p>
-      <ul>{categoriesList}</ul>
+      <ul
+        onClick={(e) => {
+          const target = e.nativeEvent.path.find((node) => node.tagName === 'BUTTON');
+          const args = target?.id.split('_') ?? [];
+          if (args[1] === 'SELECT') {
+            onSelect(args[0]);
+          }
+        }}
+      >
+        {categoriesList}
+      </ul>
     </div>
   );
 }

@@ -6,16 +6,32 @@ import Item from '../Item/Item';
 function List(props) {
   const { items, onAdd, title } = props;
 
-  const getCallbackById = (id) => () => onAdd(id);
-
   const itemsList = items?.map((elem) => (
-    <Item key={elem._id} item={elem} onClick={getCallbackById(elem._id)} />
+    <Item
+      key={elem._id}
+      imgPath={elem.imgPath}
+      title={elem.title}
+      price={elem.price}
+      description={elem.description}
+      _id={elem._id}
+    />
   ));
 
   return (
     <main>
       <h1>{title}</h1>
-      <div className="list">{itemsList}</div>
+      <div
+        className="list"
+        onClick={(e) => {
+          const target = e.nativeEvent.path.find((node) => node.tagName === 'BUTTON');
+          const args = target?.id.split('_') ?? [];
+          if (args[1] === 'ADD') {
+            onAdd(args[0]);
+          }
+        }}
+      >
+        {itemsList}
+      </div>
     </main>
   );
 }

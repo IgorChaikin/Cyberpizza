@@ -3,14 +3,13 @@ import './Item.scss';
 import PropTypes from 'prop-types';
 
 function Item(props) {
-  const { item, onClick } = props;
-  const { imgPath, title, price, description } = item;
+  const { imgPath, title, price, description, _id } = props;
 
   return (
     <article className="list__item">
       <div>
         <img src={imgPath} alt={title} />
-        <button type="button" onClick={onClick}>
+        <button type="button" id={`${_id}_ADD`}>
           +
         </button>
       </div>
@@ -22,13 +21,15 @@ function Item(props) {
 }
 
 Item.propTypes = {
-  item: PropTypes.shape({
-    price: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    imgPath: PropTypes.string.isRequired,
-  }).isRequired,
-  onClick: PropTypes.func.isRequired,
+  price: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  imgPath: PropTypes.string.isRequired,
+  _id: PropTypes.string.isRequired,
+};
+
+Item.defaultProps = {
+  description: undefined,
 };
 
 export default Item;

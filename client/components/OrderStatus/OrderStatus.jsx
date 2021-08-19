@@ -5,12 +5,16 @@ import PropTypes from 'prop-types';
 function OrderStatus(props) {
   const { orders, onClick } = props;
 
+  const countSum = (acc, curVal) => acc + curVal?.count;
+
   return (
     <button type="button" className="orders" onClick={onClick}>
       <div className="circle" />
       <img src="/dish.svg" alt="dish.svg" />
       <span>order status</span>
-      <div className="count">{orders.reduce((acc, curVal) => acc + curVal?.orders?.length, 0)}</div>
+      <div className="count">
+        {orders.reduce((acc, curVal) => acc + curVal?.orders?.reduce(countSum, 0), 0)}
+      </div>
     </button>
   );
 }

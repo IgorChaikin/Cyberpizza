@@ -5,16 +5,14 @@ import PropTypes from 'prop-types';
 function Filters(props) {
   const { tags, onSwitch, onSwitchAll, all } = props;
 
-  const getCallbackById = (elemId) => () => onSwitch(elemId);
-
   const visibleTags = all ? tags : tags.slice(0, 2);
 
   const tagsList = visibleTags?.map((elem) => (
     <button
       type="button"
       key={elem._id}
+      id={`${elem._id}_SWITCH`}
       className={`tag tag_${elem.isActive ? '' : 'in'}active`}
-      onClick={getCallbackById(elem._id)}
     >
       #{elem.name}
     </button>
@@ -23,7 +21,16 @@ function Filters(props) {
   return (
     <div className="filters">
       <p className="filters__header">filters</p>
-      <p className="filters__tag-container">
+      <p
+        className="filters__tag-container"
+        onClick={(e) => {
+          const target = e.nativeEvent.path.find((node) => node.tagName === 'BUTTON');
+          const args = target?.id.split('_') ?? [];
+          if (args[1] === 'SWITCH') {
+            onSwitch(args[0]);
+          }
+        }}
+      >
         {tagsList}
         <button type="button" className="all" onClick={onSwitchAll}>
           <img src="/settings.svg" alt="settings.svg" />

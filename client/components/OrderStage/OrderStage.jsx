@@ -62,7 +62,8 @@ function OrderStage(props) {
       key={id}
       className={`${orders.length <= 0 ? 'in' : ''}active`}
       onClick={(e) => {
-        const args = e.target.id.split('_');
+        const target = e.nativeEvent.path.find((node) => node.tagName === 'BUTTON');
+        const args = target?.id.split('_') ?? [];
         switch (args[1]) {
           case 'INC':
             onInc(args[0]);
