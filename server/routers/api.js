@@ -8,38 +8,51 @@ const { ObjectId } = Types;
 const { Category, Item, Filter, Discount, Order, Cart, OrderStage } = models;
 
 function getOrders(cartId) {
-  return Promise.allSettled([
-    OrderStage.aggregate([
-      { $sort: { _id: 1 } },
-      {
-        $lookup: {
-          from: 'orders',
-          let: { orderStageId: '$_id' },
-          as: 'orders',
-          pipeline: [
-            { $match: { $expr: { $eq: ['$$orderStageId', '$orderStageId'] } } },
-            { $sort: { time: -1 } },
-            {
-              $lookup: {
-                from: 'items',
-                localField: 'itemId',
-                foreignField: '_id',
-                as: 'item',
+  const result = {};
+  // firstly search cart with price and ids array...
+  return Cart.find({ _id: cartId })
+    .then((query) => {
+      const cart = query[0];
+      result.price = cart?.price ?? 0;
+      return OrderStage.aggregate([
+        { $sort: { _id: 1 } },
+        {
+          $lookup: {
+            from: 'orders',
+            let: { orderStageId: '$_id' },
+            as: 'orders',
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    // ...only after that make order query to db for search only orders of
+                    // this cart, not all orders. It helps save time during work with db
+                    $and: [
+                      { $eq: ['$$orderStageId', '$orderStageId'] },
+                      { $in: ['$_id', cart?.orderIds ?? []] },
+                    ],
+                  },
+                },
               },
-            },
-            { $unwind: { path: '$item', preserveNullAndEmptyArrays: true } },
-          ],
+              { $sort: { time: -1 } },
+              {
+                $lookup: {
+                  from: 'items',
+                  localField: 'itemId',
+                  foreignField: '_id',
+                  as: 'item',
+                },
+              },
+              { $unwind: { path: '$item', preserveNullAndEmptyArrays: true } },
+            ],
+          },
         },
-      },
-    ]),
-    Cart.find({ _id: cartId }),
-  ]).then((results) => ({
-    stages: results[0].value.map((elem) => ({
-      ...elem,
-      orders: elem.orders.filter((order) => results[1].value[0]?.orderIds.includes(order._id)),
-    })),
-    price: results[1].value[0]?.price ?? 0,
-  }));
+      ]);
+    })
+    .then((query) => {
+      result.stages = query ?? [];
+      return result;
+    });
 }
 
 function getOrderWithPrice(orderId) {
@@ -68,7 +81,6 @@ function updateCart(cartId, orderId, isDelete = false, amount = null) {
   return getOrderWithPrice(orderId).then((order) => {
     const validatedAmount = amount * -1 >= order?.count ? 0 : amount;
     const count = validatedAmount ?? order?.count * (isDelete ? -1 : 1);
-
     const update = {
       $inc: { price: order?.item.price * count },
     };
