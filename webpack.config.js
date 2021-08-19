@@ -163,6 +163,14 @@ module.exports = function (_env, argv) {
       proxy: {
         '/': {
           target: 'http://localhost:8080',
+          secure: false,
+          bypass(req) {
+            const { path: pathString } = req;
+            if (pathString.indexOf('/users') !== -1) {
+              return '/';
+            }
+            return undefined;
+          },
         },
       },
     },
