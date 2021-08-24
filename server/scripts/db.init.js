@@ -5,7 +5,7 @@ require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const { Types } = mongoose;
 const { ObjectId } = Types;
-const { Category, Order, OrderStage, Item, Filter, Discount, Cart } = models;
+const { Category, Order, OrderStage, Item, Filter, Discount, Cart, User } = models;
 
 const dbConn = process.env.DB_CONN;
 
@@ -176,6 +176,7 @@ mongoose.connect(dbConn, { useUnifiedTopology: true, useNewUrlParser: true }, (e
     OrderStage.remove({}).then(() => OrderStage.insertMany(initialData.orderStages)),
     Order.remove({}),
     Cart.remove({}),
+    User.remove({}),
   ]).then((res) => {
     if (res.findIndex((elem) => elem.status === 'rejected') === -1) {
       mongoose.connection.close().then(() => console.log('Database initialised'));

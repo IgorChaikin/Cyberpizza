@@ -5,20 +5,23 @@ import { fetchDiscounts } from '../actions/actions.discounts';
 import { fetchOrders } from '../actions/actions.orders';
 import { fetchFilters } from '../actions/actions.filters';
 import { fetchItems } from '../actions/actions.items';
+import { fetchUsername } from '../actions/actions.auth';
 
 const mapDispatchToProps = (dispatch) => ({
   onMount: () => {
     dispatch(fetchCategories());
     dispatch(fetchDiscounts());
-    dispatch(fetchOrders());
     dispatch(fetchFilters());
+    dispatch(fetchUsername());
   },
   onCategoriesLoad: (id) => dispatch(fetchItems(id)),
+  onUserChange: () => dispatch(fetchOrders()),
 });
 
 const mapStateToProps = (state) => ({
   isOrdersVisible: state.orders.isOrdersVisible,
   categories: state.categories,
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

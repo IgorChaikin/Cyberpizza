@@ -1,11 +1,10 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const models = require('../models');
+const { Types } = require('mongoose');
+const { Category, Item, Filter, Discount, Order, Cart, OrderStage } = require('../models');
+const { verifyToken } = require('../jwt');
 
 const api = express.Router();
-const { Types } = mongoose;
 const { ObjectId } = Types;
-const { Category, Item, Filter, Discount, Order, Cart, OrderStage } = models;
 
 function getOrders(cartId) {
   const result = {};
@@ -72,8 +71,8 @@ function getOrderWithPrice(orderId) {
   ]).then((query) => query[0]);
 }
 
-function createCart() {
-  const cart = new Cart({});
+function createCart(userId = null) {
+  const cart = new Cart({ userId });
   return cart.save().then((item) => item._id);
 }
 
@@ -104,10 +103,6 @@ api.get('/items', (request, response) => {
     .exec((err, items) => response.json(items));
 });
 
-api.get('/orders', (request, response) => {
-  getOrders(request.cookies?.cartId).then((res) => response.json(res));
-});
-
 api.get('/filters', (request, response) => {
   Filter.find({})
     .sort({ _id: 1 })
@@ -116,6 +111,15 @@ api.get('/filters', (request, response) => {
 
 api.get('/discounts', (request, response) => {
   Discount.find({}, (err, discounts) => response.json(discounts.map((elem) => elem.value)));
+});
+
+api.get('/orders', (request, response) => {
+  const { cartId, token } = request.cookies;
+  const decoded = verifyToken(token);
+  if (decoded && !decoded.isActive) {
+    return response.sendStatus(403);
+  }
+  return getOrders(cartId).then((res) => response.json(res));
 });
 
 api.post('/orders', (request, response) => {
@@ -129,17 +133,22 @@ api.post('/orders', (request, response) => {
   });
   // add order firstly
   return order.save().then((item) => {
-    const { cartId } = request.cookies;
+    const { cartId, token } = request.cookies;
+    const decoded = verifyToken(token);
+    if (decoded && !decoded.isActive) {
+      return response.sendStatus(403);
+    }
     if (!cartId) {
       // create new cart if order is first and no cart id in cookies
-      createCart().then((id) => {
+      return createCart(decoded?._id).then((id) => {
         // set new cart id in cookies
         response.cookie('cartId', id, { secure: false, maxAge: 3600 * 24 });
         updateCart(id, item._id).then(() => getOrders(id).then((res) => response.json(res)));
       });
-    } else {
-      updateCart(cartId, item._id).then(() => getOrders(cartId).then((res) => response.json(res)));
     }
+    return updateCart(cartId, item._id).then(() =>
+      getOrders(cartId).then((res) => response.json(res))
+    );
   });
 });
 
@@ -147,8 +156,12 @@ api.patch('/orders', (request, response) => {
   if (!request.body) {
     return response.sendStatus(400);
   }
-  const { cartId } = request.cookies;
+  const { cartId, token } = request.cookies;
   const { id, amount } = request.body;
+  const decoded = verifyToken(token);
+  if (decoded && !decoded.isActive) {
+    return response.sendStatus(403);
+  }
 
   return updateCart(cartId, id, false, amount).then(() =>
     Order.updateOne(
@@ -165,8 +178,12 @@ api.delete('/orders', (request, response) => {
   if (!request.body) {
     return response.sendStatus(400);
   }
-  const { cartId } = request.cookies;
+  const { cartId, token } = request.cookies;
   const { id } = request.body;
+  const decoded = verifyToken(token);
+  if (decoded && !decoded.isActive) {
+    return response.sendStatus(403);
+  }
   // remove order from cart
   return updateCart(cartId, id, true).then(() =>
     // then delete order from db

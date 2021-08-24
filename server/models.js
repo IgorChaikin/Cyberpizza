@@ -39,12 +39,13 @@ const discountScheme = new Schema({
 const cartScheme = new Schema({
   orderIds: { type: [ObjectId], default: [] },
   price: { type: Number, required: true, default: 0 },
+  userId: ObjectId,
 });
 
 const userScheme = new Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
-  isActive: { type: Boolean, default: false },
+  isActive: { type: Boolean, default: true },
   isAdmin: { type: Boolean, default: false },
 });
 

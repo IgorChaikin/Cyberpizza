@@ -159,19 +159,8 @@ module.exports = function (_env, argv) {
       overlay: true,
       port: 5566,
       liveReload: true,
-
       proxy: {
-        '/': {
-          target: 'http://localhost:8080',
-          secure: false,
-          bypass(req) {
-            const { path: pathString } = req;
-            if (pathString.indexOf('/users') !== -1) {
-              return '/';
-            }
-            return undefined;
-          },
-        },
+        '/': 'http://localhost:8080',
       },
     },
   };
