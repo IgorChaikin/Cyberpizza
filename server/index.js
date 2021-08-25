@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const api = require('./routers/api');
 const main = require('./routers/main');
 const auth = require('./routers/auth');
+const admin = require('./routers/admin');
 const createApp = require('./app');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
@@ -18,6 +19,7 @@ createApp(dbConn, cookieKey).then((app) => {
   // routing
   app.use('/api', api);
   app.use('/auth', auth);
+  app.use('/admin', admin);
   app.use('/', main);
 
   // give static
