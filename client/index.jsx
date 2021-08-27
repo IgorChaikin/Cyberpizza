@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './containers/App';
 import Auth from './containers/Auth';
+import Admin from './containers/Admin';
 import './index.css';
 
 import store from './store';
@@ -22,9 +23,9 @@ ReactDOM.render(
           <Route path="/register">
             <Auth isRegister />
           </Route>
-          <Route path="/admin">admin</Route>
-          <Route path="/admin/carts">admin/carts</Route>
-          <Route path="/admin/users">admin/users</Route>
+          <Route path="/admin">
+            <Admin />
+          </Route>
         </Switch>
       </div>
     </Provider>

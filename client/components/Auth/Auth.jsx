@@ -117,9 +117,7 @@ function Auth(props) {
                 {isRegister ? 'Register' : 'Login'}
               </button>
             </div>
-            <Link to="/">
-              <button type="button">Back to site</button>
-            </Link>
+            <Link to="/">Back to site</Link>
           </form>
         )}
       </Formik>
@@ -129,10 +127,14 @@ function Auth(props) {
 
 Auth.propTypes = {
   isRegister: PropTypes.bool.isRequired,
-  requestError: PropTypes.string.isRequired,
+  requestError: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
   onMount: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
+};
+
+Auth.defaultProps = {
+  requestError: null,
 };
 
 export default Auth;

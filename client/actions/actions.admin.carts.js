@@ -1,13 +1,13 @@
 import { ActionType } from 'redux-promise-middleware';
 
 export const FETCH_CARTS = 'FETCH_CARTS';
-export const FETCH_CART = 'FETCH_CART';
+export const FETCH_SINGLE_CART = 'FETCH_CART';
 
 export const FETCH_CARTS_FULFILLED = `${FETCH_CARTS}_${ActionType.Fulfilled}`;
-export const FETCH_CART_FULFILLED = `${FETCH_CART}_${ActionType.Fulfilled}`;
+export const FETCH_SINGLE_CART_FULFILLED = `${FETCH_SINGLE_CART}_${ActionType.Fulfilled}`;
 
 export const FETCH_CARTS_REJECTED = `${FETCH_CARTS}_${ActionType.Rejected}`;
-export const FETCH_CART_REJECTED = `${FETCH_CART}_${ActionType.Rejected}`;
+export const FETCH_SINGLE_CART_REJECTED = `${FETCH_SINGLE_CART}_${ActionType.Rejected}`;
 
 export function fetchCarts() {
   const payload = new Promise((resolve, reject) => {
@@ -27,7 +27,7 @@ export function fetchCarts() {
   };
 }
 
-export function fetchCart(id) {
+export function fetchSingleCart(id) {
   const payload = new Promise((resolve, reject) => {
     fetch(`/admin/carts/${id}`, {
       method: 'GET',
@@ -40,7 +40,7 @@ export function fetchCart(id) {
   });
 
   return {
-    type: FETCH_CART,
+    type: FETCH_SINGLE_CART,
     payload,
   };
 }
@@ -55,8 +55,8 @@ export default function reducer(state = initialState, action) {
     case FETCH_CARTS_FULFILLED: {
       return { ...state, carts: action.payload, selectedCart: null };
     }
-    case FETCH_CART_FULFILLED: {
-      return { selectedCart: action.payload };
+    case FETCH_SINGLE_CART_FULFILLED: {
+      return { ...state, selectedCart: action.payload };
     }
     default:
       return state;

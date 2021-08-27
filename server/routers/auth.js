@@ -1,10 +1,12 @@
 const express = require('express');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
+const { Types } = require('mongoose');
 const { User, Cart } = require('../models');
 const { signToken, verifyToken } = require('../jwt');
 
 const auth = express.Router();
+const { ObjectId } = Types;
 
 auth.post('/register', (request, response) => {
   if (!request.body) {
@@ -31,8 +33,8 @@ auth.post('/register', (request, response) => {
         return user.save().then((newUser) => {
           const { _id, isAdmin, isActive } = newUser;
           const token = signToken({ _id, isAdmin, isActive });
+          response.clearCookie('cartId', { secure: false, maxAge: 0 });
           response.cookie('token', token, { secure: false, maxAge: 3600 * 24 });
-          // response.redirect(302, '/');
           response.json(email);
         });
       })
@@ -51,9 +53,11 @@ auth.post('/login', (request, response) => {
         return response.sendStatus(403);
       }
       const { _id, isAdmin, isActive } = user;
-      return Cart.findOne({ userId: _id }).then((cart) => {
+      return Cart.findOne({ userId: ObjectId(_id) }).then((cart) => {
         if (cart) {
-          response.cookie('cartId', cart._id);
+          response.cookie('cartId', cart._id, { secure: false, maxAge: 3600 * 24 });
+        } else {
+          response.clearCookie('cartId', { secure: false, maxAge: 0 });
         }
         const token = signToken({ _id, isAdmin, isActive });
         response.cookie('token', token, { secure: false, maxAge: 3600 * 24 });
@@ -74,8 +78,8 @@ auth.patch('/logout', (request, response) => {
       return response.sendStatus(403);
     }
     return User.updateOne({ _id: result._id }, { isActive: false }).then(() => {
-      response.clearCookie('token');
-      response.clearCookie('cartId');
+      response.clearCookie('token', { secure: false, maxAge: 0 });
+      response.clearCookie('cartId', { secure: false, maxAge: 0 });
       response.sendStatus(201);
     });
   });

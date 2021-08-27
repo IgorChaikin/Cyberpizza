@@ -3,7 +3,6 @@ import { ActionType } from 'redux-promise-middleware';
 export const FETCH_USERS = 'FETCH_USERS';
 export const UPDATE_USERS = 'UPDATE_USERS';
 export const ADD_CHANGE = 'ADD_CHANGE';
-export const REMOVE_CHANGE = 'REMOVE_CHANGE';
 
 export const FETCH_USERS_FULFILLED = `${FETCH_USERS}_${ActionType.Fulfilled}`;
 export const UPDATE_USERS_FULFILLED = `${UPDATE_USERS}_${ActionType.Fulfilled}`;
@@ -29,14 +28,14 @@ export function fetchUsers() {
   };
 }
 
-export function updateUsers(updates) {
+export function updateUsers(changes) {
   const payload = new Promise((resolve) => {
     fetch('/admin/users', {
       method: 'PATCH',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        updates,
+        changes,
       }),
     })
       .then((response) => response.json())
@@ -54,26 +53,25 @@ export function addChange(payload) {
   return { type: ADD_CHANGE, payload };
 }
 
-export function removeChange(payload) {
-  return { type: REMOVE_CHANGE, payload };
-}
-
 const initialState = {
   users: [],
-  changes: [],
+  isChanged: true,
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_USERS_FULFILLED:
     case UPDATE_USERS_FULFILLED: {
-      return { ...state, users: action.payload, changes: [] };
+      return { ...state, users: action.payload, isChanged: false };
     }
     case ADD_CHANGE: {
-      return { ...state, changes: state.changes.concat(action.payload) };
-    }
-    case REMOVE_CHANGE: {
-      return { ...state, changes: state.changes.filter((elem) => elem?._id === action.payload) };
+      const users = state.users.slice();
+      const { _id, field } = action.payload;
+      const idx = users.findIndex((elem) => elem._id === _id);
+      if (idx !== -1) {
+        users[idx][field] = !users[idx][field];
+      }
+      return { ...state, users, isChanged: true };
     }
     default:
       return state;

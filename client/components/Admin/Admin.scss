@@ -1,0 +1,32 @@
+@import "../../vars";
+
+.error-message {
+  height: 100%;
+  width: 100%;
+  background-color: $accent-color;
+  h1 {
+    color: $white-color
+  }
+}
+
+.admin-dashboard {
+  height: 100%;
+  width: 100%;
+
+  header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+  }
+  main {
+    display: flex;
+    flex-direction: row;
+    nav {
+      width: 20%;
+    }
+    .admin-dashboard__router {
+      width: 80%;
+    }
+  }
+}
