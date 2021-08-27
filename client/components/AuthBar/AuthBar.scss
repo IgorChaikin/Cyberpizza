@@ -5,5 +5,14 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+
+  .auth-button_login {
+    margin-right: $auth-element-radius;
+  }
+
+  .auth-bar__username {
+    font: $regular-text;
+    color: $black-color;
+    margin-right: $auth-element-radius;
+  }
 }

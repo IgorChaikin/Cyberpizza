@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types';
+import './AuthBar.scss';
 import { Link } from 'react-router-dom';
 import React from 'react';
-import PropTypes from 'prop-types';
 
 function AuthBar(props) {
   const { username, onLogout } = props;
@@ -8,8 +9,8 @@ function AuthBar(props) {
   if (username) {
     return (
       <div className="auth-bar">
-        <h1>{username}</h1>
-        <button type="button" onClick={onLogout}>
+        <p className="auth-bar__username">{username}</p>
+        <button type="button" className="auth-button auth-button_logout" onClick={onLogout}>
           LogOut
         </button>
       </div>
@@ -19,10 +20,14 @@ function AuthBar(props) {
   return (
     <div className="auth-bar">
       <Link to="/register">
-        <button type="button">Register</button>
+        <button type="button" className="auth-button auth-button_login">
+          Register
+        </button>
       </Link>
       <Link to="/login">
-        <button type="button">LogIn</button>
+        <button type="button" className="auth-button auth-button_login">
+          LogIn
+        </button>
       </Link>
     </div>
   );

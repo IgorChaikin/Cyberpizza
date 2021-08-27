@@ -22,6 +22,12 @@ $price-text-serif: 1.3em serif;
 $description-text: italic 1em sans-serif;
 $button-text: bold 2em serif;
 
+//offset
+
+$auth-element-radius: 1em;
+$auth-element-height: 2em;
+$auth-element-offset: 0.5em;
+
 //details reused in different components
 .count {
   background-color: $accent-color;
@@ -82,4 +88,27 @@ $button-text: bold 2em serif;
     height: 2px;
     background: $white-color;
   }
+}
+
+.auth-button {
+  font: $regular-text;
+  color: $white-color;
+  outline: none;
+  height: $auth-element-height;
+  border-radius: $auth-element-radius;
+  padding: 0 $auth-element-offset;
+
+  &:active{
+    transform:translate(0, 10%);
+  }
+}
+
+.auth-button_login {
+  border: none;
+  background-color: $accent-color;
+}
+
+.auth-button_logout {
+  border: $white-color solid 1px;
+  background-color: transparent;
 }
