@@ -22,12 +22,6 @@ $price-text-serif: 1.3em serif;
 $description-text: italic 1em sans-serif;
 $button-text: bold 2em serif;
 
-//offset
-
-$auth-element-radius: 1em;
-$auth-element-height: 2em;
-$auth-element-offset: 0.5em;
-
 //details reused in different components
 .count {
   background-color: $accent-color;
@@ -94,9 +88,9 @@ $auth-element-offset: 0.5em;
   font: $regular-text;
   color: $white-color;
   outline: none;
-  height: $auth-element-height;
-  border-radius: $auth-element-radius;
-  padding: 0 $auth-element-offset;
+  height: 2em;
+  border-radius: 1em;
+  padding: 0 1em;
 
   &:active{
     transform:translate(0, 10%);

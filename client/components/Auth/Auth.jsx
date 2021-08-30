@@ -41,6 +41,8 @@ function Auth(props) {
     <main className="auth">
       <h1>{isRegister ? 'Registration' : 'LogIn'}</h1>
 
+      <div className="decoration decoration_light" />
+
       <Formik
         initialValues={initialValues}
         validationSchema={validationsSchema}
@@ -61,9 +63,12 @@ function Auth(props) {
           isValid,
         }) => (
           <form className="auth__form" onSubmit={handleSubmit}>
-            <label htmlFor="email-id">
+            <label htmlFor="email-id" className="row">
               E-mail
               <input
+                className={`auth__form__input${
+                  errors.email && touched.email ? ' auth__form__input_wrong' : ''
+                }`}
                 id="email-id"
                 type="email"
                 name="email"
@@ -72,9 +77,12 @@ function Auth(props) {
                 value={values.email}
               />
             </label>
-            <label htmlFor="password-id">
+            <label htmlFor="password-id" className="row">
               Password
               <input
+                className={`auth__form__input${
+                  errors.password && touched.password ? ' auth__form__input_wrong' : ''
+                }`}
                 id="password-id"
                 type="password"
                 name="password"
@@ -85,9 +93,12 @@ function Auth(props) {
             </label>
 
             {isRegister ? (
-              <label htmlFor="confirm-id">
+              <label htmlFor="confirm-id" className="row">
                 Confirm password
                 <input
+                  className={`auth__form__input${
+                    errors.confirm && touched.confirm ? ' auth__form__input_wrong' : ''
+                  }`}
                   id="confirm-id"
                   type="password"
                   name="confirm"
@@ -99,28 +110,36 @@ function Auth(props) {
             ) : (
               ''
             )}
-            <p>
+            <p className="auth__error">
               {requestError ||
                 (errors.email && touched.email && errors.email) ||
                 (errors.password && touched.password && errors.password) ||
                 (errors.confirm && touched.confirm && errors.confirm)}
             </p>
-            <div>
+            <div className="row">
               <Link to={`/${isRegister ? 'login' : 'register'}`}>
-                <button type="button">{isRegister ? 'Login' : 'Register'}</button>
+                <button className="auth-button auth-button_login" type="button">
+                  {isRegister ? 'Login' : 'Register'}
+                </button>
+              </Link>
+              <Link to="/">
+                <button className="auth-button auth-button_logout" type="button">
+                  Back to site
+                </button>
               </Link>
               <button
+                className="auth-button auth-button_login"
                 type="submit"
-                className="button_submit"
                 disabled={isSubmitting || !dirty || !isValid}
               >
                 {isRegister ? 'Register' : 'Login'}
               </button>
             </div>
-            <Link to="/">Back to site</Link>
           </form>
         )}
       </Formik>
+
+      <div className="decoration decoration_dark" />
     </main>
   );
 }
