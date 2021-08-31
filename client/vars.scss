@@ -52,7 +52,7 @@ $button-text: bold 2em serif;
   align-items: center;
   height: 5em;
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 1em;
   position: relative;
 
   figure {
@@ -61,7 +61,7 @@ $button-text: bold 2em serif;
     justify-content: space-between;
     align-items: center;
     height: 100%;
-    gap: 1rem;
+    gap: 1em;
     margin: 0;
     span {
       font: $price-text;
@@ -91,6 +91,7 @@ $button-text: bold 2em serif;
   height: 2em;
   border-radius: 1em;
   padding: 0 1em;
+  cursor: pointer;
 
   &:active{
     transform:translate(0, 10%);
@@ -100,9 +101,26 @@ $button-text: bold 2em serif;
 .auth-button_login {
   border: none;
   background-color: $accent-color;
+  &:disabled {
+    opacity: 0.5;
+  }
 }
 
 .auth-button_logout {
   border: $white-color solid 1px;
   background-color: transparent;
+}
+
+.admin-dashboard__container {
+  width: 100%;
+  height: 100%;
+  padding: 0 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h2 {
+    font: $bold-header-text-serif;
+    color: $black-color;
+  }
 }

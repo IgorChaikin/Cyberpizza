@@ -12,7 +12,7 @@ function AdminUsers(props) {
     <tr key={user._id}>
       <td>{user._id}</td>
       <td>{user.email}</td>
-      <td>
+      <td className="checkbox-container">
         <input
           type="checkbox"
           id={`${user._id}_ACT`}
@@ -21,7 +21,7 @@ function AdminUsers(props) {
           readOnly
         />
       </td>
-      <td>
+      <td className="checkbox-container">
         <input
           type="checkbox"
           id={`${user._id}_ADM`}
@@ -34,7 +34,7 @@ function AdminUsers(props) {
   ));
 
   return (
-    <div className="admin-users">
+    <div className="admin-dashboard__container">
       <h2>Users</h2>
       <table
         onChange={(e) => {
@@ -62,7 +62,12 @@ function AdminUsers(props) {
         </thead>
         <tbody>{usersList}</tbody>
       </table>
-      <button type="button" onClick={() => onApply(users)} disabled={!isChanged}>
+      <button
+        className="auth-button auth-button_login"
+        type="button"
+        onClick={() => onApply(users)}
+        disabled={!isChanged}
+      >
         Apply changes
       </button>
     </div>

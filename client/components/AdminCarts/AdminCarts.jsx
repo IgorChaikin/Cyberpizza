@@ -32,7 +32,7 @@ function AdminCarts(props) {
   });
 
   return (
-    <div className="admin-carts">
+    <div className="admin-dashboard__container">
       <h2>Carts</h2>
       <table>
         <thead>

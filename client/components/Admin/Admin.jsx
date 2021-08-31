@@ -31,11 +31,11 @@ function Admin(props) {
         </section>
         <section>
           <h2>Total price</h2>
-          <p>{totalPrice?.toFixed(2)}</p>
+          <p>{totalPrice?.toFixed(2)}$</p>
         </section>
         <section>
           <h2>Total count</h2>
-          <p>{totalCount}</p>
+          <div className="count">{totalCount}</div>
         </section>
       </header>
       <main>
