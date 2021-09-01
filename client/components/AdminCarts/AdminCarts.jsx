@@ -16,16 +16,18 @@ function AdminCarts(props) {
     return (
       <tr key={cart._id}>
         <td>{cart._id}</td>
-        <td>{cart.username ?? '[ANONYMOUS]'}</td>
-        <td>{cart.price}</td>
+        <td className={cart.username ? '' : 'anonymous-container'}>
+          {cart.username ?? '[ANONYMOUS]'}
+        </td>
+        <td>{cart.price.toFixed(2)}$</td>
         <td>{`${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1)
           .toString()
           .padStart(2, '0')}.${date.getFullYear()} ${date
           .getHours()
           .toString()
           .padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`}</td>
-        <td>
-          <Link to={`${match.url}/${cart._id}`}>Show details</Link>
+        <td className="link-container">
+          <Link to={`${match.url}/${cart._id}`}>Show details...</Link>
         </td>
       </tr>
     );
@@ -34,7 +36,7 @@ function AdminCarts(props) {
   return (
     <div className="admin-dashboard__container">
       <h2>Carts</h2>
-      <table>
+      <table className="main-content">
         <thead>
           <tr>
             <th>Id</th>

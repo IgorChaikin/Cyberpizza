@@ -37,6 +37,7 @@ function AdminUsers(props) {
     <div className="admin-dashboard__container">
       <h2>Users</h2>
       <table
+        className="main-content"
         onChange={(e) => {
           const target = e.nativeEvent.path.find((node) => node.tagName === 'INPUT');
           const args = target?.id.split('_') ?? [];

@@ -1,1 +1,16 @@
 @import "../../vars";
+
+.anonymous-container {
+  text-align: center;
+  background-color: $accent-color;
+  color: $white-color;
+}
+
+.link-container {
+  text-align: center;
+  cursor: pointer;
+  a {
+    color: $grey-color;
+    font: $regular-text;
+  }
+}

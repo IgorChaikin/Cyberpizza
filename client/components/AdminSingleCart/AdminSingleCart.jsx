@@ -24,12 +24,16 @@ function AdminSingleCart(props) {
   });
 
   return (
-    <div className="cart">
+    <div className="admin-dashboard__container">
       <h2>
-        {selectedCart?.username ? `Cart of ${selectedCart?.username}` : `Anonymous cart`}; id: {id}
+        {selectedCart?.username ? `Cart of ${selectedCart?.username}` : `Anonymous cart`}
+        <span className="cart__id">id: {id}</span>
       </h2>
-      <div className="cart_list">{ordersList}</div>
-      <span>Total {selectedCart?.price}</span>
+      <div className="main-content">{ordersList}</div>
+      <p>
+        <span className="cart__total">Total</span>
+        <span className="cart__price">{selectedCart?.price.toFixed(2)}$</span>
+      </p>
     </div>
   );
 }

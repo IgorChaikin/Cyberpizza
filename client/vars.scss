@@ -114,7 +114,6 @@ $button-text: bold 2em serif;
 .admin-dashboard__container {
   width: 100%;
   height: 100%;
-  padding: 0 1em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -122,5 +121,9 @@ $button-text: bold 2em serif;
   h2 {
     font: $bold-header-text-serif;
     color: $black-color;
+  }
+
+  .main-content {
+    width: 95%;
   }
 }
