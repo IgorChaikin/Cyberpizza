@@ -7,6 +7,7 @@ import { Route, Switch, Link } from 'react-router-dom';
 import AdminUsers from '../../containers/AdminUsers';
 import AdminCarts from '../../containers/AdminCarts';
 import AdminSingleCart from '../../containers/AdminSingleCart';
+import Placeholder from '../Placeholder/Placeholder';
 
 function Admin(props) {
   const { requestError, totalCount, totalPrice, username, onMount } = props;
@@ -50,7 +51,9 @@ function Admin(props) {
         <div className="admin-dashboard__router">
           <Switch>
             <Route exact path={`${match.url}/`}>
-              admin
+              <div className="admin-dashboard__placeholder-container">
+                <Placeholder message={`Welcome, ${username}`} />
+              </div>
             </Route>
             <Route exact path={`${match.url}/carts`}>
               <AdminCarts />

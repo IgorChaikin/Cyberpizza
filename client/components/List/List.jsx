@@ -2,6 +2,7 @@ import React from 'react';
 import './List.scss';
 import PropTypes from 'prop-types';
 import Item from '../Item/Item';
+import Placeholder from '../Placeholder/Placeholder';
 
 function List(props) {
   const { items, onAdd, title } = props;
@@ -20,18 +21,24 @@ function List(props) {
   return (
     <main>
       <h1>{title}</h1>
-      <div
-        className="list"
-        onClick={(e) => {
-          const target = e.nativeEvent.path.find((node) => node.tagName === 'BUTTON');
-          const args = target?.id.split('_') ?? [];
-          if (args[1] === 'ADD') {
-            onAdd(args[0]);
-          }
-        }}
-      >
-        {itemsList}
-      </div>
+      {itemsList?.length > 0 ? (
+        <div
+          className="list"
+          onClick={(e) => {
+            const target = e.nativeEvent.path.find((node) => node.tagName === 'BUTTON');
+            const args = target?.id.split('_') ?? [];
+            if (args[1] === 'ADD') {
+              onAdd(args[0]);
+            }
+          }}
+        >
+          {itemsList}
+        </div>
+      ) : (
+        <div className="list__placeholder-container">
+          <Placeholder message="There is nothing to show.." />
+        </div>
+      )}
     </main>
   );
 }
