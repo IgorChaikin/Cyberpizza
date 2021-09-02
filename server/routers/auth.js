@@ -70,7 +70,7 @@ auth.post('/login', (request, response) => {
 auth.patch('/logout', (request, response) => {
   const { token } = request.cookies;
   const decoded = verifyToken(token);
-  if (decoded && !decoded.isActive) {
+  if (!decoded || (decoded && !decoded.isActive)) {
     return response.sendStatus(403);
   }
   return User.findOne({ _id: decoded._id }).then((result) => {

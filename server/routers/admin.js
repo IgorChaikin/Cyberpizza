@@ -10,36 +10,40 @@ const admin = express.Router();
 const { ObjectId } = Types;
 
 function getTotal() {
-  return Cart.aggregate([
-    {
-      $lookup: {
-        from: 'orders',
-        let: { orderIds: '$orderIds' },
-        as: 'cartCount',
-        pipeline: [
-          {
-            $match: {
-              $expr: { $in: ['$_id', '$$orderIds'] },
+  return (
+    Cart.aggregate([
+      {
+        $lookup: {
+          from: 'orders',
+          let: { orderIds: '$orderIds' },
+          as: 'cartCount',
+          pipeline: [
+            {
+              $match: {
+                $expr: { $in: ['$_id', '$$orderIds'] },
+              },
             },
-          },
-          {
-            $group: {
-              _id: null,
-              count: { $sum: '$count' },
+            {
+              $group: {
+                _id: null,
+                count: { $sum: '$count' },
+              },
             },
-          },
-        ],
+          ],
+        },
       },
-    },
-    { $unwind: { path: '$cartCount', preserveNullAndEmptyArrays: true } },
-    {
-      $group: {
-        _id: null,
-        totalCount: { $sum: '$cartCount.count' },
-        totalPrice: { $sum: '$price' },
+      { $unwind: { path: '$cartCount', preserveNullAndEmptyArrays: true } },
+      {
+        $group: {
+          _id: null,
+          totalCount: { $sum: '$cartCount.count' },
+          totalPrice: { $sum: '$price' },
+        },
       },
-    },
-  ]).then((query) => query[0]);
+    ])
+      // return init value if there isn't carts and collection array is empty
+      .then((query) => query[0] ?? { totalCount: 0, totalPrice: 0 })
+  );
 }
 
 function getCarts() {

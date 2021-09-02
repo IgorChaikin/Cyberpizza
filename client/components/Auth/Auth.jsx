@@ -111,10 +111,10 @@ function Auth(props) {
               ''
             )}
             <p className="auth__error">
-              {requestError ||
-                (errors.email && touched.email && errors.email) ||
+              {(errors.email && touched.email && errors.email) ||
                 (errors.password && touched.password && errors.password) ||
-                (errors.confirm && touched.confirm && errors.confirm)}
+                (errors.confirm && touched.confirm && errors.confirm) ||
+                requestError}
             </p>
             <div className="row">
               <Link to={`/${isRegister ? 'login' : 'register'}`}>
