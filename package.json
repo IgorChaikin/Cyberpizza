@@ -10,7 +10,7 @@
     "server:watch": "nodemon server/index.js",
     "client:watch": "webpack serve",
     "lint": "eslint \"{,!(node_modules|dist|stories|storybook-static)/**/}*.+(js|jsx)\" --fix",
-    "format": "prettier --write \"{,!(node_modules|dist|stories|storybook-static)/**/}*.+(js|jsx|json|css|md)\"",
+    "format": "prettier --write \"{,!(node_modules|dist|stories|storybook-static)/**/}*.+(js|jsx|json|css|scss|md)\"",
     "prepare": "husky install",
     "deploy": "git push heroku -f production:master",
     "commit-deploy": "git add . && git commit -m \"deploy on heroku\" && npm run deploy",

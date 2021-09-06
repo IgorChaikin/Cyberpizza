@@ -1,21 +1,26 @@
-@import "../../vars";
+@import '../../vars';
 
 @keyframes appear {
-  0%{transform:scale(0); opacity: 1;}
-  100%{transform:scale(1);opacity: 1;}
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .categories-list {
-  p{
+  p {
     color: $grey-color;
     font: $price-text;
     text-transform: uppercase;
   }
 
   /* monitors and laptops */
-  @media
-  (min-width: 768px) and (max-width: 1024px) and (orientation: landscape),
-  (max-width: 768px) and (orientation: landscape) {
+  @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape),
+    (max-width: 768px) and (orientation: landscape) {
     ul {
       li {
         margin: 0;
@@ -23,9 +28,9 @@
     }
   }
 
-  ul{
+  ul {
     padding-left: 0;
-    li{
+    li {
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -42,13 +47,13 @@
 
         text-transform: uppercase;
         z-index: 1;
-        h2{
+        h2 {
           margin: 6px 0;
           color: $black-color;
         }
       }
 
-      .circle{
+      .circle {
         background-color: $light-color;
 
         opacity: 0;

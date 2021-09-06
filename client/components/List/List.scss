@@ -1,13 +1,12 @@
-@import "../../vars";
+@import '../../vars';
 
-
-main{
+main {
   width: 100%;
   position: absolute;
   right: 0;
   z-index: 1;
 
-  h1{
+  h1 {
     height: calc(5% + 1rem);
     margin: 0.5em 0;
   }
@@ -20,7 +19,7 @@ main{
     margin: 2em 2em 0 5em;
   }
 
-  .list{
+  .list {
     overflow-y: auto;
     overflow-x: hidden;
   }

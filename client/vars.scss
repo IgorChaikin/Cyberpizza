@@ -37,7 +37,7 @@ $button-text: bold 2em serif;
   border-radius: 1em;
 }
 
-.circle{
+.circle {
   width: 4em;
   height: 4em;
   border-radius: 2em;
@@ -93,8 +93,8 @@ $button-text: bold 2em serif;
   padding: 0 1em;
   cursor: pointer;
 
-  &:active{
-    transform:translate(0, 10%);
+  &:active {
+    transform: translate(0, 10%);
   }
 }
 

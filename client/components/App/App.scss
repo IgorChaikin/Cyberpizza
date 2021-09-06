@@ -1,21 +1,21 @@
-@import "../../vars";
+@import '../../vars';
 
-.app{
+.app {
   width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: row;
 
-  position:relative;
+  position: relative;
 
   /* monitors and laptops */
   @media (min-width: 1240px),
-  (min-width: 768px) and (max-width: 1024px) and (orientation: landscape),
-  (max-width: 768px) and (orientation: landscape) {
+    (min-width: 768px) and (max-width: 1024px) and (orientation: landscape),
+    (max-width: 768px) and (orientation: landscape) {
     .side-nav {
-      width: calc( 20% + 2em);
+      width: calc(20% + 2em);
     }
-    .main{
+    .main {
       width: 80%;
     }
   }
@@ -23,11 +23,11 @@
   /* tablet */
 
   @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait),
-  (max-width: 768px) and (orientation: portrait) {
+    (max-width: 768px) and (orientation: portrait) {
     .side-nav {
-      width: calc( 30% + 2em);
+      width: calc(30% + 2em);
     }
-    .main{
+    .main {
       width: 70%;
     }
   }
@@ -44,7 +44,7 @@
     flex-direction: column;
     padding-left: 2em;
 
-    h1{
+    h1 {
       color: $black-color;
       font: $bold-header-text;
     }

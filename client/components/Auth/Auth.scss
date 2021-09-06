@@ -1,4 +1,4 @@
-@import "../../vars";
+@import '../../vars';
 
 .auth {
   display: flex;
@@ -18,10 +18,10 @@
   }
 
   @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait),
-  (max-width: 768px) and (orientation: portrait) {
+    (max-width: 768px) and (orientation: portrait) {
     .auth__form {
       width: 60%;
-      .auth__form__input{
+      .auth__form__input {
         width: 70%;
       }
     }
@@ -35,7 +35,7 @@
       margin-bottom: 1em;
       font: $price-text;
 
-      .auth__form__input{
+      .auth__form__input {
         font: $regular-text;
         border: none;
         outline: none;

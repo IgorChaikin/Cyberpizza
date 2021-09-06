@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import './AdminUsers.scss';
 import PropTypes from 'prop-types';
@@ -7,6 +7,24 @@ function AdminUsers(props) {
   const { users, isChanged, username, onApply, onAdd, onMount } = props;
 
   useEffect(() => onMount(), []);
+
+  const usersCallback = useCallback(
+    (e) => {
+      const target = e.nativeEvent.path.find((node) => node.tagName === 'INPUT');
+      const args = target?.id.split('_') ?? [];
+      switch (args[1]) {
+        case 'ADM':
+          onAdd({ _id: args[0], field: 'isAdmin' });
+          break;
+        case 'ACT':
+          onAdd({ _id: args[0], field: 'isActive' });
+          break;
+        default:
+          break;
+      }
+    },
+    [onAdd]
+  );
 
   const usersList = users.map((user) => (
     <tr key={user._id}>
@@ -36,23 +54,7 @@ function AdminUsers(props) {
   return (
     <div className="admin-dashboard__container">
       <h2>Users</h2>
-      <table
-        className="main-content"
-        onChange={(e) => {
-          const target = e.nativeEvent.path.find((node) => node.tagName === 'INPUT');
-          const args = target?.id.split('_') ?? [];
-          switch (args[1]) {
-            case 'ADM':
-              onAdd({ _id: args[0], field: 'isAdmin' });
-              break;
-            case 'ACT':
-              onAdd({ _id: args[0], field: 'isActive' });
-              break;
-            default:
-              break;
-          }
-        }}
-      >
+      <table className="main-content" onChange={usersCallback}>
         <thead>
           <tr>
             <th>Id</th>

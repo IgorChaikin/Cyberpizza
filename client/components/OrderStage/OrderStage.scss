@@ -1,10 +1,9 @@
-@import "../../vars";
+@import '../../vars';
 
-
-li{
+li {
   position: relative;
   padding: 0 1rem 0 1.875em;
-  margin-bottom:1.875em;
+  margin-bottom: 1.875em;
 
   section {
     h2 {
@@ -27,7 +26,7 @@ li{
       display: flex;
       flex-direction: row;
       align-items: center;
-      .counter{
+      .counter {
         height: 2.4em;
         border-radius: 1.2em;
         margin: 0;
@@ -39,7 +38,7 @@ li{
         align-items: center;
       }
 
-      button{
+      button {
         background-color: transparent;
         outline: none;
         border: none;
@@ -48,38 +47,42 @@ li{
         &:disabled {
           opacity: 0.3;
         }
-        &:active{
-          transform:translate(0, 5%);
+        &:active {
+          transform: translate(0, 5%);
         }
       }
     }
   }
 
-  &:before{
-    content:"";
+  &:before {
+    content: '';
     display: inline-block;
     width: 0.8em;
     height: 0.8em;
     position: absolute;
-    left:0;
-    top:0.25em;
+    left: 0;
+    top: 0.25em;
     border-radius: 1em;
   }
 }
 
-.active{
+.active {
   section {
     h2 {
       color: $black-color;
     }
   }
-  &:before{background: $black-color;}
+  &:before {
+    background: $black-color;
+  }
 }
-.inactive{
+.inactive {
   section {
     h2 {
       color: $grey-color;
     }
   }
-  &:before{background: $grey-color;}
+  &:before {
+    background: $grey-color;
+  }
 }

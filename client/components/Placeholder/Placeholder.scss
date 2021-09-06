@@ -1,12 +1,18 @@
-@import "../../vars";
+@import '../../vars';
 
 @keyframes y-rotate {
-  0%{transform: scale(1, 1) translate(0, 0); }
-  50%{transform: scale(0, 1) translate(0, -10%);}
-  100%{transform: scale(-1, 1) translate(0, 0);}
+  0% {
+    transform: scale(1, 1) translate(0, 0);
+  }
+  50% {
+    transform: scale(0, 1) translate(0, -10%);
+  }
+  100% {
+    transform: scale(-1, 1) translate(0, 0);
+  }
 }
 
-.placeholder{
+.placeholder {
   width: 20em;
   display: flex;
   flex-direction: column;
@@ -19,20 +25,20 @@
     animation: 1.5s linear 0s infinite alternate y-rotate;
   }
 
-  .placeholder__message{
+  .placeholder__message {
     font: $bold-header-text;
     text-align: center;
   }
 
-  .placeholder__message_white{
+  .placeholder__message_white {
     color: $white-color;
   }
 
-  .placeholder__message_grey{
+  .placeholder__message_grey {
     color: $grey-color;
   }
 
-  .placeholder__message_black{
+  .placeholder__message_black {
     color: $black-color;
   }
 }

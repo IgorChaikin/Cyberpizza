@@ -1,16 +1,30 @@
-@import "../../vars";
+@import '../../vars';
 
 @keyframes move {
-  0%{transform:translate(100%, 0); opacity: 0;}
-  100%{transform:translate(0, 0);opacity: 1;}
+  0% {
+    transform: translate(100%, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
 }
 
 @keyframes pressed {
-  0%{transform:scale(1) translate(0, 0);opacity: 1; box-shadow: 0 1em 0.8em $grey-color;}
-  100%{transform:scale(0.8) translate(0, 25%); opacity: 1; box-shadow: 0 1em 0.5em $grey-color;}
+  0% {
+    transform: scale(1) translate(0, 0);
+    opacity: 1;
+    box-shadow: 0 1em 0.8em $grey-color;
+  }
+  100% {
+    transform: scale(0.8) translate(0, 25%);
+    opacity: 1;
+    box-shadow: 0 1em 0.5em $grey-color;
+  }
 }
 
-.list__item{
+.list__item {
   width: 20em;
   display: inline-flex;
   flex-direction: column;
@@ -68,12 +82,12 @@
     margin: 2em 0 0;
   }
 
-  h3{
+  h3 {
     margin: 0.5em 0 0;
     font: $button-text;
   }
 
-  .list__item__description{
+  .list__item__description {
     font: $description-text;
     text-align: center;
     color: $grey-color;

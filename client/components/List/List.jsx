@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import './List.scss';
 import PropTypes from 'prop-types';
 import Item from '../Item/Item';
@@ -6,6 +6,17 @@ import Placeholder from '../Placeholder/Placeholder';
 
 function List(props) {
   const { items, onAdd, title } = props;
+
+  const listCallback = useCallback(
+    (e) => {
+      const target = e.nativeEvent.path.find((node) => node.tagName === 'BUTTON');
+      const args = target?.id.split('_') ?? [];
+      if (args[1] === 'ADD') {
+        onAdd(args[0]);
+      }
+    },
+    [onAdd]
+  );
 
   const itemsList = items?.map((elem) => (
     <Item
@@ -22,16 +33,7 @@ function List(props) {
     <main>
       <h1>{title}</h1>
       {itemsList?.length > 0 ? (
-        <div
-          className="list"
-          onClick={(e) => {
-            const target = e.nativeEvent.path.find((node) => node.tagName === 'BUTTON');
-            const args = target?.id.split('_') ?? [];
-            if (args[1] === 'ADD') {
-              onAdd(args[0]);
-            }
-          }}
-        >
+        <div className="list" onClick={listCallback}>
           {itemsList}
         </div>
       ) : (

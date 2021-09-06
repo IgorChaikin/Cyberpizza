@@ -1,20 +1,28 @@
-@import "../../vars";
+@import '../../vars';
 
 @keyframes modal-move {
-  0%{transform:translate(100%, 0);}
-  100%{transform:translate(0, 0);}
+  0% {
+    transform: translate(100%, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
 }
 
 @keyframes shadow {
-  0%{opacity: 0;}
-  100%{opacity: 1;}
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
-.opening{
+.opening {
   opacity: 0;
   animation: shadow 0.5s 1 linear forwards;
-  .modal{
-    transform:translate(100%, 0);
+  .modal {
+    transform: translate(100%, 0);
     animation-delay: 0.5s;
     animation: modal-move 0.5s 1 linear forwards;
   }
@@ -32,9 +40,9 @@
 
   /* monitors and laptops */
   @media (min-width: 1240px),
-  (min-width: 768px) and (max-width: 1024px) and (orientation: landscape),
-  (max-width: 768px) and (orientation: landscape) {
-    .modal{
+    (min-width: 768px) and (max-width: 1024px) and (orientation: landscape),
+    (max-width: 768px) and (orientation: landscape) {
+    .modal {
       width: 30%;
     }
   }
@@ -42,13 +50,13 @@
   /* tablet, mobile */
 
   @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait),
-  (max-width: 768px) and (orientation: portrait){
-    .modal{
+    (max-width: 768px) and (orientation: portrait) {
+    .modal {
       width: 50%;
     }
   }
 
-  .modal{
+  .modal {
     position: absolute;
     height: 100%;
     right: 0;
@@ -70,7 +78,7 @@
       margin: 0;
       padding: 0 1rem;
 
-      button{
+      button {
         outline: none;
         border: none;
         background-color: transparent;
@@ -95,20 +103,20 @@
       }
     }
 
-    ul{
+    ul {
       list-style: none;
       margin: 0 0 0 1rem;
-      padding:0;
+      padding: 0;
       position: relative;
-      &:before{
-        content:"";
+      &:before {
+        content: '';
         display: inline-block;
         width: 0.2em;
         background: $grey-color;
         position: absolute;
-        left:0.3em;
-        top:0.25em;
-        height: calc( 100% + 0.8em );
+        left: 0.3em;
+        top: 0.25em;
+        height: calc(100% + 0.8em);
       }
     }
 

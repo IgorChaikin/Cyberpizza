@@ -111,9 +111,9 @@ function Auth(props) {
               ''
             )}
             <p className="auth__error">
-              {(errors.email && touched.email && errors.email) ||
-                (errors.password && touched.password && errors.password) ||
-                (errors.confirm && touched.confirm && errors.confirm) ||
+              {(touched.email && errors.email) ||
+                (touched.password && errors.password) ||
+                (touched.confirm && errors.confirm) ||
                 requestError}
             </p>
             <div className="row">
