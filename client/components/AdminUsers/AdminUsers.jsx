@@ -26,6 +26,10 @@ function AdminUsers(props) {
     [onAdd]
   );
 
+  const applyCallback = useCallback(() => {
+    onApply(users);
+  }, [onApply, users]);
+
   const usersList = users.map((user) => (
     <tr key={user._id}>
       <td>{user._id}</td>
@@ -68,7 +72,7 @@ function AdminUsers(props) {
       <button
         className="auth-button auth-button_login"
         type="button"
-        onClick={() => onApply(users)}
+        onClick={applyCallback}
         disabled={!isChanged}
       >
         Apply changes

@@ -3,8 +3,8 @@ import React, { useEffect } from 'react';
 import './Auth.scss';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
-import * as yup from 'yup';
 import { Link, Redirect } from 'react-router-dom';
+import { loginValidationSchema, registerValidationSchema } from '../../../validationShemas';
 
 function Auth(props) {
   const { isRegister, onSubmit, onMount, isAuthenticated, requestError } = props;
@@ -15,27 +15,8 @@ function Auth(props) {
     return <Redirect to="/" />;
   }
 
-  const validationObject = {
-    email: yup
-      .string()
-      .typeError('E-mail should be a string')
-      .email('Bad email')
-      .required('E-mail is required'),
-    password: yup
-      .string()
-      .typeError('Password should be a string')
-      .required('Password is required'),
-  };
-  const initialValues = { email: '', password: '' };
-
-  if (isRegister) {
-    validationObject.confirm = yup
-      .string()
-      .oneOf([yup.ref('password')], "Passwords doesn't match")
-      .required('Confirm password is required');
-    initialValues.confirm = '';
-  }
-  const validationsSchema = yup.object().shape(validationObject);
+  const validationsSchema = isRegister ? registerValidationSchema : loginValidationSchema;
+  const initialValues = { email: '', password: '', confirm: '' };
 
   return (
     <main className="auth">
@@ -48,7 +29,7 @@ function Auth(props) {
         validationSchema={validationsSchema}
         onSubmit={(values, { setSubmitting }) => {
           setSubmitting(false);
-          onSubmit(values.email, values.password);
+          onSubmit(values);
         }}
       >
         {({

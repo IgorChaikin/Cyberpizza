@@ -126,6 +126,12 @@ api.post('/orders', (request, response) => {
   if (!request.body) {
     return response.sendStatus(400);
   }
+  const { cartId, token } = request.cookies;
+  const decoded = verifyToken(token);
+  if (decoded && !decoded.isActive) {
+    return response.sendStatus(403);
+  }
+
   const order = new Order({
     orderStageId: ObjectId('000000000000000000000000'),
     itemId: request.body.id,
@@ -133,11 +139,6 @@ api.post('/orders', (request, response) => {
   });
   // add order firstly
   return order.save().then((item) => {
-    const { cartId, token } = request.cookies;
-    const decoded = verifyToken(token);
-    if (decoded && !decoded.isActive) {
-      return response.sendStatus(403);
-    }
     if (!cartId) {
       // create new cart if order is first and no cart id in cookies
       return createCart(decoded?._id).then((id) => {
@@ -157,11 +158,11 @@ api.patch('/orders', (request, response) => {
     return response.sendStatus(400);
   }
   const { cartId, token } = request.cookies;
-  const { id, amount } = request.body;
   const decoded = verifyToken(token);
   if (decoded && !decoded.isActive) {
     return response.sendStatus(403);
   }
+  const { id, amount } = request.body;
 
   return updateCart(cartId, id, false, amount).then(() =>
     Order.updateOne(
@@ -179,11 +180,11 @@ api.delete('/orders', (request, response) => {
     return response.sendStatus(400);
   }
   const { cartId, token } = request.cookies;
-  const { id } = request.body;
   const decoded = verifyToken(token);
   if (decoded && !decoded.isActive) {
     return response.sendStatus(403);
   }
+  const { id } = request.body;
   // remove order from cart
   return updateCart(cartId, id, true).then(() =>
     // then delete order from db

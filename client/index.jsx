@@ -1,5 +1,6 @@
 import React from 'react';
-import { HashRouter, Switch, Route } from 'react-router-dom';
+import { Router, Switch, Route } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './containers/App';
@@ -9,8 +10,10 @@ import './index.css';
 
 import store from './store';
 
+const history = createBrowserHistory();
+
 ReactDOM.render(
-  <HashRouter>
+  <Router history={history}>
     <Provider store={store}>
       <div>
         <Switch>
@@ -29,6 +32,6 @@ ReactDOM.render(
         </Switch>
       </div>
     </Provider>
-  </HashRouter>,
+  </Router>,
   document.getElementById('root')
 );

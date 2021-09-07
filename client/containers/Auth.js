@@ -4,8 +4,7 @@ import Auth from '../components/Auth/Auth';
 import { registerUser, loginUser, refreshError } from '../actions/actions.auth';
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onSubmit: (email, password) =>
-    dispatch(ownProps.isRegister ? registerUser(email, password) : loginUser(email, password)),
+  onSubmit: (values) => dispatch(ownProps.isRegister ? registerUser(values) : loginUser(values)),
   onMount: () => dispatch(refreshError()),
 });
 

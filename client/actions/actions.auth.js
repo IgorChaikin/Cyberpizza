@@ -14,15 +14,12 @@ export const REGISTER_USER_REJECTED = `${REGISTER_USER}_${ActionType.Rejected}`;
 export const LOGIN_USER_REJECTED = `${LOGIN_USER}_${ActionType.Rejected}`;
 export const LOGOUT_USER_REJECTED = `${LOGOUT_USER}_${ActionType.Rejected}`;
 
-export function registerUser(email, password) {
+export function registerUser(values) {
   const payload = new Promise((resolve, reject) => {
     fetch('/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
+      body: JSON.stringify(values),
     })
       .then((response) => response.json())
       .then((response) => {
@@ -37,15 +34,12 @@ export function registerUser(email, password) {
   };
 }
 
-export function loginUser(email, password) {
+export function loginUser(values) {
   const payload = new Promise((resolve, reject) => {
     fetch('/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
+      body: JSON.stringify(values),
     })
       .then((response) => response.json())
       .then((response) => {
@@ -63,7 +57,7 @@ export function loginUser(email, password) {
 export function logoutUser() {
   const payload = new Promise((resolve, reject) => {
     fetch('/auth/logout', {
-      method: 'PATCH',
+      method: 'POST',
     })
       .then((result) => {
         resolve(result);

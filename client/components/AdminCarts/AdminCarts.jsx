@@ -53,7 +53,13 @@ function AdminCarts(props) {
 }
 
 AdminCarts.propTypes = {
-  carts: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+  carts: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      username: PropTypes.string,
+      price: PropTypes.number.isRequired,
+    }).isRequired
+  ).isRequired,
   onMount: PropTypes.func.isRequired,
 };
 

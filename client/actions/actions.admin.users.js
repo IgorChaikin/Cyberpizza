@@ -31,7 +31,7 @@ export function fetchUsers() {
 export function updateUsers(changes) {
   const payload = new Promise((resolve) => {
     fetch('/admin/users', {
-      method: 'PATCH',
+      method: 'PUT',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

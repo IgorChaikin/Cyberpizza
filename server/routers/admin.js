@@ -190,7 +190,7 @@ admin.get('/carts/:id', (request, response) => {
   return getSingleCart(request.params.id).then((result) => response.json(result));
 });
 
-admin.patch('/users', (request, response) => {
+admin.put('/users', (request, response) => {
   if (!request.body) {
     return response.sendStatus(400);
   }

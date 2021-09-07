@@ -1,11 +1,32 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useCallback } from 'react';
 import './OrderStage.scss';
 
 function OrderStage(props) {
   const { title, orders, id, onDelete, onInc, onDec } = props;
   const time = Math.max(...orders.map((order) => order.time));
   const diff = Math.floor((Date.now() - time) / 1000);
+
+  const orderStageCallback = useCallback(
+    (e) => {
+      const target = e.nativeEvent.path.find((node) => node.tagName === 'BUTTON');
+      const args = target?.id.split('_') ?? [];
+      switch (args[1]) {
+        case 'INC':
+          onInc(args[0]);
+          break;
+        case 'DEC':
+          onDec(args[0]);
+          break;
+        case 'DEL':
+          onDelete(args[0]);
+          break;
+        default:
+          break;
+      }
+    },
+    [onInc, onDec, onDelete]
+  );
 
   const intervals = [
     [3600, ' hours'],
@@ -58,27 +79,7 @@ function OrderStage(props) {
   });
 
   return (
-    <li
-      key={id}
-      className={`${orders.length <= 0 ? 'in' : ''}active`}
-      onClick={(e) => {
-        const target = e.nativeEvent.path.find((node) => node.tagName === 'BUTTON');
-        const args = target?.id.split('_') ?? [];
-        switch (args[1]) {
-          case 'INC':
-            onInc(args[0]);
-            break;
-          case 'DEC':
-            onDec(args[0]);
-            break;
-          case 'DEL':
-            onDelete(args[0]);
-            break;
-          default:
-            break;
-        }
-      }}
-    >
+    <li key={id} className={`${orders.length <= 0 ? 'in' : ''}active`} onClick={orderStageCallback}>
       <section>
         <h2>{title}</h2>
         {orders?.length > 0 ? <span>{timeString}</span> : ''}
