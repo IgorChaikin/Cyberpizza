@@ -11,6 +11,12 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const port = process.env.PORT || 8080;
 const dbConn = process.env.DB_CONN;
 const cookieKey = process.env.COOKIE_KEY;
+const bodyCheckMiddleware = (request, response, next) => {
+  if (!request.body) {
+    return response.sendStatus(400);
+  }
+  return next();
+};
 
 createApp(dbConn, cookieKey).then((app) => {
   app.use(express.json());
@@ -21,6 +27,12 @@ createApp(dbConn, cookieKey).then((app) => {
   app.use('/auth', auth);
   app.use('/admin', admin);
   app.use('/', main);
+
+  // middleware
+  app.post('*', bodyCheckMiddleware);
+  app.put('*', bodyCheckMiddleware);
+  app.patch('*', bodyCheckMiddleware);
+  app.delete('*', bodyCheckMiddleware);
 
   // give static
   app.use(express.static(path.join(__dirname, '../dist')));

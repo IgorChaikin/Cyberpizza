@@ -154,51 +154,34 @@ function getSingleCart(cartId) {
   ]).then((query) => query[0]);
 }
 
-admin.get('/', (request, response) => {
+admin.use((request, response, next) => {
   const { token } = request.cookies;
   const decoded = verifyToken(token);
   if (!decoded || !decoded.isActive || !decoded.isAdmin) {
     return response.sendStatus(403);
   }
+  return next();
+});
+
+admin.get('/', (request, response) => {
   return getTotal().then((result) => response.json(result));
 });
 
 admin.get('/users', (request, response) => {
-  const { token } = request.cookies;
-  const decoded = verifyToken(token);
-  if (!decoded || !decoded.isActive || !decoded.isAdmin) {
-    return response.sendStatus(403);
-  }
   return User.find({}, { password: 0 }).then((result) => response.json(result));
 });
 
 admin.get('/carts', (request, response) => {
-  const { token } = request.cookies;
-  const decoded = verifyToken(token);
-  if (!decoded || !decoded.isActive || !decoded.isAdmin) {
-    return response.sendStatus(403);
-  }
   return getCarts().then((result) => response.json(result));
 });
 
 admin.get('/carts/:id', (request, response) => {
-  const { token } = request.cookies;
-  const decoded = verifyToken(token);
-  if (!decoded || !decoded.isActive || !decoded.isAdmin) {
-    return response.sendStatus(403);
-  }
   return getSingleCart(request.params.id).then((result) => response.json(result));
 });
 
 admin.put('/users', (request, response) => {
-  if (!request.body) {
-    return response.sendStatus(400);
-  }
   const { token } = request.cookies;
   const decoded = verifyToken(token);
-  if (!decoded || !decoded.isActive || !decoded.isAdmin) {
-    return response.sendStatus(403);
-  }
   return Promise.allSettled(
     request.body.changes
       // forbade admin to change himself to prevent paradoxes

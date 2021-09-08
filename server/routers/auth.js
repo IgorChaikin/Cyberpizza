@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const { Types } = require('mongoose');
@@ -10,16 +11,14 @@ const auth = express.Router();
 const { ObjectId } = Types;
 
 auth.post('/register', (request, response) => {
-  if (!request.body) {
-    return response.sendStatus(400);
-  }
   return registerValidationSchema
     .validate(request.body)
     .then(() => {
       const { email, password } = request.body;
+      const hash = bcrypt.hashSync(password, 8);
       const user = new User({
         email,
-        password,
+        password: hash,
       });
       return User.findOne({})
         .then((result) => {
@@ -37,7 +36,7 @@ auth.post('/register', (request, response) => {
               const token = signToken({ _id, isAdmin, isActive });
               response.clearCookie('cartId', { secure: false, maxAge: 0 });
               response.cookie('token', token, { secure: false, maxAge: 3600 * 24 });
-              response.json(email);
+              response.json({ email, isAdmin });
             });
           })
         );
@@ -46,17 +45,14 @@ auth.post('/register', (request, response) => {
 });
 
 auth.post('/login', (request, response) => {
-  if (!request.body) {
-    return response.sendStatus(400);
-  }
   return loginValidationSchema
     .validate(request.body)
     .then(() => {
       const { email, password } = request.body;
 
-      return User.findOne({ email, password }).then((user) => {
+      return User.findOne({ email }).then((user) => {
         // check if user exists and is user banned
-        if (!user || !user.isActive) {
+        if (!user || !bcrypt.compareSync(password, user.password) || !user.isActive) {
           return response.sendStatus(403);
         }
 
@@ -69,7 +65,7 @@ auth.post('/login', (request, response) => {
           }
           const token = signToken({ _id, isAdmin, isActive });
           response.cookie('token', token, { secure: false, maxAge: 3600 * 24 });
-          response.json(email);
+          response.json({ email, isAdmin });
         });
       });
     })
@@ -82,7 +78,8 @@ auth.post('/logout', (request, response) => {
   if (!decoded || !decoded.isActive) {
     return response.sendStatus(403);
   }
-  return User.findOne({ _id: decoded._id }).then((result) => {
+  const { email } = request.body;
+  return User.findOne({ _id: decoded._id, email }).then((result) => {
     if (!result) {
       return response.sendStatus(403);
     }
@@ -97,7 +94,7 @@ auth.get('/username', (request, response) => {
   const { token } = request.cookies;
   const decoded = verifyToken(token);
   return User.findOne({ _id: decoded?._id, isActive: true }).then((result) => {
-    response.json(result?.email);
+    response.json({ email: result?.email, isAdmin: result?.isAdmin ?? false });
   });
 });
 

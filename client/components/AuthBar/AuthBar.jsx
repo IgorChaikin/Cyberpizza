@@ -1,18 +1,25 @@
 import PropTypes from 'prop-types';
 import './AuthBar.scss';
 import { Link } from 'react-router-dom';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 function AuthBar(props) {
-  const { username, onLogout } = props;
+  const { username, isAdmin, onLogout } = props;
+
+  const logoutCallback = useCallback(() => {
+    onLogout(username);
+  }, [onLogout, username]);
 
   if (username) {
     return (
-      <div className="auth-bar">
-        <p className="auth-bar__username">{username}</p>
-        <button type="button" className="auth-button auth-button_logout" onClick={onLogout}>
-          LogOut
-        </button>
+      <div className="auth-wrapper">
+        <div className="auth-bar">
+          <p className="auth-bar__username">{username}</p>
+          <button type="button" className="auth-button auth-button_logout" onClick={logoutCallback}>
+            LogOut
+          </button>
+        </div>
+        {isAdmin ? <Link to="/admin">To admin dashboard</Link> : ''}
       </div>
     );
   }
@@ -35,6 +42,7 @@ function AuthBar(props) {
 
 AuthBar.propTypes = {
   username: PropTypes.string,
+  isAdmin: PropTypes.bool.isRequired,
   onLogout: PropTypes.func.isRequired,
 };
 

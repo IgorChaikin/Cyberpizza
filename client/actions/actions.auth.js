@@ -54,10 +54,12 @@ export function loginUser(values) {
   };
 }
 
-export function logoutUser() {
+export function logoutUser(email) {
   const payload = new Promise((resolve, reject) => {
     fetch('/auth/logout', {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
     })
       .then((result) => {
         resolve(result);
@@ -92,6 +94,7 @@ export function fetchUsername() {
 
 const initialState = {
   isAuthenticated: false,
+  isAdmin: false,
   username: null,
   requestError: null,
 };
@@ -100,13 +103,23 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
     case LOGIN_USER_FULFILLED:
     case REGISTER_USER_FULFILLED: {
-      return { requestError: null, username: action.payload, isAuthenticated: true };
+      return {
+        requestError: null,
+        username: action.payload.email,
+        isAdmin: action.payload.isAdmin,
+        isAuthenticated: true,
+      };
     }
     case LOGOUT_USER_FULFILLED: {
-      return { requestError: null, username: null, isAuthenticated: false };
+      return { requestError: null, username: null, isAuthenticated: false, isAdmin: false };
     }
     case FETCH_USERNAME_FULFILLED: {
-      return { ...state, username: action.payload, isAuthenticated: !!action.payload };
+      return {
+        ...state,
+        username: action.payload.email,
+        isAuthenticated: !!action.payload.email,
+        isAdmin: action.payload.isAdmin,
+      };
     }
     case REGISTER_USER_REJECTED: {
       return { ...state, requestError: 'Bab request or this user already exists' };

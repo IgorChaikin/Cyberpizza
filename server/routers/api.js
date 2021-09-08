@@ -90,6 +90,15 @@ function updateCart(cartId, orderId, isDelete = false, amount = null) {
   });
 }
 
+api.use('/orders', (request, response, next) => {
+  const { token } = request.cookies;
+  const decoded = verifyToken(token);
+  if (decoded && !decoded.isActive) {
+    return response.sendStatus(403);
+  }
+  return next();
+});
+
 api.get('/categories', (request, response) => {
   Category.find({})
     .sort({ _id: 1 })
@@ -114,23 +123,13 @@ api.get('/discounts', (request, response) => {
 });
 
 api.get('/orders', (request, response) => {
-  const { cartId, token } = request.cookies;
-  const decoded = verifyToken(token);
-  if (decoded && !decoded.isActive) {
-    return response.sendStatus(403);
-  }
+  const { cartId } = request.cookies;
   return getOrders(cartId).then((res) => response.json(res));
 });
 
 api.post('/orders', (request, response) => {
-  if (!request.body) {
-    return response.sendStatus(400);
-  }
   const { cartId, token } = request.cookies;
   const decoded = verifyToken(token);
-  if (decoded && !decoded.isActive) {
-    return response.sendStatus(403);
-  }
 
   const order = new Order({
     orderStageId: ObjectId('000000000000000000000000'),
@@ -154,14 +153,7 @@ api.post('/orders', (request, response) => {
 });
 
 api.patch('/orders', (request, response) => {
-  if (!request.body) {
-    return response.sendStatus(400);
-  }
-  const { cartId, token } = request.cookies;
-  const decoded = verifyToken(token);
-  if (decoded && !decoded.isActive) {
-    return response.sendStatus(403);
-  }
+  const { cartId } = request.cookies;
   const { id, amount } = request.body;
 
   return updateCart(cartId, id, false, amount).then(() =>
@@ -176,14 +168,7 @@ api.patch('/orders', (request, response) => {
 });
 
 api.delete('/orders', (request, response) => {
-  if (!request.body) {
-    return response.sendStatus(400);
-  }
-  const { cartId, token } = request.cookies;
-  const decoded = verifyToken(token);
-  if (decoded && !decoded.isActive) {
-    return response.sendStatus(403);
-  }
+  const { cartId } = request.cookies;
   const { id } = request.body;
   // remove order from cart
   return updateCart(cartId, id, true).then(() =>
