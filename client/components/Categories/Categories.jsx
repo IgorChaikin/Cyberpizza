@@ -37,7 +37,12 @@ function Categories(props) {
 }
 
 Categories.propTypes = {
-  categories: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+  categories: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   onSelect: PropTypes.func.isRequired,
   selectedId: PropTypes.string,
 };

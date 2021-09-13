@@ -4,7 +4,7 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const { Types } = require('mongoose');
 const { User, Cart } = require('../models');
-const { signToken, verifyToken } = require('../jwt');
+const { signToken } = require('../jwt');
 const { loginValidationSchema, registerValidationSchema } = require('../../validationShemas');
 
 const auth = express.Router();
@@ -73,8 +73,7 @@ auth.post('/login', (request, response) => {
 });
 
 auth.post('/logout', (request, response) => {
-  const { token } = request.cookies;
-  const decoded = verifyToken(token);
+  const { decoded } = request;
   if (!decoded || !decoded.isActive) {
     return response.sendStatus(403);
   }
@@ -91,8 +90,7 @@ auth.post('/logout', (request, response) => {
 });
 
 auth.get('/username', (request, response) => {
-  const { token } = request.cookies;
-  const decoded = verifyToken(token);
+  const { decoded } = request;
   return User.findOne({ _id: decoded?._id, isActive: true }).then((result) => {
     response.json({ email: result?.email, isAdmin: result?.isAdmin ?? false });
   });

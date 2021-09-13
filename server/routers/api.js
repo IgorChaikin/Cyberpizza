@@ -1,7 +1,7 @@
 const express = require('express');
 const { Types } = require('mongoose');
 const { Category, Item, Filter, Discount, Order, Cart, OrderStage } = require('../models');
-const { verifyToken } = require('../jwt');
+const { checkActiveMiddleware } = require('../middlewares');
 
 const api = express.Router();
 const { ObjectId } = Types;
@@ -90,14 +90,7 @@ function updateCart(cartId, orderId, isDelete = false, amount = null) {
   });
 }
 
-api.use('/orders', (request, response, next) => {
-  const { token } = request.cookies;
-  const decoded = verifyToken(token);
-  if (decoded && !decoded.isActive) {
-    return response.sendStatus(403);
-  }
-  return next();
-});
+api.use('/orders', checkActiveMiddleware);
 
 api.get('/categories', (request, response) => {
   Category.find({})
@@ -128,8 +121,8 @@ api.get('/orders', (request, response) => {
 });
 
 api.post('/orders', (request, response) => {
-  const { cartId, token } = request.cookies;
-  const decoded = verifyToken(token);
+  const { cartId } = request.cookies;
+  const { decoded } = request;
 
   const order = new Order({
     orderStageId: ObjectId('000000000000000000000000'),

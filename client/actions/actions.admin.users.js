@@ -12,7 +12,7 @@ export const UPDATE_USERS_REJECTED = `${UPDATE_USERS}_${ActionType.Rejected}`;
 
 export function fetchUsers() {
   const payload = new Promise((resolve, reject) => {
-    fetch('/admin/users', {
+    fetch('/api/admin/users', {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -30,7 +30,7 @@ export function fetchUsers() {
 
 export function updateUsers(changes) {
   const payload = new Promise((resolve) => {
-    fetch('/admin/users', {
+    fetch('/api/admin/users', {
       method: 'PUT',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },

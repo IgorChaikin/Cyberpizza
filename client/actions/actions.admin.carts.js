@@ -11,7 +11,7 @@ export const FETCH_SINGLE_CART_REJECTED = `${FETCH_SINGLE_CART}_${ActionType.Rej
 
 export function fetchCarts() {
   const payload = new Promise((resolve, reject) => {
-    fetch('/admin/carts', {
+    fetch('/api/admin/carts', {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -29,7 +29,7 @@ export function fetchCarts() {
 
 export function fetchSingleCart(id) {
   const payload = new Promise((resolve, reject) => {
-    fetch(`/admin/carts/${id}`, {
+    fetch(`/api/admin/carts/${id}`, {
       method: 'GET',
     })
       .then((response) => response.json())

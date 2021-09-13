@@ -47,7 +47,12 @@ App.propTypes = {
   onMount: PropTypes.func.isRequired,
   onCategoriesLoad: PropTypes.func.isRequired,
   onUserChange: PropTypes.func.isRequired,
-  categories: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+  categories: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default App;

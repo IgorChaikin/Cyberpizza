@@ -4,7 +4,7 @@ const { Types } = require('mongoose');
 
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const { User, Cart } = require('../models');
-const { verifyToken } = require('../jwt');
+const { checkAdminMiddleware } = require('../middlewares');
 
 const admin = express.Router();
 const { ObjectId } = Types;
@@ -154,14 +154,7 @@ function getSingleCart(cartId) {
   ]).then((query) => query[0]);
 }
 
-admin.use((request, response, next) => {
-  const { token } = request.cookies;
-  const decoded = verifyToken(token);
-  if (!decoded || !decoded.isActive || !decoded.isAdmin) {
-    return response.sendStatus(403);
-  }
-  return next();
-});
+admin.use(checkAdminMiddleware);
 
 admin.get('/', (request, response) => {
   return getTotal().then((result) => response.json(result));
@@ -180,13 +173,11 @@ admin.get('/carts/:id', (request, response) => {
 });
 
 admin.put('/users', (request, response) => {
-  const { token } = request.cookies;
-  const decoded = verifyToken(token);
   return Promise.allSettled(
     request.body.changes
       // forbade admin to change himself to prevent paradoxes
       // (for example when no one is admin and admin dashboard never can be used)
-      .filter((elem) => elem._id !== decoded._id)
+      .filter((elem) => elem._id !== request.decoded._id)
       .map((elem) =>
         User.updateOne({ _id: elem._id }, { isActive: elem.isActive, isAdmin: elem.isAdmin })
       )

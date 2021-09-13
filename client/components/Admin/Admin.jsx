@@ -11,9 +11,9 @@ import Placeholder from '../Placeholder/Placeholder';
 
 function Admin(props) {
   const { requestError, totalCount, totalPrice, username, onMount } = props;
+  const match = useRouteMatch();
 
   useEffect(() => onMount(), []);
-  const match = useRouteMatch();
 
   if (requestError) {
     return (

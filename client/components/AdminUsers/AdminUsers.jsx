@@ -82,7 +82,14 @@ function AdminUsers(props) {
 }
 
 AdminUsers.propTypes = {
-  users: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+  users: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      isActive: PropTypes.bool.isRequired,
+      isAdmin: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
   username: PropTypes.string,
   isChanged: PropTypes.bool.isRequired,
   onApply: PropTypes.func.isRequired,

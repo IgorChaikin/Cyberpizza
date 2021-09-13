@@ -91,7 +91,19 @@ function OrderStage(props) {
 
 OrderStage.propTypes = {
   id: PropTypes.string.isRequired,
-  orders: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+  orders: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      count: PropTypes.number.isRequired,
+      item: PropTypes.shape({
+        price: PropTypes.number.isRequired,
+        title: PropTypes.string.isRequired,
+        description: PropTypes.string,
+        imgPath: PropTypes.string.isRequired,
+        _id: PropTypes.string.isRequired,
+      }).isRequired,
+    })
+  ).isRequired,
   title: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
   onInc: PropTypes.func.isRequired,

@@ -46,7 +46,15 @@ function List(props) {
 }
 
 List.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      price: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string,
+      imgPath: PropTypes.string.isRequired,
+      _id: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   title: PropTypes.string,
   onAdd: PropTypes.func.isRequired,
 };

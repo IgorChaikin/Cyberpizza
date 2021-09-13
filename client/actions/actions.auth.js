@@ -16,7 +16,7 @@ export const LOGOUT_USER_REJECTED = `${LOGOUT_USER}_${ActionType.Rejected}`;
 
 export function registerUser(values) {
   const payload = new Promise((resolve, reject) => {
-    fetch('/auth/register', {
+    fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(values),
@@ -36,7 +36,7 @@ export function registerUser(values) {
 
 export function loginUser(values) {
   const payload = new Promise((resolve, reject) => {
-    fetch('/auth/login', {
+    fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(values),
@@ -56,7 +56,7 @@ export function loginUser(values) {
 
 export function logoutUser(email) {
   const payload = new Promise((resolve, reject) => {
-    fetch('/auth/logout', {
+    fetch('/api/auth/logout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
@@ -79,7 +79,7 @@ export function refreshError() {
 
 export function fetchUsername() {
   const payload = new Promise((resolve) => {
-    fetch('/auth/username', { method: 'GET', credentials: 'include' })
+    fetch('/api/auth/username', { method: 'GET' })
       .then((response) => response.json())
       .then((result) => {
         resolve(result);

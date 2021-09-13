@@ -10,7 +10,7 @@ export const FETCH_ADMIN_DASHBOARD_REJECTED = `${FETCH_ADMIN_DASHBOARD}_${Action
 
 export function fetchAdminDashboard() {
   const payload = new Promise((resolve, reject) => {
-    fetch('/admin', {
+    fetch('/api/admin', {
       method: 'GET',
     })
       .then((response) => response.json())

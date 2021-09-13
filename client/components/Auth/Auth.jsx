@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import './Auth.scss';
 import PropTypes from 'prop-types';
@@ -9,6 +9,13 @@ import { loginValidationSchema, registerValidationSchema } from '../../../valida
 function Auth(props) {
   const { isRegister, onSubmit, onMount, isAuthenticated, requestError } = props;
 
+  const submitCallback = useCallback(
+    (values, { setSubmitting }) => {
+      setSubmitting(false);
+      onSubmit(values);
+    },
+    [onSubmit]
+  );
   useEffect(() => onMount(), []);
 
   if (isAuthenticated) {
@@ -27,10 +34,7 @@ function Auth(props) {
       <Formik
         initialValues={initialValues}
         validationSchema={validationsSchema}
-        onSubmit={(values, { setSubmitting }) => {
-          setSubmitting(false);
-          onSubmit(values);
-        }}
+        onSubmit={submitCallback}
       >
         {({
           values,

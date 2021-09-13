@@ -1,10 +1,12 @@
 import { connect } from 'react-redux';
 import Admin from '../components/Admin/Admin';
 import { fetchAdminDashboard, refreshAdmin } from '../actions/actions.admin';
+import { fetchUsername } from '../actions/actions.auth';
 
 const mapDispatchToProps = (dispatch) => ({
   onMount: () => {
     dispatch(refreshAdmin());
+    dispatch(fetchUsername());
     dispatch(fetchAdminDashboard());
   },
 });
