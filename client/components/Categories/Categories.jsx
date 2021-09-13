@@ -1,9 +1,20 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useCallback } from 'react';
 import './Categories.scss';
 
 function Categories(props) {
   const { categories, selectedId, onSelect } = props;
+
+  const categoriesCallback = useCallback(
+    (e) => {
+      const target = e.nativeEvent.path.find((node) => node.tagName === 'BUTTON');
+      const args = target?.id.split('_') ?? [];
+      if (args[1] === 'SELECT') {
+        onSelect(args[0]);
+      }
+    },
+    [onSelect]
+  );
 
   const categoriesList = categories.map((elem) => {
     const title = selectedId === elem._id ? `—${elem.title}` : elem.title;
@@ -20,23 +31,18 @@ function Categories(props) {
   return (
     <div className="categories-list">
       <p>categories</p>
-      <ul
-        onClick={(e) => {
-          const target = e.nativeEvent.path.find((node) => node.tagName === 'BUTTON');
-          const args = target?.id.split('_') ?? [];
-          if (args[1] === 'SELECT') {
-            onSelect(args[0]);
-          }
-        }}
-      >
-        {categoriesList}
-      </ul>
+      <ul onClick={categoriesCallback}>{categoriesList}</ul>
     </div>
   );
 }
 
 Categories.propTypes = {
-  categories: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+  categories: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   onSelect: PropTypes.func.isRequired,
   selectedId: PropTypes.string,
 };

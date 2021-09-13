@@ -1,11 +1,10 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const models = require('../models');
+const { Types } = require('mongoose');
+const { Category, Item, Filter, Discount, Order, Cart, OrderStage } = require('../models');
+const { checkActiveMiddleware } = require('../middlewares');
 
 const api = express.Router();
-const { Types } = mongoose;
 const { ObjectId } = Types;
-const { Category, Item, Filter, Discount, Order, Cart, OrderStage } = models;
 
 function getOrders(cartId) {
   const result = {};
@@ -72,8 +71,8 @@ function getOrderWithPrice(orderId) {
   ]).then((query) => query[0]);
 }
 
-function createCart() {
-  const cart = new Cart({});
+function createCart(userId = null) {
+  const cart = new Cart({ userId });
   return cart.save().then((item) => item._id);
 }
 
@@ -91,6 +90,8 @@ function updateCart(cartId, orderId, isDelete = false, amount = null) {
   });
 }
 
+api.use('/orders', checkActiveMiddleware);
+
 api.get('/categories', (request, response) => {
   Category.find({})
     .sort({ _id: 1 })
@@ -104,10 +105,6 @@ api.get('/items', (request, response) => {
     .exec((err, items) => response.json(items));
 });
 
-api.get('/orders', (request, response) => {
-  getOrders(request.cookies?.cartId).then((res) => response.json(res));
-});
-
 api.get('/filters', (request, response) => {
   Filter.find({})
     .sort({ _id: 1 })
@@ -118,10 +115,15 @@ api.get('/discounts', (request, response) => {
   Discount.find({}, (err, discounts) => response.json(discounts.map((elem) => elem.value)));
 });
 
+api.get('/orders', (request, response) => {
+  const { cartId } = request.cookies;
+  return getOrders(cartId).then((res) => response.json(res));
+});
+
 api.post('/orders', (request, response) => {
-  if (!request.body) {
-    return response.sendStatus(400);
-  }
+  const { cartId } = request.cookies;
+  const { decoded } = request;
+
   const order = new Order({
     orderStageId: ObjectId('000000000000000000000000'),
     itemId: request.body.id,
@@ -129,24 +131,21 @@ api.post('/orders', (request, response) => {
   });
   // add order firstly
   return order.save().then((item) => {
-    const { cartId } = request.cookies;
     if (!cartId) {
       // create new cart if order is first and no cart id in cookies
-      createCart().then((id) => {
+      return createCart(decoded?._id).then((id) => {
         // set new cart id in cookies
         response.cookie('cartId', id, { secure: false, maxAge: 3600 * 24 });
         updateCart(id, item._id).then(() => getOrders(id).then((res) => response.json(res)));
       });
-    } else {
-      updateCart(cartId, item._id).then(() => getOrders(cartId).then((res) => response.json(res)));
     }
+    return updateCart(cartId, item._id).then(() =>
+      getOrders(cartId).then((res) => response.json(res))
+    );
   });
 });
 
 api.patch('/orders', (request, response) => {
-  if (!request.body) {
-    return response.sendStatus(400);
-  }
   const { cartId } = request.cookies;
   const { id, amount } = request.body;
 
@@ -162,9 +161,6 @@ api.patch('/orders', (request, response) => {
 });
 
 api.delete('/orders', (request, response) => {
-  if (!request.body) {
-    return response.sendStatus(400);
-  }
   const { cartId } = request.cookies;
   const { id } = request.body;
   // remove order from cart

@@ -1,13 +1,12 @@
-@import "../../vars";
+@import '../../vars';
 
-
-.orders{
+.orders {
   background-color: transparent;
   color: $black-color;
   font: $regular-text;
   outline: none;
   border: none;
-  padding-left: 1em;
+  padding: 0 0 0 1em;
   text-transform: uppercase;
   height: 4em;
 
@@ -19,7 +18,7 @@
 
   cursor: pointer;
 
-  img{
+  img {
     height: 2em;
   }
 
@@ -27,7 +26,7 @@
     margin: 0 1em;
   }
 
-  .circle{
+  .circle {
     display: flex;
     flex-direction: column;
     align-items: center;

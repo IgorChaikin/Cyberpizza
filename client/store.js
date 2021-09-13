@@ -5,6 +5,10 @@ import items from './actions/actions.items';
 import filters from './actions/actions.filters';
 import discounts from './actions/actions.discounts';
 import orders from './actions/actions.orders';
+import auth from './actions/actions.auth';
+import admin from './actions/actions.admin';
+import users from './actions/actions.admin.users';
+import carts from './actions/actions.admin.carts';
 
 const reducer = combineReducers({
   items,
@@ -12,6 +16,10 @@ const reducer = combineReducers({
   filters,
   discounts,
   orders,
+  auth,
+  admin,
+  users,
+  carts,
 });
 
 const store = createStore(reducer, applyMiddleware(promise));

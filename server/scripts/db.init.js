@@ -5,7 +5,7 @@ require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const { Types } = mongoose;
 const { ObjectId } = Types;
-const { Category, Order, OrderStage, Item, Filter, Discount, Cart } = models;
+const { Category, Order, OrderStage, Item, Filter, Discount, Cart, User } = models;
 
 const dbConn = process.env.DB_CONN;
 
@@ -169,13 +169,14 @@ mongoose.connect(dbConn, { useUnifiedTopology: true, useNewUrlParser: true }, (e
   }
 
   return Promise.allSettled([
-    Item.remove({}).then(() => Item.insertMany(initialData.items)),
-    Category.remove({}).then(() => Category.insertMany(initialData.categories)),
-    Filter.remove({}).then(() => Filter.insertMany(initialData.filters)),
-    Discount.remove({}).then(() => Discount.insertMany(initialData.discounts)),
-    OrderStage.remove({}).then(() => OrderStage.insertMany(initialData.orderStages)),
-    Order.remove({}),
-    Cart.remove({}),
+    Item.deleteMany({}).then(() => Item.insertMany(initialData.items)),
+    Category.deleteMany({}).then(() => Category.insertMany(initialData.categories)),
+    Filter.deleteMany({}).then(() => Filter.insertMany(initialData.filters)),
+    Discount.deleteMany({}).then(() => Discount.insertMany(initialData.discounts)),
+    OrderStage.deleteMany({}).then(() => OrderStage.insertMany(initialData.orderStages)),
+    Order.deleteMany({}),
+    Cart.deleteMany({}),
+    User.deleteMany({}),
   ]).then((res) => {
     if (res.findIndex((elem) => elem.status === 'rejected') === -1) {
       mongoose.connection.close().then(() => console.log('Database initialised'));

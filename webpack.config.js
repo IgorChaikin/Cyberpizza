@@ -159,11 +159,8 @@ module.exports = function (_env, argv) {
       overlay: true,
       port: 5566,
       liveReload: true,
-
       proxy: {
-        '/': {
-          target: 'http://localhost:8080',
-        },
+        '/': 'http://localhost:8080',
       },
     },
   };

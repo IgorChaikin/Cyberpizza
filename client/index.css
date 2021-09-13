@@ -37,10 +37,6 @@ body {
   body {
     font-size: 1vw;
   }
-
-  header {
-    margin-left: 3.2rem;
-  }
 }
 
 /* tablet */
@@ -49,19 +45,11 @@ body {
   body {
     font-size: 1.1vw;
   }
-
-  header {
-    margin-left: 3.5rem;
-  }
 }
 
 /* mobile */
 @media (max-width: 768px) and (orientation: portrait) {
   body {
     font-size: 1.3vw;
-  }
-
-  header {
-    margin-left: 2.5rem;
   }
 }

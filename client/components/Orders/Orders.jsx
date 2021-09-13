@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import './Orders.scss';
 import PropTypes from 'prop-types';
 import OrderStage from '../../containers/OrderStage';
@@ -7,10 +7,11 @@ function Orders(props) {
   const { stages, price, onClose, discounts } = props;
 
   const stagesList = stages.map((elem) => <OrderStage key={elem._id} id={elem._id} />);
+  const stopPropagationCallback = useCallback((e) => e.stopPropagation(), []);
 
   return (
     <div className="wrapper opening" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+      <div className="modal" onClick={stopPropagationCallback}>
         <div className="modal__divided-part">
           <header>
             <h1>Order Status</h1>
@@ -51,8 +52,18 @@ function Orders(props) {
 
 Orders.propTypes = {
   onClose: PropTypes.func.isRequired,
-  discounts: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
-  stages: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
+  discounts: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      value: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+  stages: PropTypes.arrayOf(
+    PropTypes.shape({
+      onClick: PropTypes.func.isRequired,
+      orders: PropTypes.arrayOf(PropTypes.any).isRequired,
+    })
+  ).isRequired,
   price: PropTypes.number.isRequired,
 };
 

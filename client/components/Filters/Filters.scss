@@ -1,8 +1,8 @@
-@import "../../vars";
+@import '../../vars';
 
-
-.filters{
-  .filters__header{
+.filters {
+  max-width: 62%;
+  .filters__header {
     display: inline;
     margin-top: 0;
     color: $grey-color;
@@ -12,18 +12,17 @@
   }
 
   .filters__tag-container {
-
-    .tag_active{
+    .tag_active {
       background-color: $grey-color;
       color: $white-color;
     }
 
-    .tag_inactive{
+    .tag_inactive {
       background-color: transparent;
       color: $black-color;
     }
 
-    .tag{
+    .tag {
       cursor: pointer;
       font: $regular-text;
       outline: none;
@@ -34,7 +33,7 @@
       padding: 0 1em;
     }
 
-    .all{
+    .all {
       cursor: pointer;
       background-color: transparent;
       color: $grey-color;
@@ -43,7 +42,7 @@
       border: none;
       text-transform: uppercase;
 
-      img{
+      img {
         height: 1em;
         margin-right: 1em;
       }
