@@ -9,7 +9,10 @@ function Filters(props) {
 
   const filtersCallback = useCallback(
     (e) => {
-      const target = e.nativeEvent.path.find((node) => node.tagName === 'BUTTON');
+      let { target } = e.nativeEvent;
+      while (target.tagName !== 'HTML' && target.tagName !== 'BUTTON') {
+        target = target.parentNode;
+      }
       const args = target?.id.split('_') ?? [];
       if (args[1] === 'SWITCH') {
         onSwitch(args[0]);

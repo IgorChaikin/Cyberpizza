@@ -14,18 +14,45 @@ describe('Test /api/ path', () => {
     app = await createApp(uri);
   });
 
-  test('Categories array contain required categories count', async () => {
+  test('Categories array contain data with correct props', async () => {
     await supertest(app)
       .get('/api/categories')
       .expect(200)
       .then((response) => {
-        // Check type and length
         expect(Array.isArray(response.body)).toBeTruthy();
-        expect(response.body.length).toEqual(8);
+        response.body.forEach((elem) => {
+          expect(typeof elem._id).toEqual('string');
+          expect(typeof elem.title).toEqual('string');
+        });
       });
   });
 
-  test('App should get items array of existed category', async () => {
+  test('Filters array contain data with correct props', async () => {
+    await supertest(app)
+      .get('/api/filters')
+      .expect(200)
+      .then((response) => {
+        expect(Array.isArray(response.body)).toBeTruthy();
+        response.body.forEach((elem) => {
+          expect(typeof elem._id).toEqual('string');
+          expect(typeof elem.name).toEqual('string');
+        });
+      });
+  });
+
+  test('Discounts array contain data with correct props', async () => {
+    await supertest(app)
+      .get('/api/discounts')
+      .expect(200)
+      .then((response) => {
+        expect(Array.isArray(response.body)).toBeTruthy();
+        response.body.forEach((elem) => {
+          expect(typeof elem).toEqual('number');
+        });
+      });
+  });
+
+  test('App should get items array of existed category, which contain data with correct props', async () => {
     await supertest(app)
       .get('/api/categories')
       .expect(200)
@@ -34,8 +61,49 @@ describe('Test /api/ path', () => {
           .get(`/api/items?id=${categoriesResponse.body[0]._id}`)
           .expect(200)
           .then((itemsResponse) => {
-            // Check type and length
             expect(Array.isArray(itemsResponse.body)).toBeTruthy();
+            itemsResponse.body.forEach((elem) => {
+              expect(typeof elem._id).toEqual('string');
+              expect(typeof elem.imgPath).toEqual('string');
+              expect(typeof elem.price).toEqual('number');
+              expect(typeof elem.title).toEqual('string');
+              expect(Array.isArray(elem.filterIds)).toBeTruthy();
+              expect(typeof elem.categoryId).toEqual('string');
+              if (elem.description) {
+                expect(typeof elem.description).toEqual('string');
+              }
+            });
+          });
+      });
+  });
+
+  test('App should post order with existed item id. Orders array contain last order as first item', async () => {
+    await supertest(app)
+      .get('/api/categories')
+      .expect(200)
+      .then(async (categoriesResponse) => {
+        await supertest(app)
+          .get(`/api/items?id=${categoriesResponse.body[0]._id}`)
+          .expect(200)
+          .then(async (itemsResponse) => {
+            const orderedId = itemsResponse.body[0]._id;
+            await supertest(app)
+              .post('/api/orders')
+              .set('Content-type', 'application/json')
+              .send(
+                JSON.stringify({
+                  id: orderedId,
+                  time: Date.now(),
+                })
+              )
+              .expect(200)
+              .then((ordersResponse) => {
+                expect(typeof ordersResponse.body.price).toEqual('number');
+                expect(Array.isArray(ordersResponse.body.stages)).toBeTruthy();
+                console.log(ordersResponse.body.stages[0]);
+                expect(ordersResponse.body.stages[0].orders[0].item._id).toEqual(orderedId);
+                console.log(ordersResponse.cookies);
+              });
           });
       });
   });

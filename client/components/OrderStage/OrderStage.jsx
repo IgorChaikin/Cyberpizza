@@ -9,7 +9,10 @@ function OrderStage(props) {
 
   const orderStageCallback = useCallback(
     (e) => {
-      const target = e.nativeEvent.path.find((node) => node.tagName === 'BUTTON');
+      let { target } = e.nativeEvent;
+      while (target.tagName !== 'HTML' && target.tagName !== 'BUTTON') {
+        target = target.parentNode;
+      }
       const args = target?.id.split('_') ?? [];
       switch (args[1]) {
         case 'INC':
