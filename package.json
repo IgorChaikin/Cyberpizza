@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server/index.js",
     "build": "webpack --mode production",
-    "test": "jest",
+    "test": "jest --runInBand --detectOpenHandles --forceExit",
     "server:watch": "nodemon server/index.js",
     "client:watch": "webpack serve",
     "lint": "eslint \"{,!(node_modules|dist|stories|storybook-static)/**/}*.+(js|jsx)\" --fix",
