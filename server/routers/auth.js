@@ -6,9 +6,15 @@ const { Types } = require('mongoose');
 const { User, Cart } = require('../models');
 const { signToken } = require('../jwt');
 const { loginValidationSchema, registerValidationSchema } = require('../../validationShemas');
+const { checkTokenMiddleware, checkActiveMiddleware } = require('../middlewares');
 
 const auth = express.Router();
 const { ObjectId } = Types;
+
+auth.use('/logout', checkTokenMiddleware);
+auth.use('/logout', checkActiveMiddleware);
+auth.use('/username', checkTokenMiddleware);
+auth.use('/username', checkActiveMiddleware);
 
 auth.post('/register', (request, response) => {
   return registerValidationSchema
@@ -74,9 +80,6 @@ auth.post('/login', (request, response) => {
 
 auth.post('/logout', (request, response) => {
   const { decoded } = request;
-  if (!decoded || !decoded.isActive) {
-    return response.sendStatus(403);
-  }
   const { email } = request.body;
   return User.findOne({ _id: decoded._id, email }).then((result) => {
     if (!result) {

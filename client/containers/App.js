@@ -12,7 +12,16 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(fetchCategories());
     dispatch(fetchDiscounts());
     dispatch(fetchFilters());
-    dispatch(fetchUsername());
+
+    const cookies = {};
+    document.cookie.split(';').forEach((elem) => {
+      const [key, value] = elem.split('=');
+      cookies[key.trim()] = value;
+    });
+
+    if (cookies.token) {
+      dispatch(fetchUsername());
+    }
   },
   onCategoriesLoad: (id) => dispatch(fetchItems(id)),
   onUserChange: () => dispatch(fetchOrders()),

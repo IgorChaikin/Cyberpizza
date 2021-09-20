@@ -4,7 +4,11 @@ const { Types } = require('mongoose');
 
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const { User, Cart } = require('../models');
-const { checkAdminMiddleware } = require('../middlewares');
+const {
+  checkTokenMiddleware,
+  checkActiveMiddleware,
+  checkAdminMiddleware,
+} = require('../middlewares');
 
 const admin = express.Router();
 const { ObjectId } = Types;
@@ -154,6 +158,8 @@ function getSingleCart(cartId) {
   ]).then((query) => query[0]);
 }
 
+admin.use(checkTokenMiddleware);
+admin.use(checkActiveMiddleware);
 admin.use(checkAdminMiddleware);
 
 admin.get('/', (request, response) => {

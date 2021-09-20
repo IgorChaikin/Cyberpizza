@@ -6,7 +6,7 @@ const api = require('./routers/api');
 const main = require('./routers/main');
 const auth = require('./routers/auth');
 const admin = require('./routers/admin');
-const { checkTokenMiddleware, checkBodyMiddleware } = require('./middlewares');
+const { verifyTokenMiddleware, checkBodyMiddleware } = require('./middlewares');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const cookieKey = process.env.COOKIE_KEY;
@@ -26,7 +26,7 @@ async function createApp(dbConn) {
   app.use(cookieParser(cookieKey));
 
   // middleware
-  app.use(checkTokenMiddleware);
+  app.use(verifyTokenMiddleware);
   app.post('/*', checkBodyMiddleware);
   app.put('/*', checkBodyMiddleware);
   app.patch('/*', checkBodyMiddleware);

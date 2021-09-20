@@ -1,14 +1,22 @@
 const { verifyToken } = require('./jwt');
 
-const checkTokenMiddleware = (request, response, next) => {
+const verifyTokenMiddleware = (request, response, next) => {
   const { token } = request.cookies;
   request.decoded = verifyToken(token);
   return next();
 };
 
+const checkTokenMiddleware = (request, response, next) => {
+  const { decoded } = request;
+  if (!decoded) {
+    return response.sendStatus(403);
+  }
+  return next();
+};
+
 const checkAdminMiddleware = (request, response, next) => {
   const { decoded } = request;
-  if (!decoded || !decoded.isActive || !decoded.isAdmin) {
+  if (!decoded.isAdmin) {
     return response.sendStatus(403);
   }
   return next();
@@ -30,6 +38,7 @@ const checkBodyMiddleware = (request, response, next) => {
 };
 
 module.exports = {
+  verifyTokenMiddleware,
   checkTokenMiddleware,
   checkActiveMiddleware,
   checkAdminMiddleware,
