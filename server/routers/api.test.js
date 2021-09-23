@@ -1,7 +1,7 @@
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const supertest = require('supertest');
-const initByDbConn = require('../server/scripts/db.init_by_dbconn');
-const createApp = require('../server/app');
+const initByDbConn = require('../scripts/db.init_by_dbconn');
+const createApp = require('../app');
 
 let app;
 let db;

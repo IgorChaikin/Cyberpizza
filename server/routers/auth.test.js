@@ -1,9 +1,9 @@
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const supertest = require('supertest');
-const initByDbConn = require('../server/scripts/db.init_by_dbconn');
-const createApp = require('../server/app');
-const { verifyToken, signToken } = require('../utils/jwt');
-const getCookiesObj = require('../utils/getCookiesObj');
+const initByDbConn = require('../scripts/db.init_by_dbconn');
+const createApp = require('../app');
+const { verifyToken, signToken } = require('../../utils/jwt');
+const getCookiesObj = require('../../utils/getCookiesObj');
 
 let app;
 let db;

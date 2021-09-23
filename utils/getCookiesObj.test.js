@@ -1,4 +1,4 @@
-const getCookiesObj = require('../utils/getCookiesObj');
+const getCookiesObj = require('./getCookiesObj');
 
 describe('Test /api/auth/register path', () => {
   it('Get cookies of null', () => {
