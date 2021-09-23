@@ -2,7 +2,7 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 const supertest = require('supertest');
 const initByDbConn = require('../server/scripts/db.init_by_dbconn');
 const createApp = require('../server/app');
-const getCookiesObj = require('./cookiesParser');
+const getCookiesObj = require('../utils/getCookiesObj');
 
 let app;
 let db;
@@ -21,7 +21,7 @@ describe('Test /api/admin/ path', () => {
     await agent.get('/api/admin').expect(403);
   });
 
-  it("Anonymous users and users without admin role shouldn't have access to admin dashboard", async () => {
+  it('Admin should have access to admin dashboard', async () => {
     const response = await agent
       .post('/api/auth/register')
       .set('Content-type', 'application/json')

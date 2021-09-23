@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import './Filters.scss';
 import PropTypes from 'prop-types';
+import getEventArgs from '../../../utils/getEventArgs';
 
 function Filters(props) {
   const { tags, onSwitch, onSwitchAll, all } = props;
@@ -9,11 +10,7 @@ function Filters(props) {
 
   const filtersCallback = useCallback(
     (e) => {
-      let { target } = e.nativeEvent;
-      while (target.tagName !== 'HTML' && target.tagName !== 'BUTTON') {
-        target = target.parentNode;
-      }
-      const args = target?.id.split('_') ?? [];
+      const args = getEventArgs(e);
       if (args[1] === 'SWITCH') {
         onSwitch(args[0]);
       }

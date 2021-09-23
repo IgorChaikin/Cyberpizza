@@ -2,8 +2,8 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 const supertest = require('supertest');
 const initByDbConn = require('../server/scripts/db.init_by_dbconn');
 const createApp = require('../server/app');
-const { verifyToken, signToken } = require('../server/jwt');
-const getCookiesObj = require('./cookiesParser');
+const { verifyToken, signToken } = require('../utils/jwt');
+const getCookiesObj = require('../utils/getCookiesObj');
 
 let app;
 let db;
@@ -218,7 +218,7 @@ describe('Test /api/auth/logout path', () => {
 });
 
 describe('Test /api/auth/username path', () => {
-  it('Getting username withiut cookies is forbidden', async () => {
+  it('Getting username without cookies is forbidden', async () => {
     await agent
       .get('/api/auth/username')
       .send(
@@ -229,7 +229,7 @@ describe('Test /api/auth/username path', () => {
       .expect(403);
   });
 
-  it('Getting username without cookies is forbidden', async () => {
+  it('Successful username getting with cookies', async () => {
     // login to get token for cookies
     const response = await agent
       .post('/api/auth/login')
@@ -242,15 +242,11 @@ describe('Test /api/auth/username path', () => {
       )
       .expect(200);
     // getting e-mail
-    await agent
+    const userResponse = await agent
       .get('/api/auth/username')
       .set('Cookie', [`token=${getCookiesObj(response.headers['set-cookie']).token}`])
-      .send(
-        JSON.stringify({
-          email: 'user.two@gmail.com',
-        })
-      )
       .expect(200);
+    expect(typeof userResponse.body.email).toBe('string');
   });
 
   afterAll(async () => {

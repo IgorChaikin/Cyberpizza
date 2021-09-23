@@ -6,20 +6,14 @@ import { fetchOrders } from '../actions/actions.orders';
 import { fetchFilters } from '../actions/actions.filters';
 import { fetchItems } from '../actions/actions.items';
 import { fetchUsername } from '../actions/actions.auth';
+import getCookiesObj from '../../utils/getCookiesObj';
 
 const mapDispatchToProps = (dispatch) => ({
   onMount: () => {
     dispatch(fetchCategories());
     dispatch(fetchDiscounts());
     dispatch(fetchFilters());
-
-    const cookies = {};
-    document.cookie.split(';').forEach((elem) => {
-      const [key, value] = elem.split('=');
-      cookies[key.trim()] = value;
-    });
-
-    if (cookies.token) {
+    if (getCookiesObj(document.cookie).token) {
       dispatch(fetchUsername());
     }
   },

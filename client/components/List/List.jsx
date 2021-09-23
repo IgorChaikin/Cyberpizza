@@ -3,17 +3,14 @@ import './List.scss';
 import PropTypes from 'prop-types';
 import Item from '../Item/Item';
 import Placeholder from '../Placeholder/Placeholder';
+import getEventArgs from '../../../utils/getEventArgs';
 
 function List(props) {
   const { items, onAdd, title } = props;
 
   const listCallback = useCallback(
     (e) => {
-      let { target } = e.nativeEvent;
-      while (target.tagName !== 'HTML' && target.tagName !== 'BUTTON') {
-        target = target.parentNode;
-      }
-      const args = target?.id.split('_') ?? [];
+      const args = getEventArgs(e);
       if (args[1] === 'ADD') {
         onAdd(args[0]);
       }

@@ -1,4 +1,4 @@
-const { verifyToken } = require('./jwt');
+const { verifyToken } = require('../utils/jwt');
 
 const verifyTokenMiddleware = (request, response, next) => {
   const { token } = request.cookies;

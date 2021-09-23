@@ -4,7 +4,7 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const { Types } = require('mongoose');
 const { User, Cart } = require('../models');
-const { signToken } = require('../jwt');
+const { signToken } = require('../../utils/jwt');
 const { loginValidationSchema, registerValidationSchema } = require('../../validationShemas');
 const { checkTokenMiddleware, checkActiveMiddleware } = require('../middlewares');
 
