@@ -10,7 +10,10 @@ function AdminUsers(props) {
 
   const usersCallback = useCallback(
     (e) => {
-      const target = e.nativeEvent.path.find((node) => node.tagName === 'INPUT');
+      let { target } = e.nativeEvent;
+      while (target.tagName !== 'HTML' && target.tagName !== 'INPUT') {
+        target = target.parentNode;
+      }
       const args = target?.id.split('_') ?? [];
       switch (args[1]) {
         case 'ADM':

@@ -120,29 +120,32 @@ api.get('/orders', (request, response) => {
   return getOrders(cartId).then((res) => response.json(res));
 });
 
-api.post('/orders', (request, response) => {
-  const { cartId } = request.cookies;
+api.post('/orders', async (request, response) => {
+  let { cartId } = request.cookies;
   const { decoded } = request;
+  const { id, time } = request.body;
+
+  const existedItem = await Item.findOne({ _id: request.body.id });
+  if (!existedItem) {
+    return response.sendStatus(422);
+  }
 
   const order = new Order({
     orderStageId: ObjectId('000000000000000000000000'),
-    itemId: request.body.id,
-    time: request.body.time,
+    itemId: ObjectId(id),
+    time,
   });
-  // add order firstly
-  return order.save().then((item) => {
-    if (!cartId) {
-      // create new cart if order is first and no cart id in cookies
-      return createCart(decoded?._id).then((id) => {
-        // set new cart id in cookies
-        response.cookie('cartId', id, { secure: false, maxAge: 3600 * 24 });
-        updateCart(id, item._id).then(() => getOrders(id).then((res) => response.json(res)));
-      });
-    }
-    return updateCart(cartId, item._id).then(() =>
-      getOrders(cartId).then((res) => response.json(res))
-    );
-  });
+  const newOrder = await order.save();
+
+  if (!cartId) {
+    // create new cart if order is first and no cart id in cookies
+    cartId = await createCart(decoded?._id);
+    // set new cart id in cookies
+    response.cookie('cartId', cartId, { secure: false, maxAge: 3600 * 24 });
+  }
+  await updateCart(cartId, newOrder._id);
+  const res = await getOrders(cartId);
+  return response.json(res);
 });
 
 api.patch('/orders', (request, response) => {
