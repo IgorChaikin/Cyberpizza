@@ -8,9 +8,10 @@ import AdminUsers from '../../containers/AdminUsers';
 import AdminCarts from '../../containers/AdminCarts';
 import AdminSingleCart from '../../containers/AdminSingleCart';
 import Placeholder from '../Placeholder/Placeholder';
+import AdminDeleteModal from '../../containers/AdminDeleteModal';
 
 function Admin(props) {
-  const { requestError, totalCount, totalPrice, username, onMount } = props;
+  const { requestError, deletedId, totalCount, totalPrice, username, onMount } = props;
   const match = useRouteMatch();
 
   useEffect(() => onMount(), []);
@@ -25,6 +26,7 @@ function Admin(props) {
 
   return (
     <div className="admin-dashboard">
+      {deletedId ? <AdminDeleteModal /> : ''}
       <header>
         <section>
           <h2>Current admin</h2>
@@ -77,11 +79,13 @@ Admin.propTypes = {
   onMount: PropTypes.func.isRequired,
   requestError: PropTypes.string,
   username: PropTypes.string,
+  deletedId: PropTypes.string,
 };
 
 Admin.defaultProps = {
   requestError: null,
   username: null,
+  deletedId: null,
 };
 
 export default Admin;

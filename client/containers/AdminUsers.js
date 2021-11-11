@@ -1,11 +1,21 @@
 import { connect } from 'react-redux';
 import AdminUsers from '../components/AdminUsers/AdminUsers';
-import { fetchUsers, addChange, updateUsers } from '../actions/actions.admin.users';
+import {
+  fetchUsers,
+  addChange,
+  updateUsers,
+  fetchRoles,
+  selectDeleted,
+} from '../actions/actions.admin.users';
 
 const mapDispatchToProps = (dispatch) => ({
-  onMount: () => dispatch(fetchUsers()),
+  onMount: () => {
+    dispatch(fetchUsers());
+    dispatch(fetchRoles());
+  },
   onAdd: (change) => dispatch(addChange(change)),
   onApply: (changes) => dispatch(updateUsers(changes)),
+  onSelectDeleted: (id) => dispatch(selectDeleted(id)),
 });
 
 const mapStateToProps = (state) => ({

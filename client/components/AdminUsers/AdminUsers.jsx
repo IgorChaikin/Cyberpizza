@@ -2,23 +2,19 @@ import React, { useCallback, useEffect } from 'react';
 
 import './AdminUsers.scss';
 import PropTypes from 'prop-types';
+import getEventArgs from '../../../utils/getEventArgs';
 
 function AdminUsers(props) {
-  const { users, roles, isChanged, username, onApply, onAdd, onMount } = props;
+  const { users, roles, isChanged, username, onApply, onAdd, onSelectDeleted, onMount } = props;
+
+  console.log(users);
+  console.log(roles);
 
   useEffect(() => onMount(), []);
 
   const usersCallback = useCallback(
     (e) => {
-      let { target } = e.nativeEvent;
-      while (
-        target.tagName !== 'HTML' &&
-        target.tagName !== 'INPUT' &&
-        target.tagName !== 'SELECT'
-      ) {
-        target = target.parentNode;
-      }
-      const args = target?.id.split('_') ?? [];
+      const { target, args } = getEventArgs(e, ['INPUT', 'SELECT', 'BUTTON']);
       switch (args[1]) {
         case 'ADM':
           onAdd({
@@ -28,13 +24,27 @@ function AdminUsers(props) {
           });
           break;
         case 'ACT':
-          onAdd({ _id: args[0], field: 'isActive', value: !target.value });
+          onAdd({ _id: args[0], field: 'isActive', value: target.value });
           break;
         default:
           break;
       }
     },
     [onAdd]
+  );
+
+  const selectDeletedCallback = useCallback(
+    (e) => {
+      const { args } = getEventArgs(e);
+      switch (args[1]) {
+        case 'DELUSER':
+          onSelectDeleted(args[0]);
+          break;
+        default:
+          break;
+      }
+    },
+    [onSelectDeleted]
   );
 
   const applyCallback = useCallback(() => {
@@ -44,6 +54,9 @@ function AdminUsers(props) {
   const usersList = users.map((user) => (
     <tr key={user._id}>
       <td>{user._id}</td>
+      <td>{user.lastName}</td>
+      <td>{user.firstName}</td>
+      <td>{user.patronymic}</td>
       <td>{user.email}</td>
       <td className="checkbox-container">
         <input
@@ -63,19 +76,32 @@ function AdminUsers(props) {
           ))}
         </select>
       </td>
+      <td className="checkbox-container">
+        {user.email !== username ? (
+          <button type="button" id={`${user._id}_DELUSER`}>
+            X
+          </button>
+        ) : (
+          ''
+        )}
+      </td>
     </tr>
   ));
 
   return (
     <div className="admin-dashboard__container">
       <h2>Users</h2>
-      <table className="main-content" onChange={usersCallback}>
+      <table className="main-content" onChange={usersCallback} onClick={selectDeletedCallback}>
         <thead>
           <tr>
             <th>Id</th>
+            <th>Last name</th>
+            <th>First name</th>
+            <th>Patronymic</th>
             <th>E-mail</th>
             <th>Is active</th>
             <th>Role</th>
+            <th> </th>
           </tr>
         </thead>
         <tbody>{usersList}</tbody>
@@ -111,6 +137,7 @@ AdminUsers.propTypes = {
   isChanged: PropTypes.bool.isRequired,
   onApply: PropTypes.func.isRequired,
   onAdd: PropTypes.func.isRequired,
+  onSelectDeleted: PropTypes.func.isRequired,
   onMount: PropTypes.func.isRequired,
 };
 

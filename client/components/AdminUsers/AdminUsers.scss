@@ -2,4 +2,15 @@
 
 .checkbox-container {
   text-align: center;
+  button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+  }
+
+  select {
+    background-color: transparent;
+    border: none;
+    outline: none;
+  }
 }

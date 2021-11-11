@@ -1,17 +1,23 @@
 import { ActionType } from 'redux-promise-middleware';
 
+export const ADD_CHANGE = 'ADD_CHANGE';
+export const SELECT_DELETED = 'SELECT_DELETED';
+export const CANCEL_DELETED = 'CANCEL_DELETED';
+
 export const FETCH_USERS = 'FETCH_USERS';
 export const FETCH_ROLES = 'FETCH_ROLES';
 export const UPDATE_USERS = 'UPDATE_USERS';
-export const ADD_CHANGE = 'ADD_CHANGE';
+export const DELETE_USER = 'DELETE_USER';
 
 export const FETCH_USERS_FULFILLED = `${FETCH_USERS}_${ActionType.Fulfilled}`;
 export const FETCH_ROLES_FULFILLED = `${FETCH_ROLES}_${ActionType.Fulfilled}`;
 export const UPDATE_USERS_FULFILLED = `${UPDATE_USERS}_${ActionType.Fulfilled}`;
+export const DELETE_USER_FULFILLED = `${DELETE_USER}_${ActionType.Fulfilled}`;
 
 export const FETCH_USERS_REJECTED = `${FETCH_USERS}_${ActionType.Rejected}`;
 export const FETCH_ROLES_REJECTED = `${FETCH_ROLES}_${ActionType.Rejected}`;
 export const UPDATE_USERS_REJECTED = `${UPDATE_USERS}_${ActionType.Rejected}`;
+export const DELETE_USER_REJECTED = `${DELETE_USER}_${ActionType.Rejected}`;
 
 export function fetchUsers() {
   const payload = new Promise((resolve, reject) => {
@@ -28,6 +34,37 @@ export function fetchUsers() {
   return {
     type: FETCH_USERS,
     payload,
+  };
+}
+
+export function deleteUser(id) {
+  const payload = new Promise((resolve, reject) => {
+    fetch(`/api/admin/users/${id}`, {
+      method: 'DELETE',
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((err) => reject(err));
+  });
+
+  return {
+    type: DELETE_USER,
+    payload,
+  };
+}
+
+export function selectDeleted(payload) {
+  return {
+    type: SELECT_DELETED,
+    payload,
+  };
+}
+
+export function cancelDeleted() {
+  return {
+    type: CANCEL_DELETED,
   };
 }
 
@@ -77,14 +114,16 @@ export function addChange(payload) {
 const initialState = {
   users: [],
   roles: [],
+  deletedId: null,
   isChanged: true,
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_USERS_FULFILLED:
-    case UPDATE_USERS_FULFILLED: {
-      return { ...state, users: action.payload, isChanged: false };
+    case UPDATE_USERS_FULFILLED:
+    case DELETE_USER_FULFILLED: {
+      return { ...state, users: action.payload, isChanged: false, deletedId: null };
     }
     case FETCH_ROLES_FULFILLED: {
       return { ...state, roles: action.payload };
@@ -97,6 +136,12 @@ export default function reducer(state = initialState, action) {
         users[idx][field] = value;
       }
       return { ...state, users, isChanged: true };
+    }
+    case SELECT_DELETED: {
+      return { ...state, deletedId: action.payload };
+    }
+    case CANCEL_DELETED: {
+      return { ...state, deletedId: null };
     }
     default:
       return state;

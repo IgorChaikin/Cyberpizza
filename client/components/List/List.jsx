@@ -10,7 +10,7 @@ function List(props) {
 
   const listCallback = useCallback(
     (e) => {
-      const args = getEventArgs(e);
+      const { args } = getEventArgs(e);
       if (args[1] === 'ADD') {
         onAdd(args[0]);
       }

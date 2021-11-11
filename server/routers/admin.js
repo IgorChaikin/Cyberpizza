@@ -197,4 +197,12 @@ admin.put('/users', (request, response) => {
   ).then(() => User.find({}, { password: 0 }).then((result) => response.json(result)));
 });
 
+admin.delete('/users/:id', async (request, response) => {
+  const deletedId = request.params.id;
+  if (deletedId !== request.decoded._id) {
+    await User.deleteOne({ _id: deletedId });
+  }
+  User.find({}, { password: 0 }).then((result) => response.json(result));
+});
+
 module.exports = admin;

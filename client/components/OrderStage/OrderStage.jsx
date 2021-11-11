@@ -10,7 +10,7 @@ function OrderStage(props) {
 
   const orderStageCallback = useCallback(
     (e) => {
-      const args = getEventArgs(e);
+      const { args } = getEventArgs(e);
       switch (args[1]) {
         case 'INC':
           onInc(args[0]);

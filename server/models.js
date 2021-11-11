@@ -20,7 +20,9 @@ const orderScheme = new Schema({
   time: { type: Number, required: true },
 
   addressId: ObjectId,
+  shopId: ObjectId,
   isPickup: { type: Boolean, default: false },
+  paymentMethodId: ObjectId,
 });
 
 const itemScheme = new Schema({
@@ -49,7 +51,7 @@ const cartScheme = new Schema({
 });
 
 // user schemas
-const roleSheme = new Schema({
+const roleScheme = new Schema({
   title: { type: String, required: true },
 });
 
@@ -89,6 +91,10 @@ const shopScheme = new Schema({
   isEnabled: { type: Boolean, default: true },
 });
 
+const PaymentMethodScheme = new Schema({
+  title: { type: Boolean, default: true },
+});
+
 // models definition
 
 module.exports = {
@@ -101,9 +107,10 @@ module.exports = {
   Cart: model('Cart', cartScheme),
   User: model('User', userScheme),
 
-  Role: model('Role', roleSheme),
+  Role: model('Role', roleScheme),
   City: model('City', cityScheme),
   Address: model('Address', addressScheme),
   Staff: model('Staff', staffScheme),
   Shop: model('Shop', shopScheme),
+  PaymentMethod: model('PaymentMethod', PaymentMethodScheme),
 };
