@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { useCallback } from 'react';
 import './Categories.scss';
+import getEventArgs from '../../../utils/getEventArgs';
 
 function Categories(props) {
   const { categories, selectedId, onSelect } = props;
 
   const categoriesCallback = useCallback(
     (e) => {
-      const target = e.nativeEvent.path.find((node) => node.tagName === 'BUTTON');
-      const args = target?.id.split('_') ?? [];
+      const { args } = getEventArgs(e);
       if (args[1] === 'SELECT') {
         onSelect(args[0]);
       }

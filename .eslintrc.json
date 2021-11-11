@@ -29,5 +29,13 @@
     "react-perf/jsx-no-new-function-as-prop": "off",
     "jsx-a11y/no-noninteractive-element-interactions": "off",
     "react-perf/jsx-no-new-object-as-prop": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.test.js", "**/*.test.jsx"],
+      "env": {
+        "jest": true
+      }
+    }
+  ]
 }

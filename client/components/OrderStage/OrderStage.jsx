@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useCallback } from 'react';
 import './OrderStage.scss';
+import getEventArgs from '../../../utils/getEventArgs';
 
 function OrderStage(props) {
   const { title, orders, id, onDelete, onInc, onDec } = props;
@@ -9,8 +10,7 @@ function OrderStage(props) {
 
   const orderStageCallback = useCallback(
     (e) => {
-      const target = e.nativeEvent.path.find((node) => node.tagName === 'BUTTON');
-      const args = target?.id.split('_') ?? [];
+      const { args } = getEventArgs(e);
       switch (args[1]) {
         case 'INC':
           onInc(args[0]);

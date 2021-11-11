@@ -94,7 +94,6 @@ export function fetchUsername() {
 
 const initialState = {
   isAuthenticated: false,
-  isAdmin: false,
   username: null,
   requestError: null,
 };
@@ -106,19 +105,17 @@ export default function reducer(state = initialState, action) {
       return {
         requestError: null,
         username: action.payload.email,
-        isAdmin: action.payload.isAdmin,
         isAuthenticated: true,
       };
     }
     case LOGOUT_USER_FULFILLED: {
-      return { requestError: null, username: null, isAuthenticated: false, isAdmin: false };
+      return { requestError: null, username: null, isAuthenticated: false };
     }
     case FETCH_USERNAME_FULFILLED: {
       return {
         ...state,
         username: action.payload.email,
         isAuthenticated: !!action.payload.email,
-        isAdmin: action.payload.isAdmin,
       };
     }
     case REGISTER_USER_REJECTED: {

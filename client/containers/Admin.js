@@ -16,6 +16,7 @@ const mapStateToProps = (state) => ({
   totalCount: state.admin.totalCount,
   totalPrice: state.admin.totalPrice,
   username: state.auth.username,
+  deletedId: state.users.deletedId,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Admin);
