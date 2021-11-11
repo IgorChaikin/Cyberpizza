@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '../.env') });
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 const { Types } = require('mongoose');
 const { User, Cart } = require('../models');
 const { signToken } = require('../../utils/jwt');
@@ -10,6 +10,9 @@ const { checkTokenMiddleware, checkActiveMiddleware } = require('../middlewares'
 
 const auth = express.Router();
 const { ObjectId } = Types;
+
+const adminId = process.env.ADMIN_ID;
+const userId = process.env.USER_ID;
 
 auth.use('/logout', checkTokenMiddleware);
 auth.use('/logout', checkActiveMiddleware);
@@ -20,16 +23,19 @@ auth.post('/register', (request, response) => {
   return registerValidationSchema
     .validate(request.body)
     .then(() => {
-      const { email, password } = request.body;
+      const { email, password, lastName, firstName, patronymic } = request.body;
       const hash = bcrypt.hashSync(password, 8);
       const user = new User({
+        lastName,
+        firstName,
+        patronymic,
         email,
         password: hash,
       });
       return User.findOne({})
         .then((result) => {
           // first registered user become admin
-          user.isAdmin = !result;
+          user.roleId = result ? ObjectId(userId) : ObjectId(adminId);
         })
         .then(() =>
           User.findOne({ email }).then((result) => {
@@ -38,11 +44,11 @@ auth.post('/register', (request, response) => {
               return response.sendStatus(409);
             }
             return user.save().then((newUser) => {
-              const { _id, isAdmin, isActive } = newUser;
-              const token = signToken({ _id, isAdmin, isActive });
+              const { _id, roleId, isActive } = newUser;
+              const token = signToken({ _id, roleId, isActive });
               response.clearCookie('cartId', { secure: false, maxAge: 0 });
               response.cookie('token', token, { secure: false, maxAge: 3600 * 24 });
-              response.json({ email, isAdmin });
+              response.json({ email });
             });
           })
         );
@@ -62,16 +68,16 @@ auth.post('/login', (request, response) => {
           return response.sendStatus(403);
         }
 
-        const { _id, isAdmin, isActive } = user;
+        const { _id, roleId, isActive } = user;
         return Cart.findOne({ userId: ObjectId(_id) }).then((cart) => {
           if (cart) {
             response.cookie('cartId', cart._id, { secure: false, maxAge: 3600 * 24 });
           } else {
             response.clearCookie('cartId', { secure: false, maxAge: 0 });
           }
-          const token = signToken({ _id, isAdmin, isActive });
+          const token = signToken({ _id, roleId, isActive });
           response.cookie('token', token, { secure: false, maxAge: 3600 * 24 });
-          response.json({ email, isAdmin });
+          response.json({ email });
         });
       });
     })
@@ -95,7 +101,9 @@ auth.post('/logout', (request, response) => {
 auth.get('/username', (request, response) => {
   const { decoded } = request;
   return User.findOne({ _id: decoded?._id, isActive: true }).then((result) => {
-    response.json({ email: result?.email, isAdmin: result?.isAdmin ?? false });
+    response.json({
+      email: result?.email,
+    });
   });
 });
 

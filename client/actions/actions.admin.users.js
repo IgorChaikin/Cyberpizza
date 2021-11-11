@@ -1,13 +1,16 @@
 import { ActionType } from 'redux-promise-middleware';
 
 export const FETCH_USERS = 'FETCH_USERS';
+export const FETCH_ROLES = 'FETCH_ROLES';
 export const UPDATE_USERS = 'UPDATE_USERS';
 export const ADD_CHANGE = 'ADD_CHANGE';
 
 export const FETCH_USERS_FULFILLED = `${FETCH_USERS}_${ActionType.Fulfilled}`;
+export const FETCH_ROLES_FULFILLED = `${FETCH_ROLES}_${ActionType.Fulfilled}`;
 export const UPDATE_USERS_FULFILLED = `${UPDATE_USERS}_${ActionType.Fulfilled}`;
 
 export const FETCH_USERS_REJECTED = `${FETCH_USERS}_${ActionType.Rejected}`;
+export const FETCH_ROLES_REJECTED = `${FETCH_ROLES}_${ActionType.Rejected}`;
 export const UPDATE_USERS_REJECTED = `${UPDATE_USERS}_${ActionType.Rejected}`;
 
 export function fetchUsers() {
@@ -24,6 +27,24 @@ export function fetchUsers() {
 
   return {
     type: FETCH_USERS,
+    payload,
+  };
+}
+
+export function fetchRoles() {
+  const payload = new Promise((resolve, reject) => {
+    fetch('/api/admin/roles', {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((err) => reject(err));
+  });
+
+  return {
+    type: FETCH_ROLES,
     payload,
   };
 }
@@ -55,6 +76,7 @@ export function addChange(payload) {
 
 const initialState = {
   users: [],
+  roles: [],
   isChanged: true,
 };
 
@@ -64,12 +86,15 @@ export default function reducer(state = initialState, action) {
     case UPDATE_USERS_FULFILLED: {
       return { ...state, users: action.payload, isChanged: false };
     }
+    case FETCH_ROLES_FULFILLED: {
+      return { ...state, roles: action.payload };
+    }
     case ADD_CHANGE: {
       const users = state.users.slice();
-      const { _id, field } = action.payload;
+      const { _id, field, value } = action.payload;
       const idx = users.findIndex((elem) => elem._id === _id);
       if (idx !== -1) {
-        users[idx][field] = !users[idx][field];
+        users[idx][field] = value;
       }
       return { ...state, users, isChanged: true };
     }

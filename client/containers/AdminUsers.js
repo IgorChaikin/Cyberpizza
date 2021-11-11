@@ -9,6 +9,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
+  roles: state.users.roles,
   users: state.users.users,
   isChanged: state.users.isChanged,
   username: state.auth.username,

@@ -4,23 +4,31 @@ import './AdminUsers.scss';
 import PropTypes from 'prop-types';
 
 function AdminUsers(props) {
-  const { users, isChanged, username, onApply, onAdd, onMount } = props;
+  const { users, roles, isChanged, username, onApply, onAdd, onMount } = props;
 
   useEffect(() => onMount(), []);
 
   const usersCallback = useCallback(
     (e) => {
       let { target } = e.nativeEvent;
-      while (target.tagName !== 'HTML' && target.tagName !== 'INPUT') {
+      while (
+        target.tagName !== 'HTML' &&
+        target.tagName !== 'INPUT' &&
+        target.tagName !== 'SELECT'
+      ) {
         target = target.parentNode;
       }
       const args = target?.id.split('_') ?? [];
       switch (args[1]) {
         case 'ADM':
-          onAdd({ _id: args[0], field: 'isAdmin' });
+          onAdd({
+            _id: args[0],
+            field: 'roleId',
+            value: target.options[target.selectedIndex].value,
+          });
           break;
         case 'ACT':
-          onAdd({ _id: args[0], field: 'isActive' });
+          onAdd({ _id: args[0], field: 'isActive', value: !target.value });
           break;
         default:
           break;
@@ -47,13 +55,13 @@ function AdminUsers(props) {
         />
       </td>
       <td className="checkbox-container">
-        <input
-          type="checkbox"
-          id={`${user._id}_ADM`}
-          checked={user.isAdmin}
-          disabled={user.email === username}
-          readOnly
-        />
+        <select id={`${user._id}_ADM`} disabled={user.email === username}>
+          {roles.map((role) => (
+            <option value={role._id} selected={role._id === user.roleId}>
+              {role.title}
+            </option>
+          ))}
+        </select>
       </td>
     </tr>
   ));
@@ -67,7 +75,7 @@ function AdminUsers(props) {
             <th>Id</th>
             <th>E-mail</th>
             <th>Is active</th>
-            <th>Is admin</th>
+            <th>Role</th>
           </tr>
         </thead>
         <tbody>{usersList}</tbody>
@@ -90,7 +98,13 @@ AdminUsers.propTypes = {
       _id: PropTypes.string.isRequired,
       email: PropTypes.string.isRequired,
       isActive: PropTypes.bool.isRequired,
-      isAdmin: PropTypes.bool.isRequired,
+      roleId: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  roles: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
     })
   ).isRequired,
   username: PropTypes.string,

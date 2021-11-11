@@ -19,6 +19,13 @@ const registerValidationSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref('password')], "Passwords doesn't match")
     .required('Confirm password is required'),
+
+  lastName: yup.string().typeError('Lastname should be a string').required('Lastname is required'),
+  firstName: yup
+    .string()
+    .typeError('Firstname should be a string')
+    .required('Firstname is required'),
+  patronymic: yup.string().typeError('Patronymic should be a string'),
   ...loginValidationObject,
 });
 

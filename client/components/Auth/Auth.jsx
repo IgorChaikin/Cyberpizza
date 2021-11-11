@@ -23,7 +23,14 @@ function Auth(props) {
   }
 
   const validationsSchema = isRegister ? registerValidationSchema : loginValidationSchema;
-  const initialValues = { email: '', password: '', confirm: '' };
+  const initialValues = {
+    lastName: '',
+    firstName: '',
+    patronymic: '',
+    email: '',
+    password: '',
+    confirm: '',
+  };
 
   return (
     <main className="auth">
@@ -48,6 +55,55 @@ function Auth(props) {
           isValid,
         }) => (
           <form className="auth__form" onSubmit={handleSubmit}>
+            {isRegister
+              ? [
+                  <label htmlFor="lastname-id" className="row">
+                    Lastname
+                    <input
+                      className={`auth__form__input${
+                        errors.lastName && touched.lastName ? ' auth__form__input_wrong' : ''
+                      }`}
+                      id="lastname-id"
+                      type="text"
+                      name="lastName"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.lastName}
+                    />
+                  </label>,
+
+                  <label htmlFor="firstname-id" className="row">
+                    Firstname
+                    <input
+                      className={`auth__form__input${
+                        errors.firstName && touched.firstName ? ' auth__form__input_wrong' : ''
+                      }`}
+                      id="firstname-id"
+                      type="text"
+                      name="firstName"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.firstName}
+                    />
+                  </label>,
+
+                  <label htmlFor="patronymic-id" className="row">
+                    Patronymic
+                    <input
+                      className={`auth__form__input${
+                        errors.patronymic && touched.patronymic ? ' auth__form__input_wrong' : ''
+                      }`}
+                      id="patronymic-id"
+                      type="text"
+                      name="patronymic"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.patronymic}
+                    />
+                  </label>,
+                ]
+              : ''}
+
             <label htmlFor="email-id" className="row">
               E-mail
               <input
@@ -99,6 +155,9 @@ function Auth(props) {
               {(touched.email && errors.email) ||
                 (touched.password && errors.password) ||
                 (touched.confirm && errors.confirm) ||
+                (touched.lastName && errors.lastName) ||
+                (touched.firstName && errors.firstName) ||
+                (touched.patronymic && errors.patronymic) ||
                 requestError}
             </p>
             <div className="row">

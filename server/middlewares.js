@@ -1,4 +1,9 @@
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
+
 const { verifyToken } = require('../utils/jwt');
+
+const adminId = process.env.ADMIN_ID;
 
 const verifyTokenMiddleware = (request, response, next) => {
   const { token } = request.cookies;
@@ -16,7 +21,7 @@ const checkTokenMiddleware = (request, response, next) => {
 
 const checkAdminMiddleware = (request, response, next) => {
   const { decoded } = request;
-  if (!decoded.isAdmin) {
+  if (!(decoded.roleId === adminId)) {
     return response.sendStatus(403);
   }
   return next();

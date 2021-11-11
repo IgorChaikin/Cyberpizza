@@ -1,9 +1,18 @@
 const mongoose = require('mongoose');
+const path = require('path');
 const models = require('../models');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const { Types } = mongoose;
 const { ObjectId } = Types;
-const { Category, Order, OrderStage, Item, Filter, Discount, Cart, User } = models;
+const { Category, Order, OrderStage, Item, Filter, Discount, Cart, Role, User } = models;
+
+const adminId = process.env.ADMIN_ID;
+const userId = process.env.USER_ID;
+const staffId = process.env.STAFF_ID;
+
+const preOrderedId = process.env.PRE_ORDERED_ID;
+const payedId = process.env.PAYED_ID;
 
 const initialData = {
   categories: [
@@ -48,20 +57,28 @@ const initialData = {
   ],
   orderStages: [
     {
-      _id: ObjectId('000000000000000000000000'),
-      title: 'ordered',
+      _id: ObjectId(preOrderedId),
+      title: 'pre ordered',
     },
     {
       _id: ObjectId('000000000000000000000001'),
-      title: 'baking',
+      title: 'ordered',
     },
     {
       _id: ObjectId('000000000000000000000002'),
-      title: 'finishing',
+      title: 'baking',
     },
     {
       _id: ObjectId('000000000000000000000003'),
+      title: 'finishing',
+    },
+    {
+      _id: ObjectId('000000000000000000000004'),
       title: 'served',
+    },
+    {
+      _id: ObjectId(payedId),
+      title: 'payed',
     },
   ],
   orders: [],
@@ -152,6 +169,20 @@ const initialData = {
       name: 'tag2',
     },
   ],
+  roles: [
+    {
+      _id: ObjectId(adminId),
+      title: 'Admin',
+    },
+    {
+      _id: ObjectId(staffId),
+      title: 'Staff',
+    },
+    {
+      _id: ObjectId(userId),
+      title: 'User',
+    },
+  ],
   discounts: [
     {
       value: 0.1,
@@ -180,6 +211,7 @@ module.exports = async (dbConn) => {
     Filter.deleteMany({}).then(() => Filter.insertMany(initialData.filters)),
     Discount.deleteMany({}).then(() => Discount.insertMany(initialData.discounts)),
     OrderStage.deleteMany({}).then(() => OrderStage.insertMany(initialData.orderStages)),
+    Role.deleteMany({}).then(() => Role.insertMany(initialData.roles)),
     Order.deleteMany({}),
     Cart.deleteMany({}),
     User.deleteMany({}),
