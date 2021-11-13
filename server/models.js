@@ -73,9 +73,14 @@ const cityScheme = new Schema({
   title: { type: String, required: true },
 });
 
+const streetScheme = new Schema({
+  title: { type: String, required: true },
+  cityIds: { type: [ObjectId], default: [] },
+});
+
 const addressScheme = new Schema({
   cityId: { type: ObjectId, required: true },
-  street: { type: String, required: true },
+  streetId: { type: ObjectId, required: true },
   house: { type: Number, required: true },
   building: Number,
   apartment: Number,
@@ -109,6 +114,7 @@ module.exports = {
 
   Role: model('Role', roleScheme),
   City: model('City', cityScheme),
+  Street: model('Street', streetScheme),
   Address: model('Address', addressScheme),
   Staff: model('Staff', staffScheme),
   Shop: model('Shop', shopScheme),

@@ -4,7 +4,7 @@ export const REGISTER_USER = 'REGISTER_USER';
 export const LOGIN_USER = 'LOGIN_USER';
 export const LOGOUT_USER = 'LOGOUT_USER';
 export const FETCH_USERNAME = 'FETCH_USERNAME';
-export const REFRESH_ERROR = 'REFRESH_ERROR';
+export const REFRESH_AUTH_ERROR = 'REFRESH_AUTH_ERROR';
 export const REGISTER_USER_FULFILLED = `${REGISTER_USER}_${ActionType.Fulfilled}`;
 export const FETCH_USERNAME_FULFILLED = `${FETCH_USERNAME}_${ActionType.Fulfilled}`;
 export const LOGIN_USER_FULFILLED = `${LOGIN_USER}_${ActionType.Fulfilled}`;
@@ -73,8 +73,8 @@ export function logoutUser(email) {
   };
 }
 
-export function refreshError() {
-  return { type: REFRESH_ERROR };
+export function refreshAuthError() {
+  return { type: REFRESH_AUTH_ERROR };
 }
 
 export function fetchUsername() {
@@ -124,7 +124,7 @@ export default function reducer(state = initialState, action) {
     case LOGIN_USER_REJECTED: {
       return { ...state, requestError: 'Bab request or not valid user data' };
     }
-    case REFRESH_ERROR: {
+    case REFRESH_AUTH_ERROR: {
       return { ...state, requestError: null };
     }
     default:

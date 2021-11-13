@@ -13,6 +13,7 @@ const staffId = process.env.STAFF_ID;
 
 const preOrderedId = process.env.PRE_ORDERED_ID;
 const payedId = process.env.PAYED_ID;
+const orderedId = process.env.ORDERED_ID;
 
 const initialData = {
   categories: [
@@ -61,7 +62,7 @@ const initialData = {
       title: 'pre ordered',
     },
     {
-      _id: ObjectId('000000000000000000000001'),
+      _id: ObjectId(orderedId),
       title: 'ordered',
     },
     {

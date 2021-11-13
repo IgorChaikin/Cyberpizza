@@ -4,11 +4,14 @@ import OrderStage from '../components/OrderStage/OrderStage';
 import { deleteOrder, updateOrder } from '../actions/actions.orders';
 
 const mapStateToProps = (state, ownProps) => {
-  const { title, orders, _id } = state.orders.stages.find((elem) => elem._id === ownProps.id);
+  const { title, orders, _id, isConfirmable } = state.orders.stages.find(
+    (elem) => elem._id === ownProps.id
+  );
   return {
     title,
     orders,
     id: _id,
+    isConfirmable,
   };
 };
 

@@ -6,6 +6,7 @@ const api = require('./routers/api');
 const main = require('./routers/main');
 const auth = require('./routers/auth');
 const admin = require('./routers/admin');
+const shipment = require('./routers/shipment');
 const { verifyTokenMiddleware, checkBodyMiddleware } = require('./middlewares');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
@@ -36,6 +37,7 @@ async function createApp(dbConn) {
   app.use('/api', api);
   app.use('/api/auth', auth);
   app.use('/api/admin', admin);
+  app.use('/api/shipment', shipment);
 
   // give static
   app.use(express.static(path.join(__dirname, '../dist')));

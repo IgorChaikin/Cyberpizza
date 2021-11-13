@@ -4,7 +4,7 @@ import './OrderStage.scss';
 import getEventArgs from '../../../utils/getEventArgs';
 
 function OrderStage(props) {
-  const { title, orders, id, onDelete, onInc, onDec } = props;
+  const { title, orders, id, onDelete, onInc, onDec, isConfirmable } = props;
   const time = Math.max(...orders.map((order) => order.time));
   const diff = Math.floor((Date.now() - time) / 1000);
 
@@ -46,11 +46,11 @@ function OrderStage(props) {
       ? stringParams[1]
       : `${Math.floor(diff / stringParams[0])}${stringParams[1]} ago`;
 
-  const counts = {};
+  /* const counts = {};
 
   orders.forEach((elem) => {
     counts[elem.item._id] = (counts[elem.item._id] || 0) + 1;
-  });
+  }); */
 
   const orderList = orders.map((order) => {
     const { item, _id, count } = order;
@@ -85,12 +85,14 @@ function OrderStage(props) {
         {orders?.length > 0 ? <span>{timeString}</span> : ''}
       </section>
       {orderList}
+      {isConfirmable && orders.length > 0 ? <button type="button">Confirm</button> : ''}
     </li>
   );
 }
 
 OrderStage.propTypes = {
   id: PropTypes.string.isRequired,
+  isConfirmable: PropTypes.bool.isRequired,
   orders: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string.isRequired,

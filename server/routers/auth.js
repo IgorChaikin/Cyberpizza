@@ -46,7 +46,7 @@ auth.post('/register', (request, response) => {
             return user.save().then((newUser) => {
               const { _id, roleId, isActive } = newUser;
               const token = signToken({ _id, roleId, isActive });
-              response.clearCookie('cartId', { secure: false, maxAge: 0 });
+              // response.clearCookie('cartId', { secure: false, maxAge: 0 });
               response.cookie('token', token, { secure: false, maxAge: 3600 * 24 });
               response.json({ email });
             });

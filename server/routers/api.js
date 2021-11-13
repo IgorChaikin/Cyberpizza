@@ -1,10 +1,25 @@
 const express = require('express');
 const { Types } = require('mongoose');
-const { Category, Item, Filter, Discount, Order, Cart, OrderStage } = require('../models');
+const path = require('path');
+const {
+  Category,
+  Item,
+  Filter,
+  Discount,
+  Order,
+  Cart,
+  OrderStage,
+  Address,
+  Shop,
+} = require('../models');
 const { checkActiveMiddleware } = require('../middlewares');
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const api = express.Router();
 const { ObjectId } = Types;
+const preOrderedId = process.env.PRE_ORDERED_ID;
+const orderedId = process.env.ORDERED_ID;
+const payedId = process.env.PAYED_ID;
 
 function getOrders(cartId) {
   const result = {};
@@ -14,6 +29,11 @@ function getOrders(cartId) {
       const cart = query[0];
       result.price = cart?.price ?? 0;
       return OrderStage.aggregate([
+        {
+          $match: {
+            $expr: { $ne: ['$_id', ObjectId(payedId)] },
+          },
+        },
         { $sort: { _id: 1 } },
         {
           $lookup: {
@@ -44,6 +64,11 @@ function getOrders(cartId) {
               },
               { $unwind: { path: '$item', preserveNullAndEmptyArrays: true } },
             ],
+          },
+        },
+        {
+          $addFields: {
+            isConfirmable: { $eq: ['$_id', ObjectId(preOrderedId)] },
           },
         },
       ]);
@@ -90,6 +115,28 @@ function updateCart(cartId, orderId, isDelete = false, amount = null) {
   });
 }
 
+async function getEnableShop(shopId = null) {
+  if (shopId) {
+    const shop = await Shop.findOne({ _id: shopId, isEnabled: true });
+    return shop;
+  }
+  const shops = await Shop.find({ isEnabled: true });
+  return shops[Math.floor(Math.random() * shops.length)];
+}
+
+async function confirmOrder(filter, shopId, paymentMethodId, isPickup, addressId = null) {
+  const update = {
+    shopId,
+    paymentMethodId,
+    isPickup,
+    orderStageId: orderedId,
+  };
+  if (addressId) {
+    update.addressId = addressId;
+  }
+  await Order.updateMany(filter, { $set: update });
+}
+
 api.use('/orders', checkActiveMiddleware);
 
 api.get('/categories', (request, response) => {
@@ -131,7 +178,7 @@ api.post('/orders', async (request, response) => {
   }
 
   const order = new Order({
-    orderStageId: ObjectId('000000000000000000000000'),
+    orderStageId: ObjectId(preOrderedId),
     itemId: ObjectId(id),
     time,
   });
@@ -171,6 +218,43 @@ api.delete('/orders', (request, response) => {
     // then delete order from db
     Order.deleteOne({ _id: id }).then(() => getOrders(cartId).then((res) => response.json(res)))
   );
+});
+
+api.put('/orders/confirm', async (request, response) => {
+  const { cartId } = request.cookies;
+  const cart = await Cart.findOne({ _id: ObjectId(cartId) });
+  if (!cart) {
+    return response.sendStatus(422);
+  }
+  const { orderIds } = cart;
+  const filter = { $in: ['$_id', orderIds], orderStageId: ObjectId(preOrderedId) };
+  const { isPickup, paymentMethodId } = request.body;
+  if (isPickup) {
+    const { shopId } = request.body;
+    const shop = await getEnableShop(ObjectId(shopId));
+    if (!shop) {
+      response.sendStatus(422);
+    }
+    await confirmOrder(filter, shop._id, ObjectId(paymentMethodId), isPickup, shop.addressId);
+  } else {
+    const { cityId, streetId, house, building, apartment } = request.body;
+    let address = await Address.findOne({ cityId, streetId, house, building, apartment });
+    if (!address) {
+      address = await new Address({
+        cityId: ObjectId(cityId),
+        streetId: ObjectId(streetId),
+        house,
+        building,
+        apartment,
+      }).save();
+    }
+    const shop = await getEnableShop();
+    if (!shop) {
+      response.sendStatus(422);
+    }
+    await confirmOrder(filter, shop._id, ObjectId(paymentMethodId), isPickup, address._id);
+  }
+  return getOrders(cartId).then((res) => response.json(res));
 });
 
 module.exports = api;

@@ -7,9 +7,6 @@ import getEventArgs from '../../../utils/getEventArgs';
 function AdminUsers(props) {
   const { users, roles, isChanged, username, onApply, onAdd, onSelectDeleted, onMount } = props;
 
-  console.log(users);
-  console.log(roles);
-
   useEffect(() => onMount(), []);
 
   const usersCallback = useCallback(
