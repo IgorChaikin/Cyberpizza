@@ -4,13 +4,18 @@ const { Types } = require('mongoose');
 
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const { City, Street, Shop, PaymentMethod } = require('../models');
-const { checkTokenMiddleware, checkActiveMiddleware } = require('../middlewares');
+const { checkActiveMiddleware } = require('../middlewares');
 
 const shipment = express.Router();
 const { ObjectId } = Types;
 
 function getShops() {
   return Shop.aggregate([
+    {
+      $match: {
+        $expr: { $eq: ['$isEnabled', true] },
+      },
+    },
     {
       $lookup: {
         from: 'addresses',
@@ -47,7 +52,6 @@ function getShops() {
   ]);
 }
 
-shipment.use(checkTokenMiddleware);
 shipment.use(checkActiveMiddleware);
 
 shipment.get('/cities', (request, response) => {
@@ -56,7 +60,7 @@ shipment.get('/cities', (request, response) => {
 
 shipment.get('/streets', (request, response) => {
   const { cityId } = request.query;
-  return Street.find({ $in: [ObjectId(cityId), '$cityIds'] }).then((result) =>
+  return Street.find({ cityIds: { $in: [ObjectId(cityId)] } }).then((result) =>
     response.json(result)
   );
 });

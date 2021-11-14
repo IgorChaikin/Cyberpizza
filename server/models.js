@@ -38,10 +38,6 @@ const filterScheme = new Schema({
   name: { type: String, required: true },
 });
 
-const discountScheme = new Schema({
-  value: { type: Number, required: true },
-});
-
 const cartScheme = new Schema({
   orderIds: { type: [ObjectId], default: [] },
   price: { type: Number, required: true, default: 0 },
@@ -97,7 +93,7 @@ const shopScheme = new Schema({
 });
 
 const PaymentMethodScheme = new Schema({
-  title: { type: Boolean, default: true },
+  title: { type: String, default: true },
 });
 
 // models definition
@@ -108,7 +104,6 @@ module.exports = {
   OrderStage: model('OrderStage', orderStageScheme),
   Item: model('Item', itemScheme),
   Filter: model('Filter', filterScheme),
-  Discount: model('Discount', discountScheme),
   Cart: model('Cart', cartScheme),
   User: model('User', userScheme),
 

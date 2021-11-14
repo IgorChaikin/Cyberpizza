@@ -21,7 +21,7 @@ function AdminUsers(props) {
           });
           break;
         case 'ACT':
-          onAdd({ _id: args[0], field: 'isActive', value: target.value });
+          onAdd({ _id: args[0], field: 'isActive', value: target.checked });
           break;
         default:
           break;

@@ -5,7 +5,21 @@ require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const { Types } = mongoose;
 const { ObjectId } = Types;
-const { Category, Order, OrderStage, Item, Filter, Discount, Cart, Role, User } = models;
+const {
+  Category,
+  Order,
+  OrderStage,
+  Item,
+  Filter,
+  Cart,
+  Role,
+  User,
+  City,
+  Street,
+  Address,
+  Shop,
+  PaymentMethod,
+} = models;
 
 const adminId = process.env.ADMIN_ID;
 const userId = process.env.USER_ID;
@@ -82,7 +96,6 @@ const initialData = {
       title: 'payed',
     },
   ],
-  orders: [],
   items: [
     {
       imgPath: '/ham_and_cheese.png',
@@ -184,9 +197,71 @@ const initialData = {
       title: 'User',
     },
   ],
-  discounts: [
+
+  cities: [
     {
-      value: 0.1,
+      _id: ObjectId('000000000000000000000000'),
+      title: 'City-1',
+    },
+    {
+      _id: ObjectId('000000000000000000000001'),
+      title: 'City-2',
+    },
+  ],
+  streets: [
+    {
+      _id: ObjectId('000000000000000000000000'),
+      title: 'Street-1',
+      cityIds: [ObjectId('000000000000000000000000')],
+    },
+    {
+      _id: ObjectId('000000000000000000000001'),
+      title: 'Street-2',
+      cityIds: [ObjectId('000000000000000000000001')],
+    },
+    {
+      _id: ObjectId('000000000000000000000002'),
+      title: 'Street-1-2',
+      cityIds: [ObjectId('000000000000000000000001'), ObjectId('000000000000000000000000')],
+    },
+  ],
+  addresses: [
+    {
+      _id: ObjectId('000000000000000000000000'),
+      cityId: ObjectId('000000000000000000000000'),
+      streetId: ObjectId('000000000000000000000000'),
+      house: 1,
+    },
+    {
+      _id: ObjectId('000000000000000000000001'),
+      cityId: ObjectId('000000000000000000000000'),
+      streetId: ObjectId('000000000000000000000002'),
+      house: 1,
+    },
+    {
+      _id: ObjectId('000000000000000000000002'),
+      cityId: ObjectId('000000000000000000000001'),
+      streetId: ObjectId('000000000000000000000001'),
+      house: 1,
+    },
+  ],
+  shops: [
+    {
+      addressId: ObjectId('000000000000000000000000'),
+    },
+    {
+      addressId: ObjectId('000000000000000000000001'),
+    },
+    {
+      addressId: ObjectId('000000000000000000000002'),
+    },
+  ],
+  paymentMethods: [
+    {
+      title: 'By cash while receiving',
+    },
+    {
+      title: 'By card while receiving',
     },
   ],
 };
@@ -210,13 +285,23 @@ module.exports = async (dbConn) => {
     Item.deleteMany({}).then(() => Item.insertMany(initialData.items)),
     Category.deleteMany({}).then(() => Category.insertMany(initialData.categories)),
     Filter.deleteMany({}).then(() => Filter.insertMany(initialData.filters)),
-    Discount.deleteMany({}).then(() => Discount.insertMany(initialData.discounts)),
     OrderStage.deleteMany({}).then(() => OrderStage.insertMany(initialData.orderStages)),
     Role.deleteMany({}).then(() => Role.insertMany(initialData.roles)),
+
+    City.deleteMany({}).then(() => City.insertMany(initialData.cities)),
+    Street.deleteMany({}).then(() => Street.insertMany(initialData.streets)),
+    Address.deleteMany({}).then(() => Address.insertMany(initialData.addresses)),
+    Shop.deleteMany({}).then(() => Shop.insertMany(initialData.shops)),
+    PaymentMethod.deleteMany({}).then(() => PaymentMethod.insertMany(initialData.paymentMethods)),
+
     Order.deleteMany({}),
     Cart.deleteMany({}),
     User.deleteMany({}),
   ]);
   await mongoose.connection.close();
-  return initResults.findIndex((elem) => elem.status === 'rejected') === -1;
+  const faledIdx = initResults.findIndex((elem) => elem.status === 'rejected');
+  if (faledIdx !== -1) {
+    console.log(initResults[faledIdx]);
+  }
+  return faledIdx === -1;
 };

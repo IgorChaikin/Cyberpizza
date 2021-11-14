@@ -29,7 +29,31 @@ const registerValidationSchema = yup.object().shape({
   ...loginValidationObject,
 });
 
+const checkoutValidationObject = {
+  isPickup: yup.bool().required('Choose if order should be pickup'),
+  paymentMethodId: yup.string().required('Payment method is required'),
+};
+
+const withShopValidationSchema = yup.object().shape({
+  shopId: yup.string().required('Shop is required'),
+  ...checkoutValidationObject,
+});
+
+const withAddressValidationSchema = yup.object().shape({
+  cityId: yup.string().required('City is required'),
+  streetId: yup.string().required('Street is required'),
+  house: yup.number().typeError('House should be a number').required('House number is required'),
+  building: yup.number().nullable(true).typeError('Building should be a number'),
+  apartment: yup
+    .number()
+    .typeError('Apartment should be a number')
+    .required('Apartment number is required'),
+  ...checkoutValidationObject,
+});
+
 module.exports = {
   loginValidationSchema,
   registerValidationSchema,
+  withShopValidationSchema,
+  withAddressValidationSchema,
 };

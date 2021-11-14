@@ -1,17 +1,7 @@
 const express = require('express');
 const { Types } = require('mongoose');
 const path = require('path');
-const {
-  Category,
-  Item,
-  Filter,
-  Discount,
-  Order,
-  Cart,
-  OrderStage,
-  Address,
-  Shop,
-} = require('../models');
+const { Category, Item, Filter, Order, Cart, OrderStage, Address, Shop } = require('../models');
 const { checkActiveMiddleware } = require('../middlewares');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
@@ -54,6 +44,11 @@ function getOrders(cartId) {
                 },
               },
               { $sort: { time: -1 } },
+              {
+                $addFields: {
+                  isEditable: { $eq: ['$orderStageId', ObjectId(preOrderedId)] },
+                },
+              },
               {
                 $lookup: {
                   from: 'items',
@@ -158,10 +153,6 @@ api.get('/filters', (request, response) => {
     .exec((err, filters) => response.json(filters));
 });
 
-api.get('/discounts', (request, response) => {
-  Discount.find({}, (err, discounts) => response.json(discounts.map((elem) => elem.value)));
-});
-
 api.get('/orders', (request, response) => {
   const { cartId } = request.cookies;
   return getOrders(cartId).then((res) => response.json(res));
@@ -204,6 +195,7 @@ api.patch('/orders', (request, response) => {
       {
         _id: id,
         count: { $gt: amount * -1 },
+        orderStageId: ObjectId(preOrderedId),
       },
       { $inc: { count: amount } }
     ).then(() => getOrders(cartId).then((res) => response.json(res)))
@@ -216,7 +208,9 @@ api.delete('/orders', (request, response) => {
   // remove order from cart
   return updateCart(cartId, id, true).then(() =>
     // then delete order from db
-    Order.deleteOne({ _id: id }).then(() => getOrders(cartId).then((res) => response.json(res)))
+    Order.deleteOne({ _id: id, orderStageId: ObjectId(preOrderedId) }).then(() =>
+      getOrders(cartId).then((res) => response.json(res))
+    )
   );
 });
 
@@ -227,7 +221,7 @@ api.put('/orders/confirm', async (request, response) => {
     return response.sendStatus(422);
   }
   const { orderIds } = cart;
-  const filter = { $in: ['$_id', orderIds], orderStageId: ObjectId(preOrderedId) };
+  const filter = { _id: { $in: orderIds }, orderStageId: ObjectId(preOrderedId) };
   const { isPickup, paymentMethodId } = request.body;
   if (isPickup) {
     const { shopId } = request.body;

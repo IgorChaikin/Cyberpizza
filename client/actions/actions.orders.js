@@ -105,31 +105,13 @@ export function refreshOrderError() {
   return { type: REFRESH_ORDERS_ERROR };
 }
 
-export function confirmOrder(
-  isPickup,
-  paymentMethodId,
-  shopId,
-  cityId,
-  streetId,
-  house,
-  building,
-  apartment
-) {
+export function confirmOrder(values) {
   const payload = new Promise((resolve) => {
     fetch('/api/orders/confirm', {
       method: 'PUT',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        isPickup,
-        paymentMethodId,
-        shopId,
-        cityId,
-        streetId,
-        house,
-        building,
-        apartment,
-      }),
+      body: JSON.stringify(values),
     })
       .then((response) => response.json())
       .then((result) => {

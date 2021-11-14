@@ -77,17 +77,11 @@ export function changeValue(payload) {
 }
 
 const initialState = {
-  selectedPaymentMethodId: null,
   paymentMethods: [],
   selectedCityId: null,
   cities: [],
-  selectedStreetId: null,
   streets: [],
-  selectedShopId: null,
   shops: [],
-  house: null,
-  building: null,
-  apartment: null,
   isPickup: false,
 };
 

@@ -1,0 +1,13 @@
+@import '../../styles/circles-page';
+
+.auth {
+  .auth__form {
+    label {
+      .auth__form__input_shadowless {
+        &:focus {
+          box-shadow: none;
+        }
+      }
+    }
+  }
+}

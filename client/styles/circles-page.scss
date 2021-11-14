@@ -1,0 +1,97 @@
+@import './vars';
+
+.auth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: $main-color;
+
+  h1 {
+    height: auto;
+    margin-bottom: 1em;
+  }
+
+  @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait),
+    (max-width: 768px) and (orientation: portrait) {
+    .auth__form {
+      width: 60%;
+      .auth__form__input {
+        width: 70%;
+      }
+    }
+  }
+
+  .auth__form {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      margin-bottom: 1em;
+      font: $price-text;
+
+      .auth__form__input {
+        font: $regular-text;
+        border: none;
+        outline: none;
+        height: 2em;
+        border-radius: 1em;
+        margin-left: 0.5em;
+        padding: 0 1em;
+        &:focus {
+          box-shadow: 0 0.5em 0.4em $grey-color;
+        }
+      }
+
+      .auth__form__input_wrong {
+        border: $accent-color solid 2px;
+      }
+    }
+  }
+
+  .auth__error {
+    color: $accent-color;
+    font: $bold-header-text;
+    text-align: center;
+  }
+
+  .auth__back-link {
+    color: $white-color;
+    font: $regular-text;
+  }
+}
+
+.decoration {
+  position: absolute;
+  z-index: 2;
+}
+
+.decoration_light {
+  background-color: $light-color;
+  height: 20em;
+  width: 20em;
+  border-radius: 10em;
+  left: -10em;
+  top: -10em;
+}
+
+.decoration_dark {
+  background-color: $light-color;
+  height: 40em;
+  width: 40em;
+  border-radius: 20em;
+  right: -20em;
+  bottom: -20em;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
