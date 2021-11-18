@@ -25,6 +25,17 @@ function Checkout(props) {
     onSubmit,
   } = props;
 
+  useEffect(() => {
+    onMount();
+  }, []);
+
+  useEffect(() => {
+    const firstId = selectedCityId ?? cities[0]?._id;
+    if (firstId) {
+      onCitySelected(firstId);
+    }
+  }, [cities, selectedCityId]);
+
   const initialValues = {
     paymentMethodId: paymentMethods[0]?._id,
     isPickup,
@@ -35,14 +46,6 @@ function Checkout(props) {
     building: null,
     apartment: null,
   };
-
-  useEffect(() => onMount(), []);
-  useEffect(() => {
-    const firstId = selectedCityId ?? cities[0]?._id;
-    if (firstId) {
-      onCitySelected(firstId);
-    }
-  }, [cities, selectedCityId]);
 
   const changeCallback = useCallback(
     (e) => {
@@ -114,10 +117,8 @@ function Checkout(props) {
             <label htmlFor="payment-id" className="row">
               Payment method
               <select
-                className={`auth__form__input${
-                  errors.paymentMethodId && touched.paymentMethodId
-                    ? ' auth__form__input_wrong'
-                    : ''
+                className={`form__input${
+                  errors.paymentMethodId && touched.paymentMethodId ? ' form__input_wrong' : ''
                 }`}
                 id="payment-id"
                 name="paymentMethodId"
@@ -135,8 +136,8 @@ function Checkout(props) {
             <label htmlFor="isPickup_CHANGE" className="row">
               Pickup order
               <input
-                className={`auth__form__input auth__form__input_shadowless${
-                  errors.isPickup && touched.isPickup ? ' auth__form__input_wrong' : ''
+                className={`form__input form__input_shadowless${
+                  errors.isPickup && touched.isPickup ? ' form__input_wrong' : ''
                 }`}
                 id="isPickup_CHANGE"
                 name="isPickup"
@@ -151,8 +152,8 @@ function Checkout(props) {
                   <label htmlFor="shop-id" className="row">
                     Shop
                     <select
-                      className={`auth__form__input${
-                        errors.shopId && touched.shopId ? ' auth__form__input_wrong' : ''
+                      className={`form__input${
+                        errors.shopId && touched.shopId ? ' form__input_wrong' : ''
                       }`}
                       id="shop-id"
                       name="shopId"
@@ -172,8 +173,8 @@ function Checkout(props) {
                   <label htmlFor="selectedCityId_CHANGE" className="row">
                     City
                     <select
-                      className={`auth__form__input${
-                        errors.cityId && touched.cityId ? ' auth__form__input_wrong' : ''
+                      className={`form__input${
+                        errors.cityId && touched.cityId ? ' form__input_wrong' : ''
                       }`}
                       id="selectedCityId_CHANGE"
                       name="cityId"
@@ -191,8 +192,8 @@ function Checkout(props) {
                   <label htmlFor="street-id" className="row">
                     Street
                     <select
-                      className={`auth__form__input${
-                        errors.streetId && touched.streetId ? ' auth__form__input_wrong' : ''
+                      className={`form__input${
+                        errors.streetId && touched.streetId ? ' form__input_wrong' : ''
                       }`}
                       id="street-id"
                       name="streetId"
@@ -210,8 +211,8 @@ function Checkout(props) {
                   <label htmlFor="house-id" className="row">
                     House
                     <input
-                      className={`auth__form__input${
-                        errors.house && touched.house ? ' auth__form__input_wrong' : ''
+                      className={`form__input${
+                        errors.house && touched.house ? ' form__input_wrong' : ''
                       }`}
                       id="house-id"
                       name="house"
@@ -224,8 +225,8 @@ function Checkout(props) {
                   <label htmlFor="building-id" className="row">
                     Building
                     <input
-                      className={`auth__form__input${
-                        errors.building && touched.building ? ' auth__form__input_wrong' : ''
+                      className={`form__input${
+                        errors.building && touched.building ? ' form__input_wrong' : ''
                       }`}
                       id="building-id"
                       name="building"
@@ -239,8 +240,8 @@ function Checkout(props) {
                   <label htmlFor="apartment-id" className="row">
                     Apartment
                     <input
-                      className={`auth__form__input${
-                        errors.apartment && touched.apartment ? ' auth__form__input_wrong' : ''
+                      className={`form__input${
+                        errors.apartment && touched.apartment ? ' form__input_wrong' : ''
                       }`}
                       id="apartment-id"
                       name="apartment"

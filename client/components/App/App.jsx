@@ -10,8 +10,16 @@ import List from '../../containers/List';
 import AuthBar from '../../containers/AuthBar';
 
 function App(props) {
-  const { isOrdersVisible, isAuthenticated, categories, onMount, onCategoriesLoad, onUserChange } =
-    props;
+  const {
+    isOrdersVisible,
+    isAuthenticated,
+    categories,
+    cities,
+    onMount,
+    onCategoriesLoad,
+    onUserChange,
+    onCitiesLoad,
+  } = props;
 
   useEffect(() => onMount(), []);
   useEffect(() => onUserChange(), [isAuthenticated]);
@@ -21,6 +29,12 @@ function App(props) {
       onCategoriesLoad(firstId);
     }
   }, [categories]);
+  useEffect(() => {
+    const firstId = cities[0]?._id;
+    if (firstId) {
+      onCitiesLoad(firstId);
+    }
+  }, [cities]);
 
   return (
     <div className="app">
@@ -46,8 +60,15 @@ App.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
   onMount: PropTypes.func.isRequired,
   onCategoriesLoad: PropTypes.func.isRequired,
+  onCitiesLoad: PropTypes.func.isRequired,
   onUserChange: PropTypes.func.isRequired,
   categories: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  cities: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,

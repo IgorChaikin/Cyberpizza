@@ -21,7 +21,7 @@
     (max-width: 768px) and (orientation: portrait) {
     .auth__form {
       width: 60%;
-      .auth__form__input {
+      .form__input {
         width: 70%;
       }
     }
@@ -30,28 +30,6 @@
   .auth__form {
     display: flex;
     flex-direction: column;
-
-    label {
-      margin-bottom: 1em;
-      font: $price-text;
-
-      .auth__form__input {
-        font: $regular-text;
-        border: none;
-        outline: none;
-        height: 2em;
-        border-radius: 1em;
-        margin-left: 0.5em;
-        padding: 0 1em;
-        &:focus {
-          box-shadow: 0 0.5em 0.4em $grey-color;
-        }
-      }
-
-      .auth__form__input_wrong {
-        border: $accent-color solid 2px;
-      }
-    }
   }
 
   .auth__error {
@@ -87,11 +65,4 @@
   border-radius: 20em;
   right: -20em;
   bottom: -20em;
-}
-
-.row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
 }

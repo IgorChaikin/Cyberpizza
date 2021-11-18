@@ -106,7 +106,7 @@ export function refreshOrderError() {
 }
 
 export function confirmOrder(values) {
-  const payload = new Promise((resolve) => {
+  const payload = new Promise((resolve, reject) => {
     fetch('/api/orders/confirm', {
       method: 'PUT',
       credentials: 'include',
@@ -116,7 +116,8 @@ export function confirmOrder(values) {
       .then((response) => response.json())
       .then((result) => {
         resolve(result);
-      });
+      })
+      .catch((err) => reject(err));
   });
   return {
     type: CONFIRM_ORDER,
@@ -149,7 +150,7 @@ export default function reducer(state = initialState, action) {
       };
     }
     case CONFIRM_ORDER_REJECTED:
-      return { ...state, orderError: 'Selected shop is unavailable or no unavailable shops' };
+      return { ...state, orderError: 'Selected shop is unavailable or no available shops' };
     case SWITCH_ORDERS:
       return { ...state, isOrdersVisible: !state.isOrdersVisible };
     case REFRESH_ORDERS_ERROR:

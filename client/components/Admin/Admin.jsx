@@ -9,6 +9,7 @@ import AdminCarts from '../../containers/AdminCarts';
 import AdminSingleCart from '../../containers/AdminSingleCart';
 import Placeholder from '../Placeholder/Placeholder';
 import AdminDeleteModal from '../../containers/AdminDeleteModal';
+import AdminStaff from '../../containers/AdminStaff';
 
 function Admin(props) {
   const { requestError, deletedId, totalCount, totalPrice, username, onMount } = props;
@@ -49,6 +50,9 @@ function Admin(props) {
           <h2>
             <Link to={`${match.url}/carts`}>Carts</Link>
           </h2>
+          <h2>
+            <Link to={`${match.url}/staff`}>Staff</Link>
+          </h2>
         </nav>
         <div className="admin-dashboard__router">
           <Switch>
@@ -65,6 +69,9 @@ function Admin(props) {
             </Route>
             <Route path={`${match.url}/users`}>
               <AdminUsers />
+            </Route>
+            <Route path={`${match.url}/staff`}>
+              <AdminStaff />
             </Route>
           </Switch>
         </div>

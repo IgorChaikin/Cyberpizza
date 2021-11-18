@@ -11,22 +11,14 @@ const { ObjectId } = Types;
 
 function getShops() {
   return Shop.aggregate([
-    {
-      $match: {
-        $expr: { $eq: ['$isEnabled', true] },
-      },
-    },
+    { $match: { $expr: { $eq: ['$isEnabled', true] } } },
     {
       $lookup: {
         from: 'addresses',
         let: { addressId: '$addressId' },
         as: 'address',
         pipeline: [
-          {
-            $match: {
-              $expr: { $eq: ['$$addressId', '$_id'] },
-            },
-          },
+          { $match: { $expr: { $eq: ['$$addressId', '$_id'] } } },
           {
             $lookup: {
               from: 'cities',

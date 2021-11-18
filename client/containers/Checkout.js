@@ -1,21 +1,12 @@
 import { connect } from 'react-redux';
 import Checkout from '../components/Checkout/Checkout';
 
-import {
-  fetchCities,
-  fetchPaymentMethods,
-  fetchShops,
-  fetchStreets,
-  changeValue,
-} from '../actions/actions.shipment';
+import { fetchStreets, changeValue } from '../actions/actions.shipment';
 import { refreshOrderError, confirmOrder } from '../actions/actions.orders';
 
 const mapDispatchToProps = (dispatch) => ({
   onSubmit: (values) => dispatch(confirmOrder(values)),
   onMount: () => {
-    dispatch(fetchCities());
-    dispatch(fetchPaymentMethods());
-    dispatch(fetchShops());
     dispatch(refreshOrderError());
   },
   onChange: (key, value) => dispatch(changeValue({ key, value })),

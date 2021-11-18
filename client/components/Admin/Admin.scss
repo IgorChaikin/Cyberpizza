@@ -95,6 +95,9 @@
     .admin-dashboard__router {
       width: 85%;
       height: 100%;
+      .auth-button {
+        margin-top: 1em;
+      }
       table {
         font: $regular-text;
         border-collapse: collapse;

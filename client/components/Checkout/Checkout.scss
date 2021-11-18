@@ -3,7 +3,7 @@
 .auth {
   .auth__form {
     label {
-      .auth__form__input_shadowless {
+      .form__input_shadowless {
         &:focus {
           box-shadow: none;
         }

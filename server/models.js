@@ -51,6 +51,18 @@ const roleScheme = new Schema({
   title: { type: String, required: true },
 });
 
+const patronymicScheme = new Schema({
+  name: { type: String, required: true },
+});
+
+const lastNameScheme = new Schema({
+  name: { type: String, required: true },
+});
+
+const firstNameScheme = new Schema({
+  name: { type: String, required: true },
+});
+
 const userScheme = new Schema({
   email: { type: String, required: true },
 
@@ -58,9 +70,9 @@ const userScheme = new Schema({
   isActive: { type: Boolean, default: true },
 
   roleId: ObjectId,
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  patronymic: { type: String, required: true },
+  firstNameId: { type: ObjectId, required: true },
+  lastNameId: { type: ObjectId, required: true },
+  patronymicId: ObjectId,
 });
 
 // shop addresses schemas
@@ -92,7 +104,7 @@ const shopScheme = new Schema({
   isEnabled: { type: Boolean, default: true },
 });
 
-const PaymentMethodScheme = new Schema({
+const paymentMethodScheme = new Schema({
   title: { type: String, default: true },
 });
 
@@ -113,5 +125,9 @@ module.exports = {
   Address: model('Address', addressScheme),
   Staff: model('Staff', staffScheme),
   Shop: model('Shop', shopScheme),
-  PaymentMethod: model('PaymentMethod', PaymentMethodScheme),
+  PaymentMethod: model('PaymentMethod', paymentMethodScheme),
+
+  Patronymic: model('Patronymic', patronymicScheme),
+  LastName: model('LastName', lastNameScheme),
+  FirstName: model('FirstName', firstNameScheme),
 };

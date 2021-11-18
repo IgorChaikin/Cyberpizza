@@ -60,8 +60,8 @@ function Auth(props) {
                   <label htmlFor="lastname-id" className="row">
                     Lastname
                     <input
-                      className={`auth__form__input${
-                        errors.lastName && touched.lastName ? ' auth__form__input_wrong' : ''
+                      className={`form__input${
+                        errors.lastName && touched.lastName ? ' form__input_wrong' : ''
                       }`}
                       id="lastname-id"
                       type="text"
@@ -75,8 +75,8 @@ function Auth(props) {
                   <label htmlFor="firstname-id" className="row">
                     Firstname
                     <input
-                      className={`auth__form__input${
-                        errors.firstName && touched.firstName ? ' auth__form__input_wrong' : ''
+                      className={`form__input${
+                        errors.firstName && touched.firstName ? ' form__input_wrong' : ''
                       }`}
                       id="firstname-id"
                       type="text"
@@ -90,8 +90,8 @@ function Auth(props) {
                   <label htmlFor="patronymic-id" className="row">
                     Patronymic
                     <input
-                      className={`auth__form__input${
-                        errors.patronymic && touched.patronymic ? ' auth__form__input_wrong' : ''
+                      className={`form__input${
+                        errors.patronymic && touched.patronymic ? ' form__input_wrong' : ''
                       }`}
                       id="patronymic-id"
                       type="text"
@@ -107,8 +107,8 @@ function Auth(props) {
             <label htmlFor="email-id" className="row">
               E-mail
               <input
-                className={`auth__form__input${
-                  errors.email && touched.email ? ' auth__form__input_wrong' : ''
+                className={`form__input${
+                  errors.email && touched.email ? ' form__input_wrong' : ''
                 }`}
                 id="email-id"
                 type="email"
@@ -121,8 +121,8 @@ function Auth(props) {
             <label htmlFor="password-id" className="row">
               Password
               <input
-                className={`auth__form__input${
-                  errors.password && touched.password ? ' auth__form__input_wrong' : ''
+                className={`form__input${
+                  errors.password && touched.password ? ' form__input_wrong' : ''
                 }`}
                 id="password-id"
                 type="password"
@@ -137,8 +137,8 @@ function Auth(props) {
               <label htmlFor="confirm-id" className="row">
                 Confirm password
                 <input
-                  className={`auth__form__input${
-                    errors.confirm && touched.confirm ? ' auth__form__input_wrong' : ''
+                  className={`form__input${
+                    errors.confirm && touched.confirm ? ' form__input_wrong' : ''
                   }`}
                   id="confirm-id"
                   type="password"

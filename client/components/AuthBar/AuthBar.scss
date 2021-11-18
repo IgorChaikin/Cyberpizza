@@ -6,6 +6,7 @@
   a {
     color: $white-color;
     font: $regular-text;
+    margin-right: 1em;
   }
 }
 
@@ -16,6 +17,10 @@
   align-items: center;
 
   .auth-button_login {
+    margin-right: 1em;
+  }
+
+  .auth-button_logout {
     margin-right: 1em;
   }
 

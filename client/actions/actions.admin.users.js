@@ -3,6 +3,7 @@ import { ActionType } from 'redux-promise-middleware';
 export const ADD_CHANGE = 'ADD_CHANGE';
 export const SELECT_DELETED = 'SELECT_DELETED';
 export const CANCEL_DELETED = 'CANCEL_DELETED';
+export const SEARCH = 'SEARCH';
 
 export const FETCH_USERS = 'FETCH_USERS';
 export const FETCH_ROLES = 'FETCH_ROLES';
@@ -31,10 +32,7 @@ export function fetchUsers() {
       .catch((err) => reject(err));
   });
 
-  return {
-    type: FETCH_USERS,
-    payload,
-  };
+  return { type: FETCH_USERS, payload };
 }
 
 export function deleteUser(id) {
@@ -49,17 +47,11 @@ export function deleteUser(id) {
       .catch((err) => reject(err));
   });
 
-  return {
-    type: DELETE_USER,
-    payload,
-  };
+  return { type: DELETE_USER, payload };
 }
 
 export function selectDeleted(payload) {
-  return {
-    type: SELECT_DELETED,
-    payload,
-  };
+  return { type: SELECT_DELETED, payload };
 }
 
 export function cancelDeleted() {
@@ -80,10 +72,7 @@ export function fetchRoles() {
       .catch((err) => reject(err));
   });
 
-  return {
-    type: FETCH_ROLES,
-    payload,
-  };
+  return { type: FETCH_ROLES, payload };
 }
 
 export function updateUsers(changes) {
@@ -101,14 +90,15 @@ export function updateUsers(changes) {
         resolve(result);
       });
   });
-  return {
-    type: UPDATE_USERS,
-    payload,
-  };
+  return { type: UPDATE_USERS, payload };
 }
 
 export function addChange(payload) {
   return { type: ADD_CHANGE, payload };
+}
+
+export function search(payload) {
+  return { type: SEARCH, payload };
 }
 
 const initialState = {
@@ -116,6 +106,13 @@ const initialState = {
   roles: [],
   deletedId: null,
   isChanged: true,
+  searchData: {
+    lastName: '',
+    firstName: '',
+    patronymic: '',
+    roleId: null,
+    isActive: null,
+  },
 };
 
 export default function reducer(state = initialState, action) {
@@ -142,6 +139,9 @@ export default function reducer(state = initialState, action) {
     }
     case CANCEL_DELETED: {
       return { ...state, deletedId: null };
+    }
+    case SEARCH: {
+      return { ...state, searchData: action.payload };
     }
     default:
       return state;

@@ -14,3 +14,23 @@
     outline: none;
   }
 }
+
+.search-form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 4em;
+  border-radius: 1em;
+  background-color: $light-color;
+  margin-bottom: 1em;
+  font: $regular-text;
+  padding: 1em;
+
+  label {
+    margin: 0 1em 0 0;
+    .form__input {
+      margin-left: 0;
+    }
+  }
+}

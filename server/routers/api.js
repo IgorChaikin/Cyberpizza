@@ -19,11 +19,7 @@ function getOrders(cartId) {
       const cart = query[0];
       result.price = cart?.price ?? 0;
       return OrderStage.aggregate([
-        {
-          $match: {
-            $expr: { $ne: ['$_id', ObjectId(payedId)] },
-          },
-        },
+        { $match: { $expr: { $ne: ['$_id', ObjectId(payedId)] } } },
         { $sort: { _id: 1 } },
         {
           $lookup: {
@@ -44,11 +40,7 @@ function getOrders(cartId) {
                 },
               },
               { $sort: { time: -1 } },
-              {
-                $addFields: {
-                  isEditable: { $eq: ['$orderStageId', ObjectId(preOrderedId)] },
-                },
-              },
+              { $addFields: { isEditable: { $eq: ['$orderStageId', ObjectId(preOrderedId)] } } },
               {
                 $lookup: {
                   from: 'items',
@@ -61,11 +53,7 @@ function getOrders(cartId) {
             ],
           },
         },
-        {
-          $addFields: {
-            isConfirmable: { $eq: ['$_id', ObjectId(preOrderedId)] },
-          },
-        },
+        { $addFields: { isConfirmable: { $eq: ['$_id', ObjectId(preOrderedId)] } } },
       ]);
     })
     .then((query) => {
@@ -110,12 +98,24 @@ function updateCart(cartId, orderId, isDelete = false, amount = null) {
   });
 }
 
-async function getEnableShop(shopId = null) {
+async function getEnableShop(shopId = null, cityId = null) {
   if (shopId) {
     const shop = await Shop.findOne({ _id: shopId, isEnabled: true });
     return shop;
   }
-  const shops = await Shop.find({ isEnabled: true });
+  const shops = await Shop.aggregate([
+    { $match: { $expr: { $eq: ['$isEnabled', true] } } },
+    {
+      $lookup: {
+        from: 'addresses',
+        foreignField: '_id',
+        localField: 'addressId',
+        as: 'address',
+      },
+    },
+    { $unwind: { path: '$address', preserveNullAndEmptyArrays: true } },
+    { $match: { $expr: { $eq: ['$address.cityId', cityId] } } },
+  ]);
   return shops[Math.floor(Math.random() * shops.length)];
 }
 
@@ -225,7 +225,7 @@ api.put('/orders/confirm', async (request, response) => {
   const { isPickup, paymentMethodId } = request.body;
   if (isPickup) {
     const { shopId } = request.body;
-    const shop = await getEnableShop(ObjectId(shopId));
+    const shop = await getEnableShop(ObjectId(shopId), null);
     if (!shop) {
       response.sendStatus(422);
     }
@@ -242,7 +242,7 @@ api.put('/orders/confirm', async (request, response) => {
         apartment,
       }).save();
     }
-    const shop = await getEnableShop();
+    const shop = await getEnableShop(null, ObjectId(cityId));
     if (!shop) {
       response.sendStatus(422);
     }

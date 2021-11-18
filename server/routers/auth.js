@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 const { Types } = require('mongoose');
-const { User, Cart } = require('../models');
+const { User, Cart, LastName, Patronymic, FirstName } = require('../models');
 const { signToken } = require('../../utils/jwt');
 const { loginValidationSchema, registerValidationSchema } = require('../../validationShemas');
 const { checkTokenMiddleware, checkActiveMiddleware } = require('../middlewares');
@@ -19,39 +19,53 @@ auth.use('/logout', checkActiveMiddleware);
 auth.use('/username', checkTokenMiddleware);
 auth.use('/username', checkActiveMiddleware);
 
+async function createUser(lastName, firstName, patronymic, email, password) {
+  let lastNameFromDb = await LastName.findOne({ name: lastName });
+  if (!lastNameFromDb) {
+    lastNameFromDb = await new LastName({ name: lastName }).save();
+  }
+
+  let firstNameFromDb = await FirstName.findOne({ name: firstName });
+  if (!firstNameFromDb) {
+    firstNameFromDb = await new FirstName({ name: firstName }).save();
+  }
+
+  let patronymicFromDb = patronymic ? await Patronymic.findOne({ name: patronymic }) : null;
+  if (!patronymicFromDb && patronymic) {
+    patronymicFromDb = await new Patronymic({ name: patronymic }).save();
+  }
+
+  const hash = bcrypt.hashSync(password, 8);
+
+  return new User({
+    lastNameId: lastNameFromDb._id,
+    firstNameId: firstNameFromDb._id,
+    patronymicId: patronymicFromDb?._id ?? null,
+    email,
+    password: hash,
+  });
+}
+
 auth.post('/register', (request, response) => {
   return registerValidationSchema
     .validate(request.body)
-    .then(() => {
+    .then(async () => {
       const { email, password, lastName, firstName, patronymic } = request.body;
-      const hash = bcrypt.hashSync(password, 8);
-      const user = new User({
-        lastName,
-        firstName,
-        patronymic,
-        email,
-        password: hash,
-      });
-      return User.findOne({})
-        .then((result) => {
-          // first registered user become admin
-          user.roleId = result ? ObjectId(userId) : ObjectId(adminId);
-        })
-        .then(() =>
-          User.findOne({ email }).then((result) => {
-            if (result) {
-              // users with same e-mails not allowed
-              return response.sendStatus(409);
-            }
-            return user.save().then((newUser) => {
-              const { _id, roleId, isActive } = newUser;
-              const token = signToken({ _id, roleId, isActive });
-              // response.clearCookie('cartId', { secure: false, maxAge: 0 });
-              response.cookie('token', token, { secure: false, maxAge: 3600 * 24 });
-              response.json({ email });
-            });
-          })
-        );
+      const firstUser = await User.findOne({});
+      const sameEmailUser = await User.findOne({ email });
+      if (sameEmailUser) {
+        // users with same e-mails not allowed
+        return response.sendStatus(409);
+      }
+      const user = await createUser(lastName, firstName, patronymic, email, password);
+      // first registered user become admin
+      user.roleId = firstUser ? ObjectId(userId) : ObjectId(adminId);
+      const newUser = await user.save();
+      const { _id, roleId, isActive } = newUser;
+      const token = signToken({ _id, roleId, isActive });
+      // response.clearCookie('cartId', { secure: false, maxAge: 0 });
+      response.cookie('token', token, { secure: false, maxAge: 3600 * 24 });
+      return response.json({ email, isUser: roleId === userId });
     })
     .catch(() => response.sendStatus(422));
 });
@@ -77,7 +91,7 @@ auth.post('/login', (request, response) => {
           }
           const token = signToken({ _id, roleId, isActive });
           response.cookie('token', token, { secure: false, maxAge: 3600 * 24 });
-          response.json({ email });
+          response.json({ email, isUser: roleId === userId });
         });
       });
     })
@@ -103,6 +117,7 @@ auth.get('/username', (request, response) => {
   return User.findOne({ _id: decoded?._id, isActive: true }).then((result) => {
     response.json({
       email: result?.email,
+      isUser: result ? result.roleId === userId : true,
     });
   });
 });

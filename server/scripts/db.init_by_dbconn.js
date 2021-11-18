@@ -19,6 +19,10 @@ const {
   Address,
   Shop,
   PaymentMethod,
+  Staff,
+  LastName,
+  FirstName,
+  Patronymic,
 } = models;
 
 const adminId = process.env.ADMIN_ID;
@@ -297,6 +301,10 @@ module.exports = async (dbConn) => {
     Order.deleteMany({}),
     Cart.deleteMany({}),
     User.deleteMany({}),
+    Staff.deleteMany({}),
+    LastName.deleteMany({}),
+    FirstName.deleteMany({}),
+    Patronymic.deleteMany({}),
   ]);
   await mongoose.connection.close();
   const faledIdx = initResults.findIndex((elem) => elem.status === 'rejected');

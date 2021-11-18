@@ -93,6 +93,7 @@ export function fetchUsername() {
 }
 
 const initialState = {
+  isUser: true,
   isAuthenticated: false,
   username: null,
   requestError: null,
@@ -105,6 +106,7 @@ export default function reducer(state = initialState, action) {
       return {
         requestError: null,
         username: action.payload.email,
+        isUser: action.payload.isUser,
         isAuthenticated: true,
       };
     }
@@ -115,6 +117,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         username: action.payload.email,
+        isUser: action.payload.isUser,
         isAuthenticated: !!action.payload.email,
       };
     }

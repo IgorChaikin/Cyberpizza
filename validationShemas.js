@@ -25,7 +25,7 @@ const registerValidationSchema = yup.object().shape({
     .string()
     .typeError('Firstname should be a string')
     .required('Firstname is required'),
-  patronymic: yup.string().typeError('Patronymic should be a string'),
+  patronymic: yup.string().nullable(true).typeError('Patronymic should be a string'),
   ...loginValidationObject,
 });
 
