@@ -3,12 +3,14 @@
 .checkbox-container {
   text-align: center;
   button {
+    font: $regular-text;
     background-color: transparent;
     border: none;
     outline: none;
   }
 
   select {
+    font: $regular-text;
     background-color: transparent;
     border: none;
     outline: none;
@@ -23,8 +25,8 @@
   height: 4em;
   border-radius: 1em;
   background-color: $light-color;
-  margin-bottom: 1em;
-  font: $regular-text;
+  margin-bottom: 1.5em;
+  font-size: 0.65em;
   padding: 1em;
 
   label {

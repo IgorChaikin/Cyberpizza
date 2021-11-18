@@ -57,6 +57,7 @@ function AdminUsers(props) {
       onSearch({
         ...values,
         isActive: values.isActive === 'null' ? null : values.isActive === 'true',
+        roleId: values.roleId === 'null' ? null : values.roleId,
       });
     },
     [onSearch]
@@ -125,7 +126,7 @@ function AdminUsers(props) {
               />
             </label>
             <label htmlFor="firstname-id" className="col">
-              Last name
+              First name
               <input
                 id="firstname-id"
                 className="form__input"
@@ -136,7 +137,7 @@ function AdminUsers(props) {
               />
             </label>
             <label htmlFor="patronymic-id" className="col">
-              Last name
+              Patronymic
               <input
                 id="patronymic-id"
                 className="form__input"
