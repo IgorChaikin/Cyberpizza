@@ -14,7 +14,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  paymentMethods: state.shipment.paymentMethods,
+  cards: state.shipment.cards,
   cities: state.shipment.cities,
   streets: state.shipment.streets,
   shops: state.shipment.shops,
@@ -23,6 +23,7 @@ const mapStateToProps = (state) => ({
   isPickup: state.shipment.isPickup,
 
   isAuthenticated: state.auth.isAuthenticated,
+  isCardAdding: state.shipment.isCardAdding,
   isConfirmable: state.orders.isConfirmable,
   orderError: state.orders.orderError,
 });

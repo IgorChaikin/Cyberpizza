@@ -163,4 +163,9 @@ label {
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
+
+  input {
+    margin-top: 0.5em;
+    margin-left: 0;
+  }
 }

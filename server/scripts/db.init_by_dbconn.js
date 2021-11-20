@@ -18,7 +18,7 @@ const {
   Street,
   Address,
   Shop,
-  PaymentMethod,
+  Card,
   Staff,
   LastName,
   FirstName,
@@ -260,14 +260,6 @@ const initialData = {
       addressId: ObjectId('000000000000000000000002'),
     },
   ],
-  paymentMethods: [
-    {
-      title: 'By cash while receiving',
-    },
-    {
-      title: 'By card while receiving',
-    },
-  ],
 };
 
 module.exports = async (dbConn) => {
@@ -296,8 +288,8 @@ module.exports = async (dbConn) => {
     Street.deleteMany({}).then(() => Street.insertMany(initialData.streets)),
     Address.deleteMany({}).then(() => Address.insertMany(initialData.addresses)),
     Shop.deleteMany({}).then(() => Shop.insertMany(initialData.shops)),
-    PaymentMethod.deleteMany({}).then(() => PaymentMethod.insertMany(initialData.paymentMethods)),
 
+    Card.deleteMany({}),
     Order.deleteMany({}),
     Cart.deleteMany({}),
     User.deleteMany({}),

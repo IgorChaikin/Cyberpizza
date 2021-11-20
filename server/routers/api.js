@@ -1,7 +1,18 @@
 const express = require('express');
 const { Types } = require('mongoose');
 const path = require('path');
-const { Category, Item, Filter, Order, Cart, OrderStage, Address, Shop } = require('../models');
+const { withAddressValidationSchema, withShopValidationSchema } = require('../../validationShemas');
+const {
+  Category,
+  Item,
+  Filter,
+  Order,
+  Cart,
+  OrderStage,
+  Address,
+  Shop,
+  Card,
+} = require('../models');
 const { checkActiveMiddleware } = require('../middlewares');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
@@ -98,6 +109,19 @@ function updateCart(cartId, orderId, isDelete = false, amount = null) {
   });
 }
 
+async function confirmOrder(filter, shopId, cardId, isPickup, addressId = null) {
+  const update = {
+    shopId,
+    cardId,
+    isPickup,
+    orderStageId: orderedId,
+  };
+  if (addressId) {
+    update.addressId = addressId;
+  }
+  await Order.updateMany(filter, { $set: update });
+}
+
 async function getEnableShop(shopId = null, cityId = null) {
   if (shopId) {
     const shop = await Shop.findOne({ _id: shopId, isEnabled: true });
@@ -117,19 +141,6 @@ async function getEnableShop(shopId = null, cityId = null) {
     { $match: { $expr: { $eq: ['$address.cityId', cityId] } } },
   ]);
   return shops[Math.floor(Math.random() * shops.length)];
-}
-
-async function confirmOrder(filter, shopId, paymentMethodId, isPickup, addressId = null) {
-  const update = {
-    shopId,
-    paymentMethodId,
-    isPickup,
-    orderStageId: orderedId,
-  };
-  if (addressId) {
-    update.addressId = addressId;
-  }
-  await Order.updateMany(filter, { $set: update });
 }
 
 api.use('/orders', checkActiveMiddleware);
@@ -216,39 +227,50 @@ api.delete('/orders', (request, response) => {
 
 api.put('/orders/confirm', async (request, response) => {
   const { cartId } = request.cookies;
+  const { isPickup, cardId, shopId, cityId, streetId, house, building, apartment } = request.body;
   const cart = await Cart.findOne({ _id: ObjectId(cartId) });
-  if (!cart) {
+  const card = await Card.findOne({ _id: ObjectId(cardId) });
+  if (!cart || (card && !card.userId.equals(ObjectId(request.decoded._id)))) {
     return response.sendStatus(422);
   }
   const { orderIds } = cart;
   const filter = { _id: { $in: orderIds }, orderStageId: ObjectId(preOrderedId) };
-  const { isPickup, paymentMethodId } = request.body;
-  if (isPickup) {
-    const { shopId } = request.body;
-    const shop = await getEnableShop(ObjectId(shopId), null);
-    if (!shop) {
-      response.sendStatus(422);
-    }
-    await confirmOrder(filter, shop._id, ObjectId(paymentMethodId), isPickup, shop.addressId);
-  } else {
-    const { cityId, streetId, house, building, apartment } = request.body;
-    let address = await Address.findOne({ cityId, streetId, house, building, apartment });
-    if (!address) {
-      address = await new Address({
-        cityId: ObjectId(cityId),
-        streetId: ObjectId(streetId),
-        house,
-        building,
-        apartment,
-      }).save();
-    }
-    const shop = await getEnableShop(null, ObjectId(cityId));
-    if (!shop) {
-      response.sendStatus(422);
-    }
-    await confirmOrder(filter, shop._id, ObjectId(paymentMethodId), isPickup, address._id);
-  }
-  return getOrders(cartId).then((res) => response.json(res));
+
+  const schema = isPickup ? withShopValidationSchema : withAddressValidationSchema;
+  return schema
+    .validate(request.body)
+    .then(async () => {
+      if (isPickup) {
+        const shop = await getEnableShop(ObjectId(shopId), null);
+        console.log(shop);
+        if (!shop) {
+          return response.sendStatus(422);
+        }
+        await confirmOrder(filter, shop._id, ObjectId(cardId), isPickup, shop.addressId);
+      } else {
+        let address = await Address.findOne({ cityId, streetId, house, building, apartment });
+        if (!address) {
+          address = await new Address({
+            cityId: ObjectId(cityId),
+            streetId: ObjectId(streetId),
+            house,
+            building,
+            apartment,
+          }).save();
+        }
+        const shop = await getEnableShop(null, ObjectId(cityId));
+        console.log(shop);
+        if (!shop) {
+          return response.sendStatus(422);
+        }
+        await confirmOrder(filter, shop._id, ObjectId(cardId), isPickup, address._id);
+      }
+      return getOrders(cartId).then((res) => response.json(res));
+    })
+    .catch((err) => {
+      console.log(err);
+      return response.sendStatus(422);
+    });
 });
 
 module.exports = api;

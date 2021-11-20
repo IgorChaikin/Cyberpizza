@@ -10,7 +10,7 @@ import getEventArgs from '../../../utils/getEventArgs';
 
 function Checkout(props) {
   const {
-    paymentMethods,
+    cards,
     cities,
     streets,
     shops,
@@ -18,6 +18,7 @@ function Checkout(props) {
     isPickup,
     isAuthenticated,
     isConfirmable,
+    isCardAdding,
     orderError,
     onMount,
     onCitySelected,
@@ -37,7 +38,7 @@ function Checkout(props) {
   }, [cities, selectedCityId]);
 
   const initialValues = {
-    paymentMethodId: paymentMethods[0]?._id,
+    cardId: null,
     isPickup,
     shopId: shops[0]?._id,
     cityId: cities[0]?._id,
@@ -63,7 +64,6 @@ function Checkout(props) {
       }
       switch (args[1]) {
         case 'CHANGE':
-          // eslint-disable-next-line no-nested-ternary
           onChange(args[0], value);
           break;
         default:
@@ -76,17 +76,25 @@ function Checkout(props) {
   const submitCallback = useCallback(
     (values, { setSubmitting }) => {
       setSubmitting(false);
-      onSubmit(values);
+      onSubmit({ ...values, cardId: values.cardId === 'null' ? null : values.cardId });
     },
     [onSubmit]
   );
 
+  const goToCardCallback = useCallback(() => {
+    onChange('isCardAdding', true);
+  }, [onChange]);
+
   if (!isAuthenticated) {
-    return <Redirect to="/login" />;
+    return <Redirect to="/register" />;
   }
 
   if (!isConfirmable) {
     return <Redirect to="/" />;
+  }
+
+  if (isCardAdding) {
+    return <Redirect to="/checkout/card" />;
   }
 
   const validationsSchema = isPickup ? withShopValidationSchema : withAddressValidationSchema;
@@ -114,24 +122,28 @@ function Checkout(props) {
           isValid,
         }) => (
           <form className="auth__form" onSubmit={handleSubmit}>
-            <label htmlFor="payment-id" className="row">
+            <label htmlFor="card-id" className="row">
               Payment method
               <select
                 className={`form__input${
-                  errors.paymentMethodId && touched.paymentMethodId ? ' form__input_wrong' : ''
+                  errors.cardId && touched.cardId ? ' form__input_wrong' : ''
                 }`}
-                id="payment-id"
-                name="paymentMethodId"
+                id="card-id"
+                name="cardId"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.paymentMethodId}
+                value={values.cardId}
               >
-                {paymentMethods.map((elem) => (
-                  <option value={elem._id} selected={elem._id === values.paymentMethodId}>
-                    {elem.title}
+                <option value="null">By cash while receiving</option>
+                {cards.map((elem) => (
+                  <option value={elem._id} selected={elem._id === values.cardId}>
+                    {elem.secureNumber}
                   </option>
                 ))}
               </select>
+              <button onClick={goToCardCallback} className="button_add-card" type="button">
+                +
+              </button>
             </label>
             <label htmlFor="isPickup_CHANGE" className="row">
               Pickup order
@@ -253,7 +265,7 @@ function Checkout(props) {
                   </label>,
                 ]}
             <p className="auth__error">
-              {(touched.paymentMethodId && errors.paymentMethodId) ||
+              {(touched.cardId && errors.cardId) ||
                 (touched.isPickup && errors.isPickup) ||
                 (touched.shopId && errors.shopId) ||
                 (touched.cityId && errors.cityId) ||
@@ -295,7 +307,8 @@ Checkout.propTypes = {
   orderError: PropTypes.string,
   isConfirmable: PropTypes.bool.isRequired,
   isPickup: PropTypes.bool.isRequired,
-  paymentMethods: PropTypes.arrayOf(PropTypes.any).isRequired,
+  isCardAdding: PropTypes.bool.isRequired,
+  cards: PropTypes.arrayOf(PropTypes.any).isRequired,
   cities: PropTypes.arrayOf(PropTypes.any).isRequired,
   streets: PropTypes.arrayOf(PropTypes.any).isRequired,
   shops: PropTypes.arrayOf(PropTypes.any).isRequired,

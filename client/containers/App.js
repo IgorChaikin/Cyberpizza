@@ -6,12 +6,7 @@ import { fetchFilters } from '../actions/actions.filters';
 import { fetchItems } from '../actions/actions.items';
 import { fetchUsername } from '../actions/actions.auth';
 import getCookiesObj from '../../utils/getCookiesObj';
-import {
-  fetchCities,
-  fetchPaymentMethods,
-  fetchShops,
-  fetchStreets,
-} from '../actions/actions.shipment';
+import { fetchCities, fetchCards, fetchShops, fetchStreets } from '../actions/actions.shipment';
 
 const mapDispatchToProps = (dispatch) => ({
   onMount: () => {
@@ -20,7 +15,7 @@ const mapDispatchToProps = (dispatch) => ({
     if (getCookiesObj(document.cookie).token) {
       dispatch(fetchUsername());
       dispatch(fetchCities());
-      dispatch(fetchPaymentMethods());
+      dispatch(fetchCards());
       dispatch(fetchShops());
     }
   },

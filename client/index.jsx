@@ -10,6 +10,7 @@ import Checkout from './containers/Checkout';
 import './index.css';
 
 import store from './store';
+import CardAdding from './containers/CardAdding';
 
 const history = createBrowserHistory();
 
@@ -32,6 +33,9 @@ ReactDOM.render(
           </Route>
           <Route exact path="/checkout">
             <Checkout />
+          </Route>
+          <Route exact path="/checkout/card">
+            <CardAdding />
           </Route>
         </Switch>
       </div>

@@ -22,7 +22,7 @@ const orderScheme = new Schema({
   addressId: ObjectId,
   shopId: ObjectId,
   isPickup: { type: Boolean, default: false },
-  paymentMethodId: ObjectId,
+  cardId: ObjectId,
 });
 
 const itemScheme = new Schema({
@@ -104,8 +104,12 @@ const shopScheme = new Schema({
   isEnabled: { type: Boolean, default: true },
 });
 
-const paymentMethodScheme = new Schema({
-  title: { type: String, default: true },
+const cardScheme = new Schema({
+  number: { type: String, required: true },
+  name: { type: String, required: true },
+  date: { type: String, required: true },
+  cvv: { type: String, required: true },
+  userId: { type: ObjectId, required: true },
 });
 
 // models definition
@@ -125,7 +129,7 @@ module.exports = {
   Address: model('Address', addressScheme),
   Staff: model('Staff', staffScheme),
   Shop: model('Shop', shopScheme),
-  PaymentMethod: model('PaymentMethod', paymentMethodScheme),
+  Card: model('Card', cardScheme),
 
   Patronymic: model('Patronymic', patronymicScheme),
   LastName: model('LastName', lastNameScheme),
