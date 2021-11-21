@@ -4,11 +4,13 @@ const { Types } = require('mongoose');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const staffId = process.env.STAFF_ID;
+const adminId = process.env.ADMIN_ID;
+
 const { User, Cart, Role, Staff } = require('../models');
 const {
   checkTokenMiddleware,
   checkActiveMiddleware,
-  checkAdminMiddleware,
+  checkRoleMiddleware,
 } = require('../middlewares');
 
 const admin = express.Router();
@@ -164,7 +166,7 @@ function getUsers() {
 
 admin.use(checkTokenMiddleware);
 admin.use(checkActiveMiddleware);
-admin.use(checkAdminMiddleware);
+admin.use(checkRoleMiddleware([adminId]));
 
 admin.get('/', (request, response) => {
   return getTotal().then((result) => response.json(result));

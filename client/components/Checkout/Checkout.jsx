@@ -154,6 +154,7 @@ function Checkout(props) {
                 id="isPickup_CHANGE"
                 name="isPickup"
                 type="checkbox"
+                checked={isPickup}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.isPickup}

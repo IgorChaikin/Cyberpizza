@@ -242,7 +242,6 @@ api.put('/orders/confirm', async (request, response) => {
     .then(async () => {
       if (isPickup) {
         const shop = await getEnableShop(ObjectId(shopId), null);
-        console.log(shop);
         if (!shop) {
           return response.sendStatus(422);
         }
@@ -259,7 +258,6 @@ api.put('/orders/confirm', async (request, response) => {
           }).save();
         }
         const shop = await getEnableShop(null, ObjectId(cityId));
-        console.log(shop);
         if (!shop) {
           return response.sendStatus(422);
         }
@@ -267,10 +265,7 @@ api.put('/orders/confirm', async (request, response) => {
       }
       return getOrders(cartId).then((res) => response.json(res));
     })
-    .catch((err) => {
-      console.log(err);
-      return response.sendStatus(422);
-    });
+    .catch(() => response.sendStatus(422));
 });
 
 module.exports = api;
