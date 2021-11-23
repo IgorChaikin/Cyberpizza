@@ -62,10 +62,11 @@ auth.post('/register', (request, response) => {
       user.roleId = firstUser ? ObjectId(userId) : ObjectId(adminId);
       const newUser = await user.save();
       const { _id, roleId, isActive } = newUser;
+      const { cartId } = request.cookies;
+      await Cart.updateOne({ _id: ObjectId(cartId) }, { $set: { userId: _id } });
       const token = signToken({ _id, roleId, isActive });
-      // response.clearCookie('cartId', { secure: false, maxAge: 0 });
       response.cookie('token', token, { secure: false, maxAge: 3600 * 24 });
-      return response.json({ email, isUser: roleId === userId });
+      return response.json({ email, isUser: roleId.equals(ObjectId(userId)) });
     })
     .catch(() => response.sendStatus(422));
 });
@@ -75,13 +76,11 @@ auth.post('/login', (request, response) => {
     .validate(request.body)
     .then(() => {
       const { email, password } = request.body;
-
       return User.findOne({ email }).then((user) => {
         // check if user exists and is user banned
         if (!user || !bcrypt.compareSync(password, user.password) || !user.isActive) {
           return response.sendStatus(403);
         }
-
         const { _id, roleId, isActive } = user;
         return Cart.findOne({ userId: ObjectId(_id) }).then((cart) => {
           if (cart) {
@@ -91,7 +90,7 @@ auth.post('/login', (request, response) => {
           }
           const token = signToken({ _id, roleId, isActive });
           response.cookie('token', token, { secure: false, maxAge: 3600 * 24 });
-          response.json({ email, isUser: roleId === userId });
+          response.json({ email, isUser: roleId.equals(ObjectId(userId)) });
         });
       });
     })
@@ -105,7 +104,6 @@ auth.post('/logout', (request, response) => {
     if (!result) {
       return response.sendStatus(403);
     }
-
     response.clearCookie('token', { secure: false, maxAge: 0 });
     response.clearCookie('cartId', { secure: false, maxAge: 0 });
     return response.sendStatus(201);
@@ -117,7 +115,7 @@ auth.get('/username', (request, response) => {
   return User.findOne({ _id: decoded?._id, isActive: true }).then((result) => {
     response.json({
       email: result?.email,
-      isUser: result ? result.roleId === userId : true,
+      isUser: result ? result.roleId.equals(ObjectId(userId)) : true,
     });
   });
 });

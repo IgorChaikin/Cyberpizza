@@ -1,6 +1,7 @@
 const express = require('express');
 const { Types } = require('mongoose');
 const path = require('path');
+const { getOrderWithPrice, withAddressTemplate } = require('../shared');
 const { withAddressValidationSchema, withShopValidationSchema } = require('../../validationShemas');
 const {
   Category,
@@ -73,23 +74,6 @@ function getOrders(cartId) {
     });
 }
 
-function getOrderWithPrice(orderId) {
-  return Order.aggregate([
-    { $match: { $expr: { $eq: ['$_id', ObjectId(orderId)] } } },
-    {
-      $lookup: {
-        from: 'items',
-        localField: 'itemId',
-        foreignField: '_id',
-        as: 'item',
-      },
-    },
-    {
-      $unwind: { path: '$item', preserveNullAndEmptyArrays: true },
-    },
-  ]).then((query) => query[0]);
-}
-
 function createCart(userId = null) {
   const cart = new Cart({ userId });
   return cart.save().then((item) => item._id);
@@ -129,15 +113,7 @@ async function getEnableShop(shopId = null, cityId = null) {
   }
   const shops = await Shop.aggregate([
     { $match: { $expr: { $eq: ['$isEnabled', true] } } },
-    {
-      $lookup: {
-        from: 'addresses',
-        foreignField: '_id',
-        localField: 'addressId',
-        as: 'address',
-      },
-    },
-    { $unwind: { path: '$address', preserveNullAndEmptyArrays: true } },
+    ...withAddressTemplate,
     { $match: { $expr: { $eq: ['$address.cityId', cityId] } } },
   ]);
   return shops[Math.floor(Math.random() * shops.length)];

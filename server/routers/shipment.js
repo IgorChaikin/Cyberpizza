@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { Types } = require('mongoose');
+const { withAddressTemplate, withCityAndStreetTemplate } = require('../shared');
 const { cardValidationSchema } = require('../../validationShemas');
 
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
@@ -13,35 +14,8 @@ const { ObjectId } = Types;
 function getShops() {
   return Shop.aggregate([
     { $match: { $expr: { $eq: ['$isEnabled', true] } } },
-    {
-      $lookup: {
-        from: 'addresses',
-        let: { addressId: '$addressId' },
-        as: 'address',
-        pipeline: [
-          { $match: { $expr: { $eq: ['$$addressId', '$_id'] } } },
-          {
-            $lookup: {
-              from: 'cities',
-              localField: 'cityId',
-              foreignField: '_id',
-              as: 'city',
-            },
-          },
-          {
-            $lookup: {
-              from: 'streets',
-              localField: 'streetId',
-              foreignField: '_id',
-              as: 'street',
-            },
-          },
-          { $unwind: { path: '$city', preserveNullAndEmptyArrays: true } },
-          { $unwind: { path: '$street', preserveNullAndEmptyArrays: true } },
-        ],
-      },
-    },
-    { $unwind: { path: '$address', preserveNullAndEmptyArrays: true } },
+    ...withAddressTemplate,
+    ...withCityAndStreetTemplate,
   ]);
 }
 
