@@ -1,6 +1,11 @@
 import { ActionType } from 'redux-promise-middleware';
 import { FETCH_SINGLE_CART_REJECTED, FETCH_CARTS_REJECTED } from './actions.admin.carts';
-import { FETCH_USERS_REJECTED, UPDATE_USERS_REJECTED } from './actions.admin.users';
+import {
+  FETCH_USERS_REJECTED,
+  UPDATE_USERS_REJECTED,
+  FETCH_ROLES_REJECTED,
+  DELETE_USER_REJECTED,
+} from './actions.admin.users';
 
 export const FETCH_ADMIN_DASHBOARD = 'FETCH_ADMIN_DASHBOARD';
 export const REFRESH_ADMIN = 'REFRESH_ADMIN_ERROR';
@@ -51,6 +56,8 @@ export default function reducer(state = initialState, action) {
     case FETCH_SINGLE_CART_REJECTED:
     case FETCH_USERS_REJECTED:
     case FETCH_CARTS_REJECTED:
+    case FETCH_ROLES_REJECTED:
+    case DELETE_USER_REJECTED:
     case FETCH_ADMIN_DASHBOARD_REJECTED: {
       return { ...state, requestError: 'Access denied' };
     }

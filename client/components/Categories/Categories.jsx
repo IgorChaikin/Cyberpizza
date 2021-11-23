@@ -8,7 +8,7 @@ function Categories(props) {
 
   const categoriesCallback = useCallback(
     (e) => {
-      const args = getEventArgs(e);
+      const { args } = getEventArgs(e);
       if (args[1] === 'SELECT') {
         onSelect(args[0]);
       }

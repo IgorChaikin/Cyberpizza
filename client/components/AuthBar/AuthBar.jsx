@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import React, { useCallback } from 'react';
 
 function AuthBar(props) {
-  const { username, isAdmin, onLogout } = props;
+  const { username, isUser, onLogout } = props;
 
   const logoutCallback = useCallback(() => {
     onLogout(username);
@@ -13,13 +13,13 @@ function AuthBar(props) {
   if (username) {
     return (
       <div className="auth-wrapper">
+        <p className="auth-bar__username">{username}</p>
         <div className="auth-bar">
-          <p className="auth-bar__username">{username}</p>
           <button type="button" className="auth-button auth-button_logout" onClick={logoutCallback}>
             LogOut
           </button>
+          {isUser ? '' : [<Link to="/admin">I am admin</Link>, <Link to="/staff">I am staff</Link>]}
         </div>
-        {isAdmin ? <Link to="/admin">To admin dashboard</Link> : ''}
       </div>
     );
   }
@@ -42,8 +42,8 @@ function AuthBar(props) {
 
 AuthBar.propTypes = {
   username: PropTypes.string,
-  isAdmin: PropTypes.bool.isRequired,
   onLogout: PropTypes.func.isRequired,
+  isUser: PropTypes.bool.isRequired,
 };
 
 AuthBar.defaultProps = {

@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import Auth from '../components/Auth/Auth';
 
-import { registerUser, loginUser, refreshError } from '../actions/actions.auth';
+import { registerUser, loginUser, refreshAuthError } from '../actions/actions.auth';
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onSubmit: (values) => dispatch(ownProps.isRegister ? registerUser(values) : loginUser(values)),
-  onMount: () => dispatch(refreshError()),
+  onMount: () => dispatch(refreshAuthError()),
 });
 
 const mapStateToProps = (state, ownProps) => ({

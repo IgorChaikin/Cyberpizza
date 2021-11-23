@@ -10,7 +10,7 @@ function Filters(props) {
 
   const filtersCallback = useCallback(
     (e) => {
-      const args = getEventArgs(e);
+      const { args } = getEventArgs(e);
       if (args[1] === 'SWITCH') {
         onSwitch(args[0]);
       }

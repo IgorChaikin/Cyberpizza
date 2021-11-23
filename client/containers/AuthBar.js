@@ -9,7 +9,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => ({
   username: state.auth.username,
-  isAdmin: state.auth.isAdmin,
+  isUser: state.auth.isUser,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthBar);

@@ -1,4 +1,4 @@
-@import '../../vars';
+@import '../../styles/vars';
 
 .error-message {
   height: 100vh;
@@ -95,25 +95,15 @@
     .admin-dashboard__router {
       width: 85%;
       height: 100%;
+      .auth-button {
+        margin-top: 1em;
+      }
       table {
         font: $regular-text;
+        border-collapse: collapse;
         display: block;
         max-height: 80%;
-        position: relative;
         overflow-y: auto;
-        border-collapse: collapse;
-        margin-bottom: 1em;
-        tbody,
-        thead {
-          display: table;
-          width: 100%;
-          table-layout: fixed;
-        }
-        thead {
-          position: sticky;
-          z-index: 2;
-          top: 0;
-        }
         th,
         td {
           border: rgba($grey-color, 0.5) solid 1px;

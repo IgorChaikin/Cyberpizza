@@ -1,9 +1,37 @@
 const mongoose = require('mongoose');
+const path = require('path');
 const models = require('../models');
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const { Types } = mongoose;
 const { ObjectId } = Types;
-const { Category, Order, OrderStage, Item, Filter, Discount, Cart, User } = models;
+const {
+  Category,
+  Order,
+  OrderStage,
+  Item,
+  Filter,
+  Cart,
+  Role,
+  User,
+  City,
+  Street,
+  Address,
+  Shop,
+  Card,
+  Staff,
+  LastName,
+  FirstName,
+  Patronymic,
+} = models;
+
+const adminId = process.env.ADMIN_ID;
+const userId = process.env.USER_ID;
+const staffId = process.env.STAFF_ID;
+
+const preOrderedId = process.env.PRE_ORDERED_ID;
+const payedId = process.env.PAYED_ID;
+const orderedId = process.env.ORDERED_ID;
 
 const initialData = {
   categories: [
@@ -48,23 +76,30 @@ const initialData = {
   ],
   orderStages: [
     {
-      _id: ObjectId('000000000000000000000000'),
+      _id: ObjectId(preOrderedId),
+      title: 'pre ordered',
+    },
+    {
+      _id: ObjectId(orderedId),
       title: 'ordered',
     },
     {
-      _id: ObjectId('000000000000000000000001'),
+      _id: ObjectId('000000000000000000000002'),
       title: 'baking',
     },
     {
-      _id: ObjectId('000000000000000000000002'),
+      _id: ObjectId('000000000000000000000003'),
       title: 'finishing',
     },
     {
-      _id: ObjectId('000000000000000000000003'),
+      _id: ObjectId('000000000000000000000004'),
       title: 'served',
     },
+    {
+      _id: ObjectId(payedId),
+      title: 'payed',
+    },
   ],
-  orders: [],
   items: [
     {
       imgPath: '/ham_and_cheese.png',
@@ -152,9 +187,77 @@ const initialData = {
       name: 'tag2',
     },
   ],
-  discounts: [
+  roles: [
     {
-      value: 0.1,
+      _id: ObjectId(adminId),
+      title: 'Admin',
+    },
+    {
+      _id: ObjectId(staffId),
+      title: 'Staff',
+    },
+    {
+      _id: ObjectId(userId),
+      title: 'User',
+    },
+  ],
+
+  cities: [
+    {
+      _id: ObjectId('000000000000000000000000'),
+      title: 'City-1',
+    },
+    {
+      _id: ObjectId('000000000000000000000001'),
+      title: 'City-2',
+    },
+  ],
+  streets: [
+    {
+      _id: ObjectId('000000000000000000000000'),
+      title: 'Street-1',
+      cityIds: [ObjectId('000000000000000000000000')],
+    },
+    {
+      _id: ObjectId('000000000000000000000001'),
+      title: 'Street-2',
+      cityIds: [ObjectId('000000000000000000000001')],
+    },
+    {
+      _id: ObjectId('000000000000000000000002'),
+      title: 'Street-1-2',
+      cityIds: [ObjectId('000000000000000000000001'), ObjectId('000000000000000000000000')],
+    },
+  ],
+  addresses: [
+    {
+      _id: ObjectId('000000000000000000000000'),
+      cityId: ObjectId('000000000000000000000000'),
+      streetId: ObjectId('000000000000000000000000'),
+      house: 1,
+    },
+    {
+      _id: ObjectId('000000000000000000000001'),
+      cityId: ObjectId('000000000000000000000000'),
+      streetId: ObjectId('000000000000000000000002'),
+      house: 1,
+    },
+    {
+      _id: ObjectId('000000000000000000000002'),
+      cityId: ObjectId('000000000000000000000001'),
+      streetId: ObjectId('000000000000000000000001'),
+      house: 1,
+    },
+  ],
+  shops: [
+    {
+      addressId: ObjectId('000000000000000000000000'),
+    },
+    {
+      addressId: ObjectId('000000000000000000000001'),
+    },
+    {
+      addressId: ObjectId('000000000000000000000002'),
     },
   ],
 };
@@ -178,12 +281,27 @@ module.exports = async (dbConn) => {
     Item.deleteMany({}).then(() => Item.insertMany(initialData.items)),
     Category.deleteMany({}).then(() => Category.insertMany(initialData.categories)),
     Filter.deleteMany({}).then(() => Filter.insertMany(initialData.filters)),
-    Discount.deleteMany({}).then(() => Discount.insertMany(initialData.discounts)),
     OrderStage.deleteMany({}).then(() => OrderStage.insertMany(initialData.orderStages)),
+    Role.deleteMany({}).then(() => Role.insertMany(initialData.roles)),
+
+    City.deleteMany({}).then(() => City.insertMany(initialData.cities)),
+    Street.deleteMany({}).then(() => Street.insertMany(initialData.streets)),
+    Address.deleteMany({}).then(() => Address.insertMany(initialData.addresses)),
+    Shop.deleteMany({}).then(() => Shop.insertMany(initialData.shops)),
+
+    Card.deleteMany({}),
     Order.deleteMany({}),
     Cart.deleteMany({}),
     User.deleteMany({}),
+    Staff.deleteMany({}),
+    LastName.deleteMany({}),
+    FirstName.deleteMany({}),
+    Patronymic.deleteMany({}),
   ]);
   await mongoose.connection.close();
-  return initResults.findIndex((elem) => elem.status === 'rejected') === -1;
+  const faledIdx = initResults.findIndex((elem) => elem.status === 'rejected');
+  if (faledIdx !== -1) {
+    console.log(initResults[faledIdx]);
+  }
+  return faledIdx === -1;
 };

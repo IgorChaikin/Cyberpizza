@@ -1,3 +1,6 @@
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
+
 const { verifyToken } = require('../utils/jwt');
 
 const verifyTokenMiddleware = (request, response, next) => {
@@ -14,9 +17,9 @@ const checkTokenMiddleware = (request, response, next) => {
   return next();
 };
 
-const checkAdminMiddleware = (request, response, next) => {
+const checkRoleMiddleware = (roleIds) => (request, response, next) => {
   const { decoded } = request;
-  if (!decoded.isAdmin) {
+  if (!roleIds.includes(decoded.roleId)) {
     return response.sendStatus(403);
   }
   return next();
@@ -41,6 +44,6 @@ module.exports = {
   verifyTokenMiddleware,
   checkTokenMiddleware,
   checkActiveMiddleware,
-  checkAdminMiddleware,
   checkBodyMiddleware,
+  checkRoleMiddleware,
 };

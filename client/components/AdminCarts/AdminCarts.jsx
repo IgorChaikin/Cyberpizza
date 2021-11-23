@@ -4,6 +4,7 @@ import './AdminCarts.scss';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useRouteMatch } from 'react-router';
+import Placeholder from '../Placeholder/Placeholder';
 
 function AdminCarts(props) {
   const { carts, onMount } = props;
@@ -32,6 +33,14 @@ function AdminCarts(props) {
       </tr>
     );
   });
+
+  if (!carts || carts.length <= 0) {
+    return (
+      <div className="admin-dashboard__placeholder-container">
+        <Placeholder message="There is nothing to show.." />
+      </div>
+    );
+  }
 
   return (
     <div className="admin-dashboard__container">
