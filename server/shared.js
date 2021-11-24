@@ -51,4 +51,22 @@ const withCityAndStreetTemplate = [
   { $unwind: { path: '$address.street', preserveNullAndEmptyArrays: true } },
 ];
 
-module.exports = { getOrderWithPrice, withAddressTemplate, withCityAndStreetTemplate };
+const withItemAndSortTemplate = [
+  {
+    $lookup: {
+      from: 'items',
+      localField: 'itemId',
+      foreignField: '_id',
+      as: 'item',
+    },
+  },
+  { $unwind: { path: '$item', preserveNullAndEmptyArrays: true } },
+  { $sort: { time: -1 } },
+];
+
+module.exports = {
+  getOrderWithPrice,
+  withAddressTemplate,
+  withCityAndStreetTemplate,
+  withItemAndSortTemplate,
+};

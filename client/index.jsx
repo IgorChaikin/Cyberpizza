@@ -7,6 +7,7 @@ import App from './containers/App';
 import Auth from './containers/Auth';
 import Admin from './containers/Admin';
 import Checkout from './containers/Checkout';
+import Staff from './containers/Staff';
 import './index.css';
 
 import store from './store';
@@ -30,6 +31,9 @@ ReactDOM.render(
           </Route>
           <Route path="/admin">
             <Admin />
+          </Route>
+          <Route path="/staff">
+            <Staff />
           </Route>
           <Route exact path="/checkout">
             <Checkout />

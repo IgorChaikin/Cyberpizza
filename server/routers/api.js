@@ -1,6 +1,7 @@
 const express = require('express');
 const { Types } = require('mongoose');
 const path = require('path');
+const { withItemAndSortTemplate } = require('../shared');
 const { getOrderWithPrice, withAddressTemplate } = require('../shared');
 const { withAddressValidationSchema, withShopValidationSchema } = require('../../validationShemas');
 const {
@@ -42,8 +43,6 @@ function getOrders(cartId) {
               {
                 $match: {
                   $expr: {
-                    // ...only after that make order query to db for search only orders of
-                    // this cart, not all orders. It helps save time during work with db
                     $and: [
                       { $eq: ['$$orderStageId', '$orderStageId'] },
                       { $in: ['$_id', cart?.orderIds ?? []] },
@@ -51,17 +50,8 @@ function getOrders(cartId) {
                   },
                 },
               },
-              { $sort: { time: -1 } },
+              ...withItemAndSortTemplate,
               { $addFields: { isEditable: { $eq: ['$orderStageId', ObjectId(preOrderedId)] } } },
-              {
-                $lookup: {
-                  from: 'items',
-                  localField: 'itemId',
-                  foreignField: '_id',
-                  as: 'item',
-                },
-              },
-              { $unwind: { path: '$item', preserveNullAndEmptyArrays: true } },
             ],
           },
         },

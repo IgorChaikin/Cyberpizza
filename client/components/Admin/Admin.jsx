@@ -8,7 +8,7 @@ import AdminUsers from '../../containers/AdminUsers';
 import AdminCarts from '../../containers/AdminCarts';
 import AdminSingleCart from '../../containers/AdminSingleCart';
 import Placeholder from '../Placeholder/Placeholder';
-import AdminDeleteModal from '../../containers/AdminDeleteModal';
+import DeleteModal from '../../containers/DeleteModal';
 import AdminStaff from '../../containers/AdminStaff';
 
 function Admin(props) {
@@ -27,7 +27,7 @@ function Admin(props) {
 
   return (
     <div className="admin-dashboard">
-      {deletedId ? <AdminDeleteModal /> : ''}
+      {deletedId ? <DeleteModal entity="user" /> : ''}
       <header>
         <section>
           <h2>Current admin</h2>

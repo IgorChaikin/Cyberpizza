@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { Types } = require('mongoose');
+const { withItemAndSortTemplate } = require('../shared');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const staffId = process.env.STAFF_ID;
@@ -120,16 +121,7 @@ function getSingleCart(cartId) {
         as: 'orders',
         pipeline: [
           { $match: { $expr: { $in: ['$_id', '$$orderIds'] } } },
-          { $sort: { time: -1 } },
-          {
-            $lookup: {
-              from: 'items',
-              localField: 'itemId',
-              foreignField: '_id',
-              as: 'item',
-            },
-          },
-          { $unwind: { path: '$item', preserveNullAndEmptyArrays: true } },
+          ...withItemAndSortTemplate,
         ],
       },
     },

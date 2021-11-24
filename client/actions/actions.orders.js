@@ -140,12 +140,12 @@ export default function reducer(state = initialState, action) {
     case DELETE_ORDER_FULFILLED:
     case UPDATE_ORDER_FULFILLED:
     case CONFIRM_ORDER_FULFILLED: {
-      const { stages } = action.payload;
+      const { stages, price } = action.payload;
       const confirmableIdx = stages.findIndex((elem) => elem.isConfirmable);
       return {
         ...state,
         stages,
-        price: action.payload.price,
+        price,
         isConfirmable: confirmableIdx !== -1 && stages[confirmableIdx].orders.length > 0,
       };
     }

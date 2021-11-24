@@ -1,13 +1,18 @@
 const express = require('express');
 const path = require('path');
 const { Types } = require('mongoose');
-const { withAddressTemplate, withCityAndStreetTemplate, getOrderWithPrice } = require('../shared');
+const {
+  withAddressTemplate,
+  withCityAndStreetTemplate,
+  withItemAndSortTemplate,
+  getOrderWithPrice,
+} = require('../shared');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const staffId = process.env.STAFF_ID;
 const payedId = process.env.PAYED_ID;
 
-const { Staff, Order, Shop, Cart } = require('../models');
+const { Staff, Order, Shop, Cart, OrderStage } = require('../models');
 const {
   checkTokenMiddleware,
   checkActiveMiddleware,
@@ -31,6 +36,7 @@ async function getOrdersWithAddress(_id, stageId) {
         },
       },
     },
+    ...withItemAndSortTemplate,
     ...withAddressTemplate,
     ...withCityAndStreetTemplate,
   ]);
@@ -62,8 +68,8 @@ staff.use(checkRoleMiddleware([staffId]));
 
 staff.get('/orders/:id', (request, response) => {
   const { _id } = request.decoded;
-  const stageid = request.params.id;
-  return getOrdersWithAddress(_id, stageid).then((result) => response.json(result));
+  const stageId = request.params.id;
+  return getOrdersWithAddress(_id, stageId).then((result) => response.json(result));
 });
 
 staff.get('/shop', async (request, response) => {
@@ -72,17 +78,21 @@ staff.get('/shop', async (request, response) => {
   return getShopWithAddress(staffFromDb.shopId).then((result) => response.json(result));
 });
 
+staff.get('/stages', async (request, response) => {
+  return OrderStage.find({}).then((result) => response.json(result));
+});
+
 staff.put('/shop', async (request, response) => {
   const { _id } = request.decoded;
   const staffFromDb = await Staff.findOne({ userId: ObjectId(_id) });
   const { enabling } = request.body;
-  await Shop.updateOne({ _id: staffFromDb.shopId }, { isEnable: enabling });
+  await Shop.updateOne({ _id: staffFromDb.shopId }, { $set: { isEnabled: enabling } });
   return getShopWithAddress(staffFromDb.shopId).then((result) => response.json(result));
 });
 
 staff.put('/orders/:id', (request, response) => {
   const { _id } = request.decoded;
-  const stageid = request.params.id;
+  const stageId = request.params.id;
   return Promise.allSettled(
     request.body.changes.map(async (elem) => {
       if (elem.orderStageId === payedId) {
@@ -93,15 +103,15 @@ staff.put('/orders/:id', (request, response) => {
         { orderStageId: ObjectId(elem.orderStageId) }
       );
     })
-  ).then(() => getOrdersWithAddress(_id, stageid).then((result) => response.json(result)));
+  ).then(() => getOrdersWithAddress(_id, stageId).then((result) => response.json(result)));
 });
 
 staff.delete('/orders/:id', async (request, response) => {
   const { deletedId } = request.body;
   await Order.deleteOne({ _id: ObjectId(deletedId) });
   const { _id } = request.decoded;
-  const stageid = request.params.id;
-  getOrdersWithAddress(_id, stageid).then((result) => response.json(result));
+  const stageId = request.params.id;
+  getOrdersWithAddress(_id, stageId).then((result) => response.json(result));
 });
 
 module.exports = staff;
