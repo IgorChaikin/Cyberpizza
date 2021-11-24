@@ -1,0 +1,13 @@
+@import '../../styles/employee-page';
+
+.admin-dashboard {
+  main {
+    nav {
+      .link_selected {
+        a {
+          color: $accent-color;
+        }
+      }
+    }
+  }
+}

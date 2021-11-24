@@ -1,11 +1,18 @@
 const express = require('express');
 const path = require('path');
 const { Types } = require('mongoose');
+const {
+  withAddressTemplate,
+  withCityAndStreetTemplate,
+  withItemAndSortTemplate,
+  getOrderWithPrice,
+} = require('../shared');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const staffId = process.env.STAFF_ID;
+const payedId = process.env.PAYED_ID;
 
-const { Staff, Order, OrderStage, Shop } = require('../models');
+const { Staff, Order, Shop, Cart, OrderStage } = require('../models');
 const {
   checkTokenMiddleware,
   checkActiveMiddleware,
@@ -14,38 +21,6 @@ const {
 
 const staff = express.Router();
 const { ObjectId } = Types;
-
-const addressTemplate = [
-  {
-    $lookup: {
-      from: 'addresses',
-      let: { addressId: '$addressId' },
-      as: 'address',
-      pipeline: [
-        { $match: { $expr: { $eq: ['$$addressId', '$_id'] } } },
-        {
-          $lookup: {
-            from: 'cities',
-            localField: 'cityId',
-            foreignField: '_id',
-            as: 'city',
-          },
-        },
-        {
-          $lookup: {
-            from: 'streets',
-            localField: 'streetId',
-            foreignField: '_id',
-            as: 'street',
-          },
-        },
-        { $unwind: { path: '$city', preserveNullAndEmptyArrays: true } },
-        { $unwind: { path: '$street', preserveNullAndEmptyArrays: true } },
-      ],
-    },
-  },
-  { $unwind: { path: '$address', preserveNullAndEmptyArrays: true } },
-];
 
 async function getOrdersWithAddress(_id, stageId) {
   const staffFromDb = await Staff.findOne({ userId: ObjectId(_id) });
@@ -61,15 +36,30 @@ async function getOrdersWithAddress(_id, stageId) {
         },
       },
     },
-    ...addressTemplate,
+    ...withItemAndSortTemplate,
+    ...withAddressTemplate,
+    ...withCityAndStreetTemplate,
   ]);
 }
 
 async function getShopWithAddress(shopId) {
   return Shop.aggregate([
     { $match: { $expr: { $eq: ['$_id', shopId] } } },
-    ...addressTemplate,
+    ...withAddressTemplate,
+    ...withCityAndStreetTemplate,
   ]).then((res) => res[0]);
+}
+
+async function payOrder(orderId) {
+  const order = await getOrderWithPrice(orderId);
+  const payedPrice = order?.item.price * order?.count;
+  return Cart.updateOne(
+    { orderIds: { $in: [order._id] }, price: { $gte: payedPrice } },
+    {
+      $dec: { price: payedPrice },
+      $inc: { generalPrice: payedPrice },
+    }
+  );
 }
 
 staff.use(checkTokenMiddleware);
@@ -78,12 +68,8 @@ staff.use(checkRoleMiddleware([staffId]));
 
 staff.get('/orders/:id', (request, response) => {
   const { _id } = request.decoded;
-  const stageid = request.params.id;
-  return getOrdersWithAddress(_id, stageid).then((result) => response.json(result));
-});
-
-staff.get('/stages', (request, response) => {
-  return OrderStage.find({}).then((result) => response.json(result));
+  const stageId = request.params.id;
+  return getOrdersWithAddress(_id, stageId).then((result) => response.json(result));
 });
 
 staff.get('/shop', async (request, response) => {
@@ -92,30 +78,40 @@ staff.get('/shop', async (request, response) => {
   return getShopWithAddress(staffFromDb.shopId).then((result) => response.json(result));
 });
 
+staff.get('/stages', async (request, response) => {
+  return OrderStage.find({}).then((result) => response.json(result));
+});
+
 staff.put('/shop', async (request, response) => {
   const { _id } = request.decoded;
   const staffFromDb = await Staff.findOne({ userId: ObjectId(_id) });
   const { enabling } = request.body;
-  await Shop.updateOne({ _id: staffFromDb.shopId }, { isEnable: enabling });
+  await Shop.updateOne({ _id: staffFromDb.shopId }, { $set: { isEnabled: enabling } });
   return getShopWithAddress(staffFromDb.shopId).then((result) => response.json(result));
 });
 
 staff.put('/orders/:id', (request, response) => {
   const { _id } = request.decoded;
-  const stageid = request.params.id;
+  const stageId = request.params.id;
   return Promise.allSettled(
-    request.body.changes.map(async (elem) =>
-      Order.updateOne({ _id: ObjectId(elem._id) }, { orderStageId: ObjectId(elem.orderStageId) })
-    )
-  ).then(() => getOrdersWithAddress(_id, stageid).then((result) => response.json(result)));
+    request.body.changes.map(async (elem) => {
+      if (elem.orderStageId === payedId) {
+        await payOrder(elem._id);
+      }
+      return Order.updateOne(
+        { _id: ObjectId(elem._id), orderStageId: { $ne: ObjectId(payedId) } },
+        { orderStageId: ObjectId(elem.orderStageId) }
+      );
+    })
+  ).then(() => getOrdersWithAddress(_id, stageId).then((result) => response.json(result)));
 });
 
 staff.delete('/orders/:id', async (request, response) => {
   const { deletedId } = request.body;
   await Order.deleteOne({ _id: ObjectId(deletedId) });
   const { _id } = request.decoded;
-  const stageid = request.params.id;
-  getOrdersWithAddress(_id, stageid).then((result) => response.json(result));
+  const stageId = request.params.id;
+  getOrdersWithAddress(_id, stageId).then((result) => response.json(result));
 });
 
 module.exports = staff;

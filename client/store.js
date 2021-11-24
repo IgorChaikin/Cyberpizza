@@ -10,6 +10,8 @@ import users from './actions/actions.admin.users';
 import carts from './actions/actions.admin.carts';
 import shipment from './actions/actions.shipment';
 import staff from './actions/actions.admin.staff';
+import stafforders from './actions/actions.staff.orders';
+import staffshop from './actions/actions.staff';
 
 const reducer = combineReducers({
   items,
@@ -22,6 +24,8 @@ const reducer = combineReducers({
   carts,
   shipment,
   staff,
+  stafforders,
+  staffshop,
 });
 
 const store = createStore(reducer, applyMiddleware(promise));
