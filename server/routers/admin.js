@@ -6,6 +6,7 @@ require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const staffId = process.env.STAFF_ID;
 const adminId = process.env.ADMIN_ID;
+const payedId = process.env.PAYED_ID;
 
 const { User, Cart, Role, Staff } = require('../models');
 const {
@@ -64,7 +65,16 @@ function getTotal() {
           let: { orderIds: '$orderIds' },
           as: 'cartCount',
           pipeline: [
-            { $match: { $expr: { $in: ['$_id', '$$orderIds'] } } },
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$orderStageId', ObjectId(payedId)] },
+                    { $in: ['$_id', '$$orderIds'] },
+                  ],
+                },
+              },
+            },
             { $group: { _id: null, count: { $sum: '$count' } } },
           ],
         },
@@ -74,7 +84,7 @@ function getTotal() {
         $group: {
           _id: null,
           totalCount: { $sum: '$cartCount.count' },
-          totalPrice: { $sum: '$price' },
+          totalPrice: { $sum: '$generalPrice' },
         },
       },
     ])
@@ -122,6 +132,7 @@ function getSingleCart(cartId) {
         pipeline: [
           { $match: { $expr: { $in: ['$_id', '$$orderIds'] } } },
           ...withItemAndSortTemplate,
+          { $addFields: { isHighlighted: { $eq: ['$orderStageId', ObjectId(payedId)] } } },
         ],
       },
     },

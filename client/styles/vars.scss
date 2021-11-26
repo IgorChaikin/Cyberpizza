@@ -164,7 +164,8 @@ label {
   align-items: flex-start;
   justify-content: space-between;
 
-  input {
+  input,
+  select {
     margin-top: 0.5em;
     margin-left: 0;
   }

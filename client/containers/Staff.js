@@ -19,6 +19,7 @@ const mapStateToProps = (state) => ({
   shop: state.staffshop.shop,
   stages: state.stafforders.stages,
   deletedId: state.stafforders.deletedId,
+  selectedId: state.stafforders.selectedId,
   username: state.auth.username,
 });
 

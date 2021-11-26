@@ -21,7 +21,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  console.log(state.users.searchData);
   return {
     users: state.users.users.filter(
       (elem) =>

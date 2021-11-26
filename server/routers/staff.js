@@ -5,12 +5,14 @@ const {
   withAddressTemplate,
   withCityAndStreetTemplate,
   withItemAndSortTemplate,
+  secureCardTemplate,
   getOrderWithPrice,
 } = require('../shared');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const staffId = process.env.STAFF_ID;
 const payedId = process.env.PAYED_ID;
+const preOrderedId = process.env.PRE_ORDERED_ID;
 
 const { Staff, Order, Shop, Cart, OrderStage } = require('../models');
 const {
@@ -39,6 +41,15 @@ async function getOrdersWithAddress(_id, stageId) {
     ...withItemAndSortTemplate,
     ...withAddressTemplate,
     ...withCityAndStreetTemplate,
+    {
+      $lookup: {
+        from: 'cards',
+        let: { cardId: '$cardId' },
+        as: 'card',
+        pipeline: [{ $match: { $expr: { $eq: ['$$cardId', '$_id'] } } }, ...secureCardTemplate],
+      },
+    },
+    { $unwind: { path: '$card', preserveNullAndEmptyArrays: true } },
   ]);
 }
 
@@ -56,8 +67,10 @@ async function payOrder(orderId) {
   return Cart.updateOne(
     { orderIds: { $in: [order._id] }, price: { $gte: payedPrice } },
     {
-      $dec: { price: payedPrice },
-      $inc: { generalPrice: payedPrice },
+      $inc: {
+        generalPrice: payedPrice,
+        price: -payedPrice,
+      },
     }
   );
 }
@@ -79,7 +92,9 @@ staff.get('/shop', async (request, response) => {
 });
 
 staff.get('/stages', async (request, response) => {
-  return OrderStage.find({}).then((result) => response.json(result));
+  return OrderStage.find({ _id: { $ne: ObjectId(preOrderedId) } }).then((result) =>
+    response.json(result)
+  );
 });
 
 staff.put('/shop', async (request, response) => {
@@ -94,15 +109,12 @@ staff.put('/orders/:id', (request, response) => {
   const { _id } = request.decoded;
   const stageId = request.params.id;
   return Promise.allSettled(
-    request.body.changes.map(async (elem) => {
-      if (elem.orderStageId === payedId) {
-        await payOrder(elem._id);
-      }
-      return Order.updateOne(
+    request.body.changes.map(async (elem) =>
+      Order.updateOne(
         { _id: ObjectId(elem._id), orderStageId: { $ne: ObjectId(payedId) } },
         { orderStageId: ObjectId(elem.orderStageId) }
-      );
-    })
+      ).then(() => (elem.orderStageId === payedId ? payOrder(elem._id) : null))
+    )
   ).then(() => getOrdersWithAddress(_id, stageId).then((result) => response.json(result)));
 });
 

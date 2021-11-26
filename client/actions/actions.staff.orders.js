@@ -6,17 +6,17 @@ export const ADD_ORDER_CHANGE = 'ADD_ORDER_CHANGE';
 
 export const FETCH_ORDERS_AS_STAFF = 'FETCH_ORDERS_AS_STAFF';
 export const UPDATE_ORDERS = 'UPDATE_ORDERS';
-export const DELETE_ORDER = 'DELETE_ORDER';
+export const DELETE_ORDER_AS_STAFF = 'DELETE_ORDER_AS_STAFF';
 export const FETCH_STAGES = 'FETCH_STAGES';
 
 export const FETCH_ORDERS_AS_STAFF_FULFILLED = `${FETCH_ORDERS_AS_STAFF}_${ActionType.Fulfilled}`;
 export const UPDATE_ORDERS_FULFILLED = `${UPDATE_ORDERS}_${ActionType.Fulfilled}`;
-export const DELETE_ORDER_FULFILLED = `${DELETE_ORDER}_${ActionType.Fulfilled}`;
+export const DELETE_ORDER_AS_STAFF_FULFILLED = `${DELETE_ORDER_AS_STAFF}_${ActionType.Fulfilled}`;
 export const FETCH_STAGES_FULFILLED = `${FETCH_STAGES}_${ActionType.Fulfilled}`;
 
 export const FETCH_ORDERS_AS_STAFF_REJECTED = `${FETCH_ORDERS_AS_STAFF}_${ActionType.Rejected}`;
 export const UPDATE_ORDERS_REJECTED = `${UPDATE_ORDERS}_${ActionType.Rejected}`;
-export const DELETE_ORDER_REJECTED = `${DELETE_ORDER}_${ActionType.Rejected}`;
+export const DELETE_ORDER_AS_STAFF_REJECTED = `${DELETE_ORDER_AS_STAFF}_${ActionType.Rejected}`;
 export const FETCH_STAGES_REJECTED = `${FETCH_STAGES}_${ActionType.Rejected}`;
 
 export function fetchOrdersAsStaff(id) {
@@ -86,7 +86,7 @@ export function deleteOrder(deletedId, id) {
         resolve({ changes: result, id });
       });
   });
-  return { type: DELETE_ORDER, payload };
+  return { type: DELETE_ORDER_AS_STAFF, payload };
 }
 
 export function selectDeleted(payload) {
@@ -133,7 +133,7 @@ export default function reducer(state = initialState, action) {
     }
     case FETCH_ORDERS_AS_STAFF_FULFILLED:
     case UPDATE_ORDERS_FULFILLED:
-    case DELETE_ORDER_FULFILLED: {
+    case DELETE_ORDER_AS_STAFF_FULFILLED: {
       return {
         ...state,
         changes: action.payload.changes,

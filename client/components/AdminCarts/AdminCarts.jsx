@@ -20,7 +20,7 @@ function AdminCarts(props) {
         <td className={cart.username ? '' : 'anonymous-container'}>
           {cart.username ?? '[ANONYMOUS]'}
         </td>
-        <td>{cart.price.toFixed(2)}$</td>
+        <td>{cart.generalPrice.toFixed(2)}$</td>
         <td>{`${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1)
           .toString()
           .padStart(2, '0')}.${date.getFullYear()} ${date
@@ -67,6 +67,7 @@ AdminCarts.propTypes = {
       _id: PropTypes.string.isRequired,
       username: PropTypes.string,
       price: PropTypes.number.isRequired,
+      generalPrice: PropTypes.number.isRequired,
     }).isRequired
   ).isRequired,
   onMount: PropTypes.func.isRequired,

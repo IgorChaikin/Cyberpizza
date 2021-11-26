@@ -19,17 +19,29 @@
 
 .search-form {
   display: flex;
+  width: 95%;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   height: 4em;
   border-radius: 1em;
   background-color: $light-color;
-  margin-bottom: 1.5em;
-  font-size: 0.65em;
+  margin: 0 0 1em;
+  font: $regular-text;
   padding: 1em;
 
   label {
+    @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait),
+      (max-width: 768px) and (orientation: portrait) {
+      input {
+        width: 7em;
+      }
+      main {
+        width: 11em;
+      }
+    }
+    font: $regular-text;
     margin: 0 1em 0 0;
+    flex-grow: 1;
   }
 }
