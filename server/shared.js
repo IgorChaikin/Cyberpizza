@@ -64,9 +64,19 @@ const withItemAndSortTemplate = [
   { $sort: { time: -1 } },
 ];
 
+const secureCardTemplate = [
+  {
+    $addFields: {
+      secureNumber: { $concat: ['****-****-****-', { $substr: ['$number', 12, -1] }] },
+    },
+  },
+  { $project: { number: 0, name: 0, date: 0, cvv: 0, userId: 0 } },
+];
+
 module.exports = {
   getOrderWithPrice,
   withAddressTemplate,
   withCityAndStreetTemplate,
   withItemAndSortTemplate,
+  secureCardTemplate,
 };

@@ -1,7 +1,7 @@
 import { ActionType } from 'redux-promise-middleware';
 import {
   FETCH_ORDERS_AS_STAFF_REJECTED,
-  DELETE_ORDER_REJECTED,
+  DELETE_ORDER_AS_STAFF_REJECTED,
   UPDATE_ORDERS_REJECTED,
   FETCH_STAGES_REJECTED,
 } from './actions.staff.orders';
@@ -72,7 +72,7 @@ export default function reducer(state = initialState, action) {
     }
     case FETCH_ORDERS_AS_STAFF_REJECTED:
     case UPDATE_ORDERS_REJECTED:
-    case DELETE_ORDER_REJECTED:
+    case DELETE_ORDER_AS_STAFF_REJECTED:
     case FETCH_SHOP_DATA_REJECTED:
     case UPDATE_SHOP_DATA_REJECTED:
     case FETCH_STAGES_REJECTED: {
