@@ -10,10 +10,10 @@ function AdminSingleCart(props) {
 
   useEffect(() => onMount(id), []);
 
-  const ordersList = selectedCart?.orders.map((cart) => {
-    const { _id, item, count } = cart;
+  const ordersList = selectedCart?.orders.map((order) => {
+    const { _id, item, count, isHighlighted } = order;
     return (
-      <div className="order" key={_id}>
+      <div className={`order${isHighlighted ? ' highlighted' : ''}`} key={_id}>
         <figure>
           <img src={item?.imgPath} alt={item?.title} />
           <span>{item?.title}</span>
@@ -32,7 +32,7 @@ function AdminSingleCart(props) {
       <div className="main-content">{ordersList}</div>
       <p>
         <span className="cart__total">Total</span>
-        <span className="cart__price">{selectedCart?.price.toFixed(2)}$</span>
+        <span className="cart__price">{selectedCart?.generalPrice.toFixed(2)}$</span>
       </p>
     </div>
   );
@@ -42,6 +42,7 @@ AdminSingleCart.propTypes = {
   selectedCart: PropTypes.shape({
     _id: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
+    generalPrice: PropTypes.number.isRequired,
     orders: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
     username: PropTypes.string,
   }),

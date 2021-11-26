@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { Types } = require('mongoose');
+const { secureCardTemplate } = require('../shared');
 const { withAddressTemplate, withCityAndStreetTemplate } = require('../shared');
 const { cardValidationSchema } = require('../../validationShemas');
 
@@ -20,15 +21,7 @@ function getShops() {
 }
 
 function getCards(id) {
-  return Card.aggregate([
-    { $match: { $expr: { $eq: [id, '$userId'] } } },
-    {
-      $addFields: {
-        secureNumber: { $concat: ['****-****-****-', { $substr: ['$number', 12, -1] }] },
-      },
-    },
-    { $project: { number: 0, name: 0, date: 0, cvv: 0, userId: 0 } },
-  ]);
+  return Card.aggregate([{ $match: { $expr: { $eq: [id, '$userId'] } } }, ...secureCardTemplate]);
 }
 
 shipment.use(checkActiveMiddleware);

@@ -30,17 +30,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 const mapStateToProps = (state, ownProps) => {
   const { entity } = ownProps;
   let deletedId;
-  let stageId;
+  let selectedId;
 
   switch (entity) {
     case 'user': {
       deletedId = state.users.deletedId;
-      stageId = null;
+      selectedId = null;
       break;
     }
     case 'order': {
       deletedId = state.stafforders.deletedId;
-      stageId = state.stafforders.selectedId;
+      selectedId = state.stafforders.selectedId;
       break;
     }
     default:
@@ -50,7 +50,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     entity,
     deletedId,
-    stageId,
+    selectedId,
   };
 };
 

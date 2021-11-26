@@ -4,10 +4,10 @@ import './Staff.scss';
 import PropTypes from 'prop-types';
 import { useRouteMatch } from 'react-router';
 import { Route, Switch, Link } from 'react-router-dom';
-import AdminSingleCart from '../../containers/AdminSingleCart';
 import Placeholder from '../Placeholder/Placeholder';
 import DeleteModal from '../../containers/DeleteModal';
 import getFormatAddress from '../../../utils/getFormatAddress';
+import StaffOrders from '../../containers/StaffOrders';
 
 function Staff(props) {
   const { shop, stages, deletedId, selectedId, requestError, username, onMount, onChangeShop } =
@@ -80,7 +80,7 @@ function Staff(props) {
               </div>
             </Route>
             <Route exact path={`${match.url}/orders/:id`}>
-              <AdminSingleCart />
+              <StaffOrders />
             </Route>
           </Switch>
         </div>
