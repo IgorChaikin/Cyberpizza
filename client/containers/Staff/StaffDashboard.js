@@ -15,12 +15,12 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  requestError: state.staffshop.requestError,
-  shop: state.staffshop.shop,
-  stages: state.stafforders.stages,
-  deletedId: state.stafforders.deletedId,
-  selectedId: state.stafforders.selectedId,
-  username: state.auth.username,
+  requestError: state.StaffShop.requestError,
+  shop: state.StaffShop.shop,
+  stages: state.StaffOrders.stages,
+  deletedId: state.StaffOrders.deletedId,
+  selectedId: state.StaffOrders.selectedId,
+  username: state.Auth.username,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StaffDashboard);

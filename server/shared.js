@@ -1,5 +1,5 @@
 const { Types } = require('mongoose');
-const { Order } = require('./models');
+const { Order, Cart } = require('./models');
 
 const { ObjectId } = Types;
 
@@ -17,6 +17,20 @@ const getOrderWithPrice = (orderId) => {
     { $unwind: { path: '$item', preserveNullAndEmptyArrays: true } },
   ]).then((query) => query[0]);
 };
+
+function updateCart(cartId, orderId, isDelete = false, amount = null) {
+  return getOrderWithPrice(orderId).then((order) => {
+    const validatedAmount = amount * -1 >= order?.count ? 0 : amount;
+    const count = validatedAmount ?? order?.count * (isDelete ? -1 : 1);
+    const update = {
+      $inc: { price: order?.item.price * count },
+    };
+    if (!amount) {
+      update[isDelete ? '$pull' : '$push'] = { orderIds: orderId };
+    }
+    return Cart.updateOne({ _id: cartId }, update);
+  });
+}
 
 const withAddressTemplate = [
   {
@@ -75,6 +89,7 @@ const secureCardTemplate = [
 
 module.exports = {
   getOrderWithPrice,
+  updateCart,
   withAddressTemplate,
   withCityAndStreetTemplate,
   withItemAndSortTemplate,

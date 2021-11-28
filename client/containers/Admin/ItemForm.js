@@ -17,15 +17,15 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const { items, editedId } = state.adminitems;
+  const { items, editedId } = state.AdminItems;
   const item = items.find((elem) => elem._id === editedId);
 
   return {
     item,
     editedId,
-    filters: state.filters.tags,
-    categories: state.categories,
-    selectedFilters: state.adminitems.selectedFilters,
+    filters: state.Filters.tags,
+    categories: state.Categories,
+    selectedFilters: state.AdminItems.selectedFilters,
   };
 };
 

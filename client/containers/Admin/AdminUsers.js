@@ -22,18 +22,18 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => {
   return {
-    users: state.users.users.filter(
+    users: state.Users.users.filter(
       (elem) =>
-        elem.lastName?.indexOf(state.users.searchData.lastName) !== -1 &&
-        elem.firstName?.indexOf(state.users.searchData.firstName) !== -1 &&
-        elem.patronymic?.indexOf(state.users.searchData.patronymic) !== -1 &&
-        (state.users.searchData.roleId === null || elem.roleId === state.users.searchData.roleId) &&
-        (state.users.searchData.isActive === null ||
-          elem.isActive === state.users.searchData.isActive)
+        elem.lastName?.indexOf(state.Users.searchData.lastName) !== -1 &&
+        elem.firstName?.indexOf(state.Users.searchData.firstName) !== -1 &&
+        elem.patronymic?.indexOf(state.Users.searchData.patronymic) !== -1 &&
+        (state.Users.searchData.roleId === null || elem.roleId === state.Users.searchData.roleId) &&
+        (state.Users.searchData.isActive === null ||
+          elem.isActive === state.Users.searchData.isActive)
     ),
-    roles: state.users.roles,
-    isChanged: state.users.isChanged,
-    username: state.auth.username,
+    roles: state.Users.roles,
+    isChanged: state.Users.isChanged,
+    username: state.Auth.username,
   };
 };
 

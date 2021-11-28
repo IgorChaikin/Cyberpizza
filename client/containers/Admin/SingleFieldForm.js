@@ -38,17 +38,17 @@ const mapStateToProps = (state, ownProps) => {
   switch (entity) {
     case 'category':
       return {
-        item: state.categories.find((elem) => elem._id === state.admincategories.editedId),
-        editedId: state.admincategories.editedId,
+        item: state.Categories.find((elem) => elem._id === state.AdminCategories.editedId),
+        editedId: state.AdminCategories.editedId,
       };
     case 'filter': {
-      const filter = state.filters.tags.find((elem) => elem._id === state.adminfilters.editedId);
+      const filter = state.Filters.tags.find((elem) => elem._id === state.AdminFilters.editedId);
       if (filter) {
         filter.title = filter.name;
       }
       return {
         item: filter,
-        editedId: state.adminfilters.editedId,
+        editedId: state.AdminFilters.editedId,
       };
     }
     default:
