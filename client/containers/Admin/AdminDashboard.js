@@ -12,15 +12,15 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  requestError: state.admin.requestError,
-  totalCount: state.admin.totalCount,
-  totalPrice: state.admin.totalPrice,
-  username: state.auth.username,
+  requestError: state.Admin.requestError,
+  totalCount: state.Admin.totalCount,
+  totalPrice: state.Admin.totalPrice,
+  username: state.Auth.username,
   entity:
-    (state.users.deletedId && 'user') ||
-    (state.adminitems.deletedId && 'item') ||
-    (state.admincategories.deletedId && 'category') ||
-    (state.adminfilters.deletedId && 'filter'),
+    (state.Users.deletedId && 'user') ||
+    (state.AdminItems.deletedId && 'item') ||
+    (state.AdminCategories.deletedId && 'category') ||
+    (state.AdminFilters.deletedId && 'filter'),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminDashboard);

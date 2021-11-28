@@ -14,18 +14,18 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  cards: state.shipment.cards,
-  cities: state.shipment.cities,
-  streets: state.shipment.streets,
-  shops: state.shipment.shops,
+  cards: state.Shipment.cards,
+  cities: state.Shipment.cities,
+  streets: state.Shipment.streets,
+  shops: state.Shipment.shops,
 
-  selectedCityId: state.shipment.selectedCityId,
-  isPickup: state.shipment.isPickup,
+  selectedCityId: state.Shipment.selectedCityId,
+  isPickup: state.Shipment.isPickup,
 
-  isAuthenticated: state.auth.isAuthenticated,
-  isCardAdding: state.shipment.isCardAdding,
-  isConfirmable: state.orders.isConfirmable,
-  orderError: state.orders.orderError,
+  isAuthenticated: state.Auth.isAuthenticated,
+  isCardAdding: state.Shipment.isCardAdding,
+  isConfirmable: state.Orders.isConfirmable,
+  orderError: state.Orders.orderError,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Checkout);

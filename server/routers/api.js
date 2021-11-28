@@ -2,7 +2,7 @@ const express = require('express');
 const { Types } = require('mongoose');
 const path = require('path');
 const { withItemAndSortTemplate } = require('../shared');
-const { getOrderWithPrice, withAddressTemplate } = require('../shared');
+const { updateCart, withAddressTemplate } = require('../shared');
 const { withAddressValidationSchema, withShopValidationSchema } = require('../../validationShemas');
 const {
   Category,
@@ -67,20 +67,6 @@ function getOrders(cartId) {
 function createCart(userId = null) {
   const cart = new Cart({ userId });
   return cart.save().then((item) => item._id);
-}
-
-function updateCart(cartId, orderId, isDelete = false, amount = null) {
-  return getOrderWithPrice(orderId).then((order) => {
-    const validatedAmount = amount * -1 >= order?.count ? 0 : amount;
-    const count = validatedAmount ?? order?.count * (isDelete ? -1 : 1);
-    const update = {
-      $inc: { price: order?.item.price * count },
-    };
-    if (!amount) {
-      update[isDelete ? '$pull' : '$push'] = { orderIds: orderId };
-    }
-    return Cart.updateOne({ _id: cartId }, update);
-  });
 }
 
 async function confirmOrder(filter, shopId, cardId, isPickup, addressId = null) {
@@ -158,7 +144,7 @@ api.post('/orders', async (request, response) => {
     // set new cart id in cookies
     response.cookie('cartId', cartId, { secure: false, maxAge: 3600 * 24 });
   }
-  await updateCart(cartId, newOrder._id);
+  await updateCart(ObjectId(cartId), newOrder._id);
   const res = await getOrders(cartId);
   return response.json(res);
 });
@@ -167,7 +153,7 @@ api.patch('/orders', (request, response) => {
   const { cartId } = request.cookies;
   const { id, amount } = request.body;
 
-  return updateCart(cartId, id, false, amount).then(() =>
+  return updateCart(ObjectId(cartId), id, false, amount).then(() =>
     Order.updateOne(
       {
         _id: id,
@@ -183,7 +169,7 @@ api.delete('/orders', (request, response) => {
   const { cartId } = request.cookies;
   const { id } = request.body;
   // remove order from cart
-  return updateCart(cartId, id, true).then(() =>
+  return updateCart(ObjectId(cartId), id, true).then(() =>
     // then delete order from db
     Order.deleteOne({ _id: id, orderStageId: ObjectId(preOrderedId) }).then(() =>
       getOrders(cartId).then((res) => response.json(res))

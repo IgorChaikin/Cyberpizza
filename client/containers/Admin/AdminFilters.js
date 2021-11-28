@@ -13,10 +13,10 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  filters: state.filters.tags,
-  deletedId: state.adminfilters.deletedId,
-  editedId: state.adminfilters.editedId,
-  isAdding: state.adminfilters.isAdding,
+  filters: state.Filters.tags,
+  deletedId: state.AdminFilters.deletedId,
+  editedId: state.AdminFilters.editedId,
+  isAdding: state.AdminFilters.isAdding,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminFilters);

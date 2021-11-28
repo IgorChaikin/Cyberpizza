@@ -67,28 +67,28 @@ const mapStateToProps = (state, ownProps) => {
 
   switch (entity) {
     case 'user': {
-      deletedId = state.users.deletedId;
+      deletedId = state.Users.deletedId;
       selectedId = null;
       break;
     }
     case 'item': {
-      deletedId = state.adminitems.deletedId;
+      deletedId = state.AdminItems.deletedId;
       selectedId = null;
       break;
     }
     case 'category': {
-      deletedId = state.admincategories.deletedId;
+      deletedId = state.AdminCategories.deletedId;
       selectedId = null;
       break;
     }
     case 'filter': {
-      deletedId = state.adminfilters.deletedId;
+      deletedId = state.AdminFilters.deletedId;
       selectedId = null;
       break;
     }
     case 'order': {
-      deletedId = state.stafforders.deletedId;
-      selectedId = state.stafforders.selectedId;
+      deletedId = state.StaffOrders.deletedId;
+      selectedId = state.StaffOrders.selectedId;
       break;
     }
     default:

@@ -8,10 +8,10 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const { categories, filters, items } = state;
-  const { activeFilters } = filters;
-  const { products, selectedCategory } = items;
-  const categoryTitle = categories.find((elem) => elem._id === selectedCategory)?.title;
+  const { Categories, Filters, Items } = state;
+  const { activeFilters } = Filters;
+  const { products, selectedCategory } = Items;
+  const categoryTitle = Categories.find((elem) => elem._id === selectedCategory)?.title;
   const filteredItems =
     activeFilters.length > 0
       ? products?.filter((elem) => {

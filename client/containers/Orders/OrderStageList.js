@@ -8,8 +8,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const { orders } = state;
-  const { stages, price } = orders;
+  const { Orders } = state;
+  const { stages, price } = Orders;
 
   return {
     stages,

@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { Types } = require('mongoose');
+const { updateCart } = require('../shared');
 const {
   withAddressTemplate,
   withCityAndStreetTemplate,
@@ -120,6 +121,8 @@ staff.put('/orders/:id', (request, response) => {
 
 staff.delete('/orders/:id', async (request, response) => {
   const { deletedId } = request.body;
+  const cart = await Cart.findOne({ orderIds: { $in: [ObjectId(deletedId)] } });
+  updateCart(cart._id, deletedId, true);
   await Order.deleteOne({ _id: ObjectId(deletedId) });
   const { _id } = request.decoded;
   const stageId = request.params.id;
