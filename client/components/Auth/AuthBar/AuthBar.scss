@@ -1,0 +1,32 @@
+@import '../../../styles/vars';
+
+.auth-wrapper {
+  width: 100%;
+
+  a {
+    color: $white-color;
+    font: $regular-text;
+    margin-right: 1em;
+  }
+}
+
+.auth-bar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .auth-button_login {
+    margin-right: 1em;
+  }
+
+  .auth-button_logout {
+    margin-right: 1em;
+  }
+
+  .auth-bar__username {
+    font: $regular-text;
+    color: $black-color;
+    margin-right: 1em;
+  }
+}

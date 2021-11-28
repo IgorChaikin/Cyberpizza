@@ -1,0 +1,10 @@
+@import '../../../styles/vars';
+
+.link-container {
+  text-align: center;
+  cursor: pointer;
+  a {
+    color: $grey-color;
+    font: $regular-text;
+  }
+}

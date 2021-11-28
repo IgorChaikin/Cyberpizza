@@ -21,7 +21,7 @@ describe('Test /api/admin/ path', () => {
     await agent.get('/api/admin').expect(403);
   });
 
-  it('Staff should have access to admin dashboard', async () => {
+  it('StaffDashboard should have access to admin dashboard', async () => {
     const response = await agent
       .post('/api/auth/register')
       .set('Content-type', 'application/json')

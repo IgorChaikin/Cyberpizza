@@ -6,6 +6,7 @@ const api = require('./routers/api');
 const main = require('./routers/main');
 const auth = require('./routers/auth');
 const admin = require('./routers/admin');
+const admindb = require('./routers/admindb');
 const shipment = require('./routers/shipment');
 const staff = require('./routers/staff');
 const { verifyTokenMiddleware, checkBodyMiddleware } = require('./middlewares');
@@ -38,6 +39,7 @@ async function createApp(dbConn) {
   app.use('/api', api);
   app.use('/api/auth', auth);
   app.use('/api/admin', admin);
+  app.use('/api/admin/db', admindb);
   app.use('/api/shipment', shipment);
   app.use('/api/staff', staff);
 
