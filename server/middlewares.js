@@ -1,14 +1,25 @@
-const { verifyToken } = require('./jwt');
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
-const checkTokenMiddleware = (request, response, next) => {
+const { verifyToken } = require('../utils/jwt');
+
+const verifyTokenMiddleware = (request, response, next) => {
   const { token } = request.cookies;
   request.decoded = verifyToken(token);
   return next();
 };
 
-const checkAdminMiddleware = (request, response, next) => {
+const checkTokenMiddleware = (request, response, next) => {
   const { decoded } = request;
-  if (!decoded || !decoded.isActive || !decoded.isAdmin) {
+  if (!decoded) {
+    return response.sendStatus(403);
+  }
+  return next();
+};
+
+const checkRoleMiddleware = (roleIds) => (request, response, next) => {
+  const { decoded } = request;
+  if (!roleIds.includes(decoded.roleId)) {
     return response.sendStatus(403);
   }
   return next();
@@ -30,8 +41,9 @@ const checkBodyMiddleware = (request, response, next) => {
 };
 
 module.exports = {
+  verifyTokenMiddleware,
   checkTokenMiddleware,
   checkActiveMiddleware,
-  checkAdminMiddleware,
   checkBodyMiddleware,
+  checkRoleMiddleware,
 };

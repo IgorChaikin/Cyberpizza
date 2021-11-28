@@ -4,11 +4,14 @@ import { createBrowserHistory } from 'history';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './containers/App';
-import Auth from './containers/Auth';
-import Admin from './containers/Admin';
+import AuthForm from './containers/Auth/AuthForm';
+import AdminDashboard from './containers/Admin/AdminDashboard';
+import Checkout from './containers/Shipment/Checkout';
+import StaffDashboard from './containers/Staff/StaffDashboard';
 import './index.css';
 
 import store from './store';
+import CardAdding from './containers/Shipment/CardAdding';
 
 const history = createBrowserHistory();
 
@@ -21,13 +24,22 @@ ReactDOM.render(
             <App />
           </Route>
           <Route path="/login">
-            <Auth isRegister={false} />
+            <AuthForm isRegister={false} />
           </Route>
           <Route path="/register">
-            <Auth isRegister />
+            <AuthForm isRegister />
           </Route>
           <Route path="/admin">
-            <Admin />
+            <AdminDashboard />
+          </Route>
+          <Route path="/staff">
+            <StaffDashboard />
+          </Route>
+          <Route exact path="/checkout">
+            <Checkout />
+          </Route>
+          <Route exact path="/checkout/card">
+            <CardAdding />
           </Route>
         </Switch>
       </div>
