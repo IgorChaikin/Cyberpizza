@@ -111,6 +111,23 @@ $button-text: bold 2em serif;
   background-color: transparent;
 }
 
+.button_small {
+  margin-left: 1em;
+  height: 1em;
+  width: 1em;
+  background-color: $accent-color;
+  border: none;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5em;
+  color: $white-color;
+  font: $regular-text;
+  padding: 0;
+}
+
 .admin-dashboard__container {
   width: 100%;
   height: 100%;
@@ -146,9 +163,20 @@ $button-text: bold 2em serif;
   border: $accent-color solid 2px;
 }
 
+.form__error {
+  color: $accent-color;
+  font: $bold-header-text;
+  text-align: center;
+}
 label {
   margin-bottom: 1em;
   font: $price-text;
+}
+
+.thumbnail {
+  width: 2em;
+  height: 2em;
+  margin-right: 1em;
 }
 
 .row {

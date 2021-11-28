@@ -1,0 +1,26 @@
+@import '../../../styles/vars';
+
+main {
+  width: 100%;
+  position: absolute;
+  right: 0;
+  z-index: 1;
+
+  h1 {
+    height: calc(5% + 1rem);
+    margin: 0.5em 0;
+  }
+
+  .list__placeholder-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 2em 2em 0 5em;
+  }
+
+  .list {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}

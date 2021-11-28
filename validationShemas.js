@@ -13,6 +13,26 @@ const loginValidationObject = {
     .required('Password is required'),
 };
 
+const checkoutValidationObject = {
+  isPickup: yup.bool().required('Choose if order should be pickup'),
+  cardId: yup.string().nullable(true),
+};
+
+const titleValidationObject = {
+  title: yup.string().typeError('Title should be a string').required('Title is required'),
+};
+
+const itemClientValidationObject = {
+  ...titleValidationObject,
+  imgPath: yup.string().typeError('Img path should be a string').required('Img path is required'),
+  price: yup
+    .number()
+    .min(0)
+    .typeError('Price should be a positive number')
+    .required('Price is required'),
+  categoryId: yup.string().nullable(true).typeError('Category id should be a string'),
+};
+
 const loginValidationSchema = yup.object().shape(loginValidationObject);
 const registerValidationSchema = yup.object().shape({
   confirm: yup
@@ -29,11 +49,6 @@ const registerValidationSchema = yup.object().shape({
   ...loginValidationObject,
 });
 
-const checkoutValidationObject = {
-  isPickup: yup.bool().required('Choose if order should be pickup'),
-  cardId: yup.string().nullable(true),
-};
-
 const withShopValidationSchema = yup.object().shape({
   shopId: yup.string().required('Shop is required'),
   ...checkoutValidationObject,
@@ -42,11 +57,16 @@ const withShopValidationSchema = yup.object().shape({
 const withAddressValidationSchema = yup.object().shape({
   cityId: yup.string().required('City is required'),
   streetId: yup.string().required('Street is required'),
-  house: yup.number().typeError('House should be a number').required('House number is required'),
-  building: yup.number().nullable(true).typeError('Building should be a number'),
+  house: yup
+    .number()
+    .min(0)
+    .typeError('House should be a positive number')
+    .required('House number is required'),
+  building: yup.number().min(0).nullable(true).typeError('Building should be a positive number'),
   apartment: yup
     .number()
-    .typeError('Apartment should be a number')
+    .min(0)
+    .typeError('Apartment should be a positive number')
     .required('Apartment number is required'),
   ...checkoutValidationObject,
 });
@@ -79,10 +99,22 @@ const cardValidationSchema = yup.object().shape({
     .required('CVV is required'),
 });
 
+const titleValidationSchema = yup.object().shape(titleValidationObject);
+
+const itemClientValidationSchema = yup.object().shape(itemClientValidationObject);
+
+const itemServerValidationSchema = yup.object().shape({
+  ...itemClientValidationObject,
+  filterIds: yup.array().min(0).of(yup.string()).required('Filter ids is required'),
+});
+
 module.exports = {
   loginValidationSchema,
   registerValidationSchema,
   withShopValidationSchema,
   withAddressValidationSchema,
   cardValidationSchema,
+  titleValidationSchema,
+  itemClientValidationSchema,
+  itemServerValidationSchema,
 };
