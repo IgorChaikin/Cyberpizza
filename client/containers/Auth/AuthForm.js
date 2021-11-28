@@ -10,8 +10,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
 const mapStateToProps = (state, ownProps) => ({
   isRegister: ownProps.isRegister,
-  isAuthenticated: state.auth.isAuthenticated,
-  requestError: state.auth.requestError,
+  isAuthenticated: state.Auth.isAuthenticated,
+  requestError: state.Auth.requestError,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthForm);

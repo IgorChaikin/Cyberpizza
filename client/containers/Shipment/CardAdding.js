@@ -9,8 +9,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  paymentError: state.shipment.paymentError,
-  isCardAdding: state.shipment.isCardAdding,
+  paymentError: state.Shipment.paymentError,
+  isCardAdding: state.Shipment.isCardAdding,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CardAdding);
