@@ -117,7 +117,7 @@
     }
     .admin-dashboard__router {
       width: 85%;
-      height: 100%;
+      height: calc(100% - 2em);
       margin: 1em 0;
       .auth-button {
         margin-top: 1em;
@@ -157,4 +157,27 @@
       }
     }
   }
+}
+
+.checkbox-container {
+  text-align: center;
+  button {
+    font: $regular-text;
+    background-color: transparent;
+    border: none;
+    outline: none;
+  }
+
+  select {
+    font: $regular-text;
+    background-color: transparent;
+    border: none;
+    outline: none;
+  }
+}
+
+.anonymous-container {
+  text-align: center;
+  background-color: $accent-color;
+  color: $white-color;
 }

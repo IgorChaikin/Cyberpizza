@@ -66,7 +66,7 @@ describe('Test /api/ path', () => {
     );
   });
 
-  it('App should post order with existed item id. Orders array contain last order as first item', async () => {
+  it('App should post order with existed item id. OrderStageList array contain last order as first item', async () => {
     const categoriesResponse = await agent.get('/api/categories').expect(200);
     const itemsResponse = await agent
       .get(`/api/items?id=${categoriesResponse.body[0]._id}`)
