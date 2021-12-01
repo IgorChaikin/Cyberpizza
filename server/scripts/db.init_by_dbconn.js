@@ -205,28 +205,33 @@ const initialData = {
   cities: [
     {
       _id: ObjectId('000000000000000000000000'),
-      title: 'City-1',
+      title: 'Minsk',
     },
     {
       _id: ObjectId('000000000000000000000001'),
-      title: 'City-2',
+      title: 'Vitebsk',
     },
   ],
   streets: [
     {
       _id: ObjectId('000000000000000000000000'),
-      title: 'Street-1',
+      title: 'Nezalejnosti',
       cityIds: [ObjectId('000000000000000000000000')],
     },
     {
       _id: ObjectId('000000000000000000000001'),
-      title: 'Street-2',
+      title: 'Azina',
       cityIds: [ObjectId('000000000000000000000001')],
     },
     {
       _id: ObjectId('000000000000000000000002'),
-      title: 'Street-1-2',
+      title: 'Lenina',
       cityIds: [ObjectId('000000000000000000000001'), ObjectId('000000000000000000000000')],
+    },
+    {
+      _id: ObjectId('000000000000000000000003'),
+      title: 'Frunzenskaya',
+      cityIds: [ObjectId('000000000000000000000000')],
     },
   ],
   addresses: [
