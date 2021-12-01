@@ -17,7 +17,7 @@ const mapStateToProps = (state) => ({
   cards: state.Shipment.cards,
   cities: state.Shipment.cities,
   streets: state.Shipment.streets,
-  shops: state.Shipment.shops,
+  shops: state.Shipment.shops.filter((elem) => elem.isEnabled),
 
   selectedCityId: state.Shipment.selectedCityId,
   isPickup: state.Shipment.isPickup,

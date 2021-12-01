@@ -13,11 +13,7 @@ const shipment = express.Router();
 const { ObjectId } = Types;
 
 function getShops() {
-  return Shop.aggregate([
-    { $match: { $expr: { $eq: ['$isEnabled', true] } } },
-    ...withAddressTemplate,
-    ...withCityAndStreetTemplate,
-  ]);
+  return Shop.aggregate([...withAddressTemplate, ...withCityAndStreetTemplate]);
 }
 
 function getCards(id) {
