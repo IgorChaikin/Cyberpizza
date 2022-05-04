@@ -19,7 +19,7 @@ auth.use('/logout', checkActiveMiddleware);
 auth.use('/username', checkTokenMiddleware);
 auth.use('/username', checkActiveMiddleware);
 
-async function createUser(lastName, firstName, patronymic, email, password) {
+async function createUser(lastName, firstName, patronymic, phone, password) {
   let lastNameFromDb = await LastName.findOne({ name: lastName });
   if (!lastNameFromDb) {
     lastNameFromDb = await new LastName({ name: lastName }).save();
@@ -41,7 +41,7 @@ async function createUser(lastName, firstName, patronymic, email, password) {
     lastNameId: lastNameFromDb._id,
     firstNameId: firstNameFromDb._id,
     patronymicId: patronymicFromDb?._id ?? null,
-    email,
+    phone,
     password: hash,
   });
 }
@@ -50,14 +50,14 @@ auth.post('/register', (request, response) => {
   return registerValidationSchema
     .validate(request.body)
     .then(async () => {
-      const { email, password, lastName, firstName, patronymic } = request.body;
+      const { phone, password, lastName, firstName, patronymic } = request.body;
       const firstUser = await User.findOne({});
-      const sameEmailUser = await User.findOne({ email });
-      if (sameEmailUser) {
-        // users with same e-mails not allowed
+      const samePhoneUser = await User.findOne({ phone });
+      if (samePhoneUser) {
+        // users with same phones not allowed
         return response.sendStatus(409);
       }
-      const user = await createUser(lastName, firstName, patronymic, email, password);
+      const user = await createUser(lastName, firstName, patronymic, phone, password);
       // first registered user become admin
       user.roleId = firstUser ? ObjectId(userId) : ObjectId(adminId);
       const newUser = await user.save();
@@ -66,7 +66,7 @@ auth.post('/register', (request, response) => {
       await Cart.updateOne({ _id: ObjectId(cartId) }, { $set: { userId: _id } });
       const token = signToken({ _id, roleId, isActive });
       response.cookie('token', token, { secure: false, maxAge: 3600 * 24 });
-      return response.json({ email, isUser: roleId.equals(ObjectId(userId)) });
+      return response.json({ phone, isUser: roleId.equals(ObjectId(userId)) });
     })
     .catch(() => response.sendStatus(422));
 });
@@ -75,8 +75,8 @@ auth.post('/login', (request, response) => {
   return loginValidationSchema
     .validate(request.body)
     .then(() => {
-      const { email, password } = request.body;
-      return User.findOne({ email }).then((user) => {
+      const { phone, password } = request.body;
+      return User.findOne({ phone }).then((user) => {
         // check if user exists and is user banned
         if (!user || !bcrypt.compareSync(password, user.password) || !user.isActive) {
           return response.sendStatus(403);
@@ -90,7 +90,7 @@ auth.post('/login', (request, response) => {
           }
           const token = signToken({ _id, roleId, isActive });
           response.cookie('token', token, { secure: false, maxAge: 3600 * 24 });
-          response.json({ email, isUser: roleId.equals(ObjectId(userId)) });
+          response.json({ phone, isUser: roleId.equals(ObjectId(userId)) });
         });
       });
     })
@@ -99,8 +99,8 @@ auth.post('/login', (request, response) => {
 
 auth.post('/logout', (request, response) => {
   const { decoded } = request;
-  const { email } = request.body;
-  return User.findOne({ _id: decoded._id, email }).then((result) => {
+  const { phone } = request.body;
+  return User.findOne({ _id: decoded._id, phone }).then((result) => {
     if (!result) {
       return response.sendStatus(403);
     }
@@ -114,7 +114,7 @@ auth.get('/username', (request, response) => {
   const { decoded } = request;
   return User.findOne({ _id: decoded?._id, isActive: true }).then((result) => {
     response.json({
-      email: result?.email,
+      phone: result?.phone,
       isUser: result ? result.roleId.equals(ObjectId(userId)) : true,
     });
   });

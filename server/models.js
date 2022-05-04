@@ -64,7 +64,7 @@ const firstNameScheme = new Schema({
 });
 
 const userScheme = new Schema({
-  email: { type: String, required: true },
+  phone: { type: String, required: true },
 
   password: { type: String, required: true },
   isActive: { type: Boolean, default: true },

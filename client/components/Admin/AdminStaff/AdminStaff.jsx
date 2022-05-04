@@ -49,7 +49,7 @@ function AdminStaff(props) {
       <td>{employee.user.lastName}</td>
       <td>{employee.user.firstName}</td>
       <td>{employee.user.patronymic}</td>
-      <td>{employee.user.email}</td>
+      <td>{employee.user.phone}</td>
       <td className="checkbox-container">
         <select id={`${employee._id}_SHOP`}>
           <option value="null">No selected</option>
@@ -99,7 +99,7 @@ AdminStaff.propTypes = {
       shopId: PropTypes.bool.isRequired,
       user: PropTypes.shape({
         _id: PropTypes.string.isRequired,
-        email: PropTypes.string.isRequired,
+        phone: PropTypes.string.isRequired,
         isActive: PropTypes.bool.isRequired,
         roleId: PropTypes.string.isRequired,
       }),

@@ -69,18 +69,18 @@ function AdminUsers(props) {
       <td>{user.lastName}</td>
       <td>{user.firstName}</td>
       <td>{user.patronymic}</td>
-      <td>{user.email}</td>
+      <td>{user.phone}</td>
       <td className="checkbox-container">
         <input
           type="checkbox"
           id={`${user._id}_ACT`}
           checked={user.isActive}
-          disabled={user.email === username}
+          disabled={user.phone === username}
           readOnly
         />
       </td>
       <td className="checkbox-container">
-        <select id={`${user._id}_ADM`} disabled={user.email === username}>
+        <select id={`${user._id}_ADM`} disabled={user.phone === username}>
           {roles.map((role) => (
             <option value={role._id} selected={role._id === user.roleId}>
               {role.title}
@@ -89,7 +89,7 @@ function AdminUsers(props) {
         </select>
       </td>
       <td className="checkbox-container">
-        {user.email !== username ? (
+        {user.phone !== username ? (
           <button type="button" id={`${user._id}_DELUSER`}>
             X
           </button>
@@ -231,7 +231,7 @@ AdminUsers.propTypes = {
   users: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
-      email: PropTypes.string.isRequired,
+      phone: PropTypes.string.isRequired,
       isActive: PropTypes.bool.isRequired,
       roleId: PropTypes.string.isRequired,
     })

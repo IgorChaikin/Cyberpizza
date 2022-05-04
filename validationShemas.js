@@ -1,16 +1,16 @@
 const yup = require('yup');
 
 const loginValidationObject = {
-  email: yup
+  phone: yup
     .string()
-    .typeError('E-mail should be a string')
-    .email('Wrong email')
-    .required('E-mail is required'),
+    .typeError('Телефон должен быть строкой')
+    .matches(/^(8|\+375)[- ]?(\(?\d{3}\)?[- ]?)?[\d\- ]{7,10}$/, 'Неверный шаблон телефона')
+    .required('Поле "Телефон" обязательно'),
   password: yup
     .string()
-    .typeError('Password should be a string')
-    .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, 'Weak password')
-    .required('Password is required'),
+    .typeError('Пароль должен быть строкой')
+    .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, 'Слабый пароль')
+    .required('Поле "Пароль" обязательно'),
 };
 
 const checkoutValidationObject = {

@@ -116,7 +116,7 @@ function getCarts() {
     },
     { $unwind: { path: '$lastUpdateAggregate', preserveNullAndEmptyArrays: true } },
     { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
-    { $addFields: { lastUpdate: '$lastUpdateAggregate.lastOrderDate', username: '$user.email' } },
+    { $addFields: { lastUpdate: '$lastUpdateAggregate.lastOrderDate', username: '$user.phone' } },
     { $project: { lastUpdateAggregate: 0, user: 0 } },
   ]);
 }
@@ -145,7 +145,7 @@ function getSingleCart(cartId) {
       },
     },
     { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
-    { $addFields: { username: '$user.email' } },
+    { $addFields: { username: '$user.phone' } },
   ]).then((query) => query[0]);
 }
 
