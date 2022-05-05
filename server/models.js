@@ -22,7 +22,7 @@ const orderScheme = new Schema({
   addressId: ObjectId,
   shopId: ObjectId,
   isPickup: { type: Boolean, default: false },
-  cardId: ObjectId,
+  isPaid: { type: Boolean, default: false },
 });
 
 const itemScheme = new Schema({
@@ -72,7 +72,7 @@ const userScheme = new Schema({
   roleId: ObjectId,
   firstNameId: { type: ObjectId, required: true },
   lastNameId: { type: ObjectId, required: true },
-  patronymicId: ObjectId,
+  // patronymicId: ObjectId,
 });
 
 // shop addresses schemas
@@ -104,6 +104,7 @@ const shopScheme = new Schema({
   isEnabled: { type: Boolean, default: true },
 });
 
+// SHOULD BE DELETED
 const cardScheme = new Schema({
   number: { type: String, required: true },
   name: { type: String, required: true },

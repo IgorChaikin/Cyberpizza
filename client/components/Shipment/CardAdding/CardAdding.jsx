@@ -6,6 +6,8 @@ import { Formik } from 'formik';
 import { Redirect } from 'react-router-dom';
 import { cardValidationSchema } from '../../../../validationShemas';
 
+// ------------------SHOULD BE DELETED!!!------------------
+
 function CardAdding(props) {
   const { onSubmit, paymentError, onExit, isCardAdding } = props;
 

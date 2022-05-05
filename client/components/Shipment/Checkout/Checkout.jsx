@@ -13,7 +13,7 @@ import getEventArgs from '../../../../utils/getEventArgs';
 
 function Checkout(props) {
   const {
-    cards,
+    // cards,
     cities,
     streets,
     shops,
@@ -21,7 +21,7 @@ function Checkout(props) {
     isPickup,
     isAuthenticated,
     isConfirmable,
-    isCardAdding,
+    // isCardAdding,
     orderError,
     onMount,
     onCitySelected,
@@ -41,7 +41,7 @@ function Checkout(props) {
   }, [cities, selectedCityId]);
 
   const initialValues = {
-    cardId: null,
+    // cardId: null,
     isPickup,
     shopId: shops[0]?._id,
     cityId: cities[0]?._id,
@@ -79,14 +79,14 @@ function Checkout(props) {
   const submitCallback = useCallback(
     (values, { setSubmitting }) => {
       setSubmitting(false);
-      onSubmit({ ...values, cardId: values.cardId === 'null' ? null : values.cardId });
+      onSubmit({ ...values /* , cardId: values.cardId === 'null' ? null : values.cardId */ });
     },
     [onSubmit]
   );
 
-  const goToCardCallback = useCallback(() => {
+  /* const goToCardCallback = useCallback(() => {
     onChange('isCardAdding', true);
-  }, [onChange]);
+  }, [onChange]); */
 
   if (!isAuthenticated) {
     return <Redirect to="/register" />;
@@ -96,9 +96,9 @@ function Checkout(props) {
     return <Redirect to="/" />;
   }
 
-  if (isCardAdding) {
+  /* if (isCardAdding) {
     return <Redirect to="/checkout/card" />;
-  }
+  } */
 
   const validationsSchema = isPickup ? withShopValidationSchema : withAddressValidationSchema;
 
@@ -125,31 +125,22 @@ function Checkout(props) {
           isValid,
         }) => (
           <form className="auth__form" onSubmit={handleSubmit}>
-            <label htmlFor="card-id" className="row">
-              Payment method
+            <label htmlFor="isPaid-id" className="row">
+              Способ оплаты
               <select
-                className={`form__input${
-                  errors.cardId && touched.cardId ? ' form__input_wrong' : ''
-                }`}
-                id="card-id"
-                name="cardId"
+                className={`form__input${0 ? ' form__input_wrong' : ''}`}
+                id="isPaid-id"
+                name="isPaid"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.cardId}
+                // value={values.cardId}
               >
-                <option value="null">By cash while receiving</option>
-                {cards.map((elem) => (
-                  <option value={elem._id} selected={elem._id === values.cardId}>
-                    {elem.secureNumber}
-                  </option>
-                ))}
+                <option value="false">Наличными при получении</option>
+                <option value="true">Оплата онлайн</option>
               </select>
-              <button onClick={goToCardCallback} className="button_small" type="button">
-                +
-              </button>
             </label>
             <label htmlFor="isPickup_CHANGE" className="row">
-              Pickup order
+              Самовывоз
               <input
                 className={`form__input form__input_shadowless${
                   errors.isPickup && touched.isPickup ? ' form__input_wrong' : ''
@@ -272,15 +263,17 @@ function Checkout(props) {
                   </label>,
                 ]}
             <p className="form__error">
-              {(touched.cardId && errors.cardId) ||
+              {
+                // (touched.cardId && errors.cardId) ||
                 (touched.isPickup && errors.isPickup) ||
-                (touched.shopId && errors.shopId) ||
-                (touched.cityId && errors.cityId) ||
-                (touched.streetId && errors.streetId) ||
-                (touched.house && errors.house) ||
-                (touched.building && errors.building) ||
-                (touched.apartment && errors.apartment) ||
-                orderError}
+                  (touched.shopId && errors.shopId) ||
+                  (touched.cityId && errors.cityId) ||
+                  (touched.streetId && errors.streetId) ||
+                  (touched.house && errors.house) ||
+                  (touched.building && errors.building) ||
+                  (touched.apartment && errors.apartment) ||
+                  orderError
+              }
             </p>
             <div className="row">
               <Link to="/">
@@ -314,8 +307,8 @@ Checkout.propTypes = {
   orderError: PropTypes.string,
   isConfirmable: PropTypes.bool.isRequired,
   isPickup: PropTypes.bool.isRequired,
-  isCardAdding: PropTypes.bool.isRequired,
-  cards: PropTypes.arrayOf(PropTypes.any).isRequired,
+  /* isCardAdding: PropTypes.bool.isRequired,
+  cards: PropTypes.arrayOf(PropTypes.any).isRequired, */
   cities: PropTypes.arrayOf(PropTypes.any).isRequired,
   streets: PropTypes.arrayOf(PropTypes.any).isRequired,
   shops: PropTypes.arrayOf(PropTypes.any).isRequired,

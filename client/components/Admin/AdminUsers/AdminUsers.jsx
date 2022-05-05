@@ -68,7 +68,6 @@ function AdminUsers(props) {
       <td>{user._id}</td>
       <td>{user.lastName}</td>
       <td>{user.firstName}</td>
-      <td>{user.patronymic}</td>
       <td>{user.phone}</td>
       <td className="checkbox-container">
         <input
@@ -103,19 +102,19 @@ function AdminUsers(props) {
   const initialValues = {
     lastName: '',
     firstName: '',
-    patronymic: '',
+    // patronymic: '',
     roleId: null,
     isActive: null,
   };
 
   return (
     <div className="admin-dashboard__container">
-      <h2>Users</h2>
+      <h2>Пользователи</h2>
       <Formik initialValues={initialValues} onSubmit={submitCallback}>
         {({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
           <form className="search-form" onSubmit={handleSubmit}>
             <label htmlFor="lastname-id" className="col">
-              Last name
+              Фамилия
               <input
                 id="lastname-id"
                 className="form__input"
@@ -126,7 +125,7 @@ function AdminUsers(props) {
               />
             </label>
             <label htmlFor="firstname-id" className="col">
-              First name
+              Имя
               <input
                 id="firstname-id"
                 className="form__input"
@@ -136,19 +135,8 @@ function AdminUsers(props) {
                 value={values.firstName}
               />
             </label>
-            <label htmlFor="patronymic-id" className="col">
-              Patronymic
-              <input
-                id="patronymic-id"
-                className="form__input"
-                name="patronymic"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.patronymic}
-              />
-            </label>
             <label htmlFor="role-id" className="col">
-              Role
+              Роль
               <select
                 id="role-id"
                 className="form__input"
@@ -157,7 +145,7 @@ function AdminUsers(props) {
                 onBlur={handleBlur}
                 value={values.roleId}
               >
-                <option value={null}>No selected</option>
+                <option value={null}>Не выбрано</option>
                 {roles.map((elem) => (
                   <option value={elem._id} selected={elem._id === values.roleId}>
                     {elem.title}
@@ -167,7 +155,7 @@ function AdminUsers(props) {
             </label>
 
             <label htmlFor="active-id" className="col">
-              Is active
+              Активен
               <select
                 id="active-id"
                 className="form__input"
@@ -176,17 +164,17 @@ function AdminUsers(props) {
                 onBlur={handleBlur}
                 value={values.isActive}
               >
-                <option value="null">No selected</option>
+                <option value="null">Не выбрано</option>
                 <option value="true" selected={values.isActive === true}>
-                  Active
+                  Да
                 </option>
                 <option value="false" selected={values.isActive === false}>
-                  Inactive
+                  Нет
                 </option>
               </select>
             </label>
             <button className="auth-button auth-button_login" type="submit" disabled={isSubmitting}>
-              Search
+              Поиск
             </button>
           </form>
         )}
@@ -198,12 +186,11 @@ function AdminUsers(props) {
             <thead>
               <tr>
                 <th>Id</th>
-                <th>Last name</th>
-                <th>First name</th>
-                <th>Patronymic</th>
-                <th>E-mail</th>
-                <th>Is active</th>
-                <th>Role</th>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Телефон</th>
+                <th>Активен</th>
+                <th>Роль</th>
                 <th> </th>
               </tr>
             </thead>
@@ -215,7 +202,7 @@ function AdminUsers(props) {
             onClick={applyCallback}
             disabled={!isChanged}
           >
-            Apply changes
+            Применить изменения
           </button>,
         ]
       ) : (

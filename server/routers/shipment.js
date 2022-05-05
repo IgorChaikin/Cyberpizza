@@ -42,6 +42,7 @@ shipment.get('/cards', (request, response) => {
   return getCards(ObjectId(_id)).then((result) => response.json(result));
 });
 
+// SHOULD BE DELETED
 shipment.post('/cards', (request, response) => {
   const { _id } = request.decoded;
   cardValidationSchema

@@ -4,7 +4,7 @@ const loginValidationObject = {
   phone: yup
     .string()
     .typeError('Телефон должен быть строкой')
-    .matches(/^(8|\+375)[- ]?(\(?\d{3}\)?[- ]?)?[\d\- ]{7,10}$/, 'Неверный шаблон телефона')
+    .matches(/^\+375(\(\d{2,3}\))[\d]{3}[\-][\d]{2}[\-][\d]{2}$/, 'Неверный шаблон телефона')
     .required('Поле "Телефон" обязательно'),
   password: yup
     .string()
@@ -15,7 +15,7 @@ const loginValidationObject = {
 
 const checkoutValidationObject = {
   isPickup: yup.bool().required('Choose if order should be pickup'),
-  cardId: yup.string().nullable(true),
+  // cardId: yup.string().nullable(true),
 };
 
 const titleValidationObject = {
@@ -37,15 +37,15 @@ const loginValidationSchema = yup.object().shape(loginValidationObject);
 const registerValidationSchema = yup.object().shape({
   confirm: yup
     .string()
-    .oneOf([yup.ref('password')], "Passwords doesn't match")
-    .required('Confirm password is required'),
+    .oneOf([yup.ref('password')], 'Пароли не совпадают')
+    .required('Поле "Повторить пароль" обязательно'),
 
   lastName: yup.string().typeError('Lastname should be a string').required('Lastname is required'),
   firstName: yup
     .string()
     .typeError('Firstname should be a string')
     .required('Firstname is required'),
-  patronymic: yup.string().nullable(true).typeError('Patronymic should be a string'),
+  // patronymic: yup.string().nullable(true).typeError('Patronymic should be a string'),
   ...loginValidationObject,
 });
 
@@ -71,6 +71,7 @@ const withAddressValidationSchema = yup.object().shape({
   ...checkoutValidationObject,
 });
 
+// SHOULD BE DELETED
 const cardValidationSchema = yup.object().shape({
   number: yup
     .string()

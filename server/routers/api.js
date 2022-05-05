@@ -13,7 +13,7 @@ const {
   OrderStage,
   Address,
   Shop,
-  Card,
+  // Card,
 } = require('../models');
 const { checkActiveMiddleware } = require('../middlewares');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
@@ -83,10 +83,10 @@ function updateCart(cartId, orderId, isDelete = false, amount = null) {
   });
 }
 
-async function confirmOrder(filter, shopId, cardId, isPickup, addressId = null) {
+async function confirmOrder(filter, shopId, isPaid, isPickup, addressId = null) {
   const update = {
     shopId,
-    cardId,
+    isPaid,
     isPickup,
     orderStageId: orderedId,
   };
@@ -193,12 +193,12 @@ api.delete('/orders', (request, response) => {
 
 api.put('/orders/confirm', async (request, response) => {
   const { cartId } = request.cookies;
-  const { isPickup, cardId, shopId, cityId, streetId, house, building, apartment } = request.body;
+  const { isPickup, isPaid, shopId, cityId, streetId, house, building, apartment } = request.body;
   const cart = await Cart.findOne({ _id: ObjectId(cartId) });
-  const card = await Card.findOne({ _id: ObjectId(cardId) });
+  /* const card = await Card.findOne({ _id: ObjectId(cardId) });
   if (!cart || (card && !card.userId.equals(ObjectId(request.decoded._id)))) {
     return response.sendStatus(422);
-  }
+  } */
   const { orderIds } = cart;
   const filter = { _id: { $in: orderIds }, orderStageId: ObjectId(preOrderedId) };
 
@@ -211,7 +211,7 @@ api.put('/orders/confirm', async (request, response) => {
         if (!shop) {
           return response.sendStatus(422);
         }
-        await confirmOrder(filter, shop._id, ObjectId(cardId), isPickup, shop.addressId);
+        await confirmOrder(filter, shop._id, isPaid, isPickup, shop.addressId);
       } else {
         let address = await Address.findOne({ cityId, streetId, house, building, apartment });
         if (!address) {
@@ -227,7 +227,7 @@ api.put('/orders/confirm', async (request, response) => {
         if (!shop) {
           return response.sendStatus(422);
         }
-        await confirmOrder(filter, shop._id, ObjectId(cardId), isPickup, address._id);
+        await confirmOrder(filter, shop._id, isPaid, isPickup, address._id);
       }
       return getOrders(cartId).then((res) => response.json(res));
     })

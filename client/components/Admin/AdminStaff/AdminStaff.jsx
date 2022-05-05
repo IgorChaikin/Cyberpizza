@@ -48,7 +48,6 @@ function AdminStaff(props) {
       <td>{employee._id}</td>
       <td>{employee.user.lastName}</td>
       <td>{employee.user.firstName}</td>
-      <td>{employee.user.patronymic}</td>
       <td>{employee.user.phone}</td>
       <td className="checkbox-container">
         <select id={`${employee._id}_SHOP`}>
@@ -65,16 +64,15 @@ function AdminStaff(props) {
 
   return (
     <div className="admin-dashboard__container">
-      <h2>Staff</h2>
+      <h2>Персонал</h2>
       <table className="main-content" onChange={staffCallback}>
         <thead>
           <tr>
             <th>Id</th>
-            <th>Last name</th>
-            <th>First name</th>
-            <th>Patronymic</th>
-            <th>E-mail</th>
-            <th>Shop</th>
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Телефон</th>
+            <th>Учреждение</th>
           </tr>
         </thead>
         <tbody>{usersList}</tbody>
@@ -85,7 +83,7 @@ function AdminStaff(props) {
         onClick={applyCallback}
         disabled={!isChanged}
       >
-        Apply changes
+        Применить изменения
       </button>
     </div>
   );

@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 const { Types } = require('mongoose');
-const { User, Cart, LastName, Patronymic, FirstName } = require('../models');
+const { User, Cart, LastName, /* Patronymic, */ FirstName } = require('../models');
 const { signToken } = require('../../utils/jwt');
 const { loginValidationSchema, registerValidationSchema } = require('../../validationShemas');
 const { checkTokenMiddleware, checkActiveMiddleware } = require('../middlewares');
@@ -19,7 +19,7 @@ auth.use('/logout', checkActiveMiddleware);
 auth.use('/username', checkTokenMiddleware);
 auth.use('/username', checkActiveMiddleware);
 
-async function createUser(lastName, firstName, patronymic, phone, password) {
+async function createUser(lastName, firstName, /* patronymic, */ phone, password) {
   let lastNameFromDb = await LastName.findOne({ name: lastName });
   if (!lastNameFromDb) {
     lastNameFromDb = await new LastName({ name: lastName }).save();
@@ -30,17 +30,17 @@ async function createUser(lastName, firstName, patronymic, phone, password) {
     firstNameFromDb = await new FirstName({ name: firstName }).save();
   }
 
-  let patronymicFromDb = patronymic ? await Patronymic.findOne({ name: patronymic }) : null;
+  /* let patronymicFromDb = patronymic ? await Patronymic.findOne({ name: patronymic }) : null;
   if (!patronymicFromDb && patronymic) {
     patronymicFromDb = await new Patronymic({ name: patronymic }).save();
-  }
+  } */
 
   const hash = bcrypt.hashSync(password, 8);
 
   return new User({
     lastNameId: lastNameFromDb._id,
     firstNameId: firstNameFromDb._id,
-    patronymicId: patronymicFromDb?._id ?? null,
+    // patronymicId: patronymicFromDb?._id ?? null,
     phone,
     password: hash,
   });
@@ -50,14 +50,14 @@ auth.post('/register', (request, response) => {
   return registerValidationSchema
     .validate(request.body)
     .then(async () => {
-      const { phone, password, lastName, firstName, patronymic } = request.body;
+      const { phone, password, lastName, firstName /* , patronymic */ } = request.body;
       const firstUser = await User.findOne({});
       const samePhoneUser = await User.findOne({ phone });
       if (samePhoneUser) {
         // users with same phones not allowed
         return response.sendStatus(409);
       }
-      const user = await createUser(lastName, firstName, patronymic, phone, password);
+      const user = await createUser(lastName, firstName, /* patronymic, */ phone, password);
       // first registered user become admin
       user.roleId = firstUser ? ObjectId(userId) : ObjectId(adminId);
       const newUser = await user.save();

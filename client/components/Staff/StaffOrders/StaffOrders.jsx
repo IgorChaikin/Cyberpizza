@@ -70,7 +70,7 @@ function StaffOrders(props) {
         <input type="checkbox" checked={order.isPickup} disabled readOnly />
       </td>
       <td>{order.isPickup ? '' : getFormatAddress(order.address)}</td>
-      <td>{order.card ? order.card.secureNumber : 'By cash'}</td>
+      <td>By cash</td>
       <td className="checkbox-container">
         <select id={`${order._id}_STAGE`}>
           {stages.map((stage) => (
@@ -114,7 +114,7 @@ function StaffOrders(props) {
             onClick={applyCallback}
             disabled={!isChanged}
           >
-            Apply changes
+            Применить изменения
           </button>,
         ]
       ) : (
