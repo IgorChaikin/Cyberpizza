@@ -115,7 +115,7 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
     case CHANGE_VALUE: {
       const { key, value } = action.payload;
-      return { ...state, [key]: value };
+      return Object.keys(state).includes(key) ? { ...state, [key]: value } : state;
     }
     case FETCH_CITIES_FULFILLED:
       return { ...state, cities: action.payload };

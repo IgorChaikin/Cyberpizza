@@ -30,6 +30,11 @@
   .auth__form {
     display: flex;
     flex-direction: column;
+    .row {
+      .auth-button_logout {
+        margin: 0 1em;
+      }
+    }
   }
 
   .auth__back-link {

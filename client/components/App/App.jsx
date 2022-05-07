@@ -39,7 +39,6 @@ function App(props) {
   return (
     <div className="app">
       <nav className="side-nav">
-        <h1>P.</h1>
         <AuthBar />
         <Categories />
       </nav>

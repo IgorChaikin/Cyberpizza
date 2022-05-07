@@ -41,7 +41,7 @@ function Checkout(props) {
   }, [cities, selectedCityId]);
 
   const initialValues = {
-    // cardId: null,
+    isPaid: 'false',
     isPickup,
     shopId: shops[0]?._id,
     cityId: cities[0]?._id,
@@ -79,7 +79,7 @@ function Checkout(props) {
   const submitCallback = useCallback(
     (values, { setSubmitting }) => {
       setSubmitting(false);
-      onSubmit({ ...values /* , cardId: values.cardId === 'null' ? null : values.cardId */ });
+      onSubmit({ ...values, isPaid: values.isPaid === 'true' });
     },
     [onSubmit]
   );
@@ -128,12 +128,14 @@ function Checkout(props) {
             <label htmlFor="isPaid-id" className="row">
               Способ оплаты
               <select
-                className={`form__input${0 ? ' form__input_wrong' : ''}`}
+                className={`form__input${
+                  errors.isPaid && touched.isPaid ? ' form__input_wrong' : ''
+                }`}
                 id="isPaid-id"
                 name="isPaid"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                // value={values.cardId}
+                value={values.isPaid}
               >
                 <option value="false">Наличными при получении</option>
                 <option value="true">Оплата онлайн</option>
@@ -157,7 +159,7 @@ function Checkout(props) {
             {isPickup
               ? [
                   <label htmlFor="shop-id" className="row">
-                    Shop
+                    Адрес заведения
                     <select
                       className={`form__input${
                         errors.shopId && touched.shopId ? ' form__input_wrong' : ''
@@ -178,7 +180,7 @@ function Checkout(props) {
                 ]
               : [
                   <label htmlFor="selectedCityId_CHANGE" className="row">
-                    City
+                    Город
                     <select
                       className={`form__input${
                         errors.cityId && touched.cityId ? ' form__input_wrong' : ''
@@ -197,7 +199,7 @@ function Checkout(props) {
                     </select>
                   </label>,
                   <label htmlFor="street-id" className="row">
-                    Street
+                    Улица
                     <select
                       className={`form__input${
                         errors.streetId && touched.streetId ? ' form__input_wrong' : ''
@@ -216,7 +218,7 @@ function Checkout(props) {
                     </select>
                   </label>,
                   <label htmlFor="house-id" className="row">
-                    House
+                    Дом
                     <input
                       className={`form__input${
                         errors.house && touched.house ? ' form__input_wrong' : ''
@@ -231,7 +233,7 @@ function Checkout(props) {
                     />
                   </label>,
                   <label htmlFor="building-id" className="row">
-                    Building
+                    Корпус
                     <input
                       className={`form__input${
                         errors.building && touched.building ? ' form__input_wrong' : ''
@@ -247,7 +249,7 @@ function Checkout(props) {
                   </label>,
 
                   <label htmlFor="apartment-id" className="row">
-                    Apartment
+                    Квартира
                     <input
                       className={`form__input${
                         errors.apartment && touched.apartment ? ' form__input_wrong' : ''
@@ -263,22 +265,20 @@ function Checkout(props) {
                   </label>,
                 ]}
             <p className="form__error">
-              {
-                // (touched.cardId && errors.cardId) ||
+              {(touched.isPaid && errors.isPaid) ||
                 (touched.isPickup && errors.isPickup) ||
-                  (touched.shopId && errors.shopId) ||
-                  (touched.cityId && errors.cityId) ||
-                  (touched.streetId && errors.streetId) ||
-                  (touched.house && errors.house) ||
-                  (touched.building && errors.building) ||
-                  (touched.apartment && errors.apartment) ||
-                  orderError
-              }
+                (touched.shopId && errors.shopId) ||
+                (touched.cityId && errors.cityId) ||
+                (touched.streetId && errors.streetId) ||
+                (touched.house && errors.house) ||
+                (touched.building && errors.building) ||
+                (touched.apartment && errors.apartment) ||
+                orderError}
             </p>
             <div className="row">
               <Link to="/">
                 <button className="auth-button auth-button_logout" type="button">
-                  Back to site
+                  Вернуться на сайт
                 </button>
               </Link>
               <button
@@ -286,7 +286,7 @@ function Checkout(props) {
                 type="submit"
                 disabled={isSubmitting || !dirty || !isValid}
               >
-                Confirm order
+                Подтвердить заказ
               </button>
             </div>
           </form>

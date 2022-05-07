@@ -31,12 +31,12 @@ function Filters(props) {
 
   return (
     <div className="filters">
-      <p className="filters__header">filters</p>
+      <p className="filters__header">фильтры</p>
       <p className="filters__tag-container" onClick={filtersCallback}>
         {tagsList}
         <button type="button" className="all" onClick={onSwitchAll}>
           <img src="/settings.svg" alt="settings.svg" />
-          {`${all ? 'hide' : 'all'} filters`}
+          {`${all ? 'скрыть' : 'все'} фильтры`}
         </button>
       </p>
     </div>

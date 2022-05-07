@@ -70,7 +70,9 @@ function StaffOrders(props) {
         <input type="checkbox" checked={order.isPickup} disabled readOnly />
       </td>
       <td>{order.isPickup ? '' : getFormatAddress(order.address)}</td>
-      <td>By cash</td>
+      <td className="checkbox-container">
+        <input type="checkbox" checked={order.isPaid} disabled readOnly />
+      </td>
       <td className="checkbox-container">
         <select id={`${order._id}_STAGE`}>
           {stages.map((stage) => (
@@ -96,13 +98,13 @@ function StaffOrders(props) {
             <thead>
               <tr>
                 <th>Id</th>
-                <th>Item</th>
-                <th>Count</th>
-                <th>Price</th>
-                <th>Is pickup</th>
-                <th>Address</th>
-                <th>Payment</th>
-                <th>Order stage</th>
+                <th>Товар</th>
+                <th>Количество</th>
+                <th>Цена</th>
+                <th>Самовывоз</th>
+                <th>Адрес</th>
+                <th>Оплачено</th>
+                <th>Стадия заказа</th>
                 <th> </th>
               </tr>
             </thead>

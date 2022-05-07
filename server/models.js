@@ -104,6 +104,13 @@ const shopScheme = new Schema({
   isEnabled: { type: Boolean, default: true },
 });
 
+const discountScheme = new Schema({
+  cartIds: { type: [ObjectId], default: [] },
+  orderIds: { type: [ObjectId], default: [] },
+  value: { type: Number, required: true },
+  title: { type: String, required: true },
+});
+
 // SHOULD BE DELETED
 const cardScheme = new Schema({
   number: { type: String, required: true },
@@ -131,6 +138,7 @@ module.exports = {
   Staff: model('Staff', staffScheme),
   Shop: model('Shop', shopScheme),
   Card: model('Card', cardScheme),
+  Discount: model('Discount', discountScheme),
 
   Patronymic: model('Patronymic', patronymicScheme),
   LastName: model('LastName', lastNameScheme),

@@ -37,11 +37,11 @@ function StaffDashboard(props) {
       {deletedId ? <DeleteModal entity="order" /> : ''}
       <header>
         <section>
-          <h2>Current staff</h2>
+          <h2>Сотрудник</h2>
           <p>{username}</p>
         </section>
         <section>
-          <h2>Current shop</h2>
+          <h2>Учреждение</h2>
           <p>{getFormatAddress(shop?.address)}</p>
         </section>
         <section>
@@ -51,7 +51,7 @@ function StaffDashboard(props) {
               className="auth-button auth-button_login"
               onClick={disableCallback}
             >
-              Enabled
+              Доступно
             </button>
           ) : (
             <button
@@ -59,7 +59,7 @@ function StaffDashboard(props) {
               className="auth-button auth-button_logout"
               onClick={enableCallback}
             >
-              Disabled
+              Не доступно
             </button>
           )}
         </section>

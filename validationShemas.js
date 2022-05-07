@@ -15,7 +15,7 @@ const loginValidationObject = {
 
 const checkoutValidationObject = {
   isPickup: yup.bool().required('Choose if order should be pickup'),
-  // cardId: yup.string().nullable(true),
+  isPaid: yup.mixed(),
 };
 
 const titleValidationObject = {

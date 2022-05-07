@@ -5,7 +5,7 @@ const {
   withAddressTemplate,
   withCityAndStreetTemplate,
   withItemAndSortTemplate,
-  secureCardTemplate,
+  // secureCardTemplate,
   getOrderWithPrice,
 } = require('../shared');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
@@ -41,7 +41,7 @@ async function getOrdersWithAddress(_id, stageId) {
     ...withItemAndSortTemplate,
     ...withAddressTemplate,
     ...withCityAndStreetTemplate,
-    {
+    /* {
       $lookup: {
         from: 'cards',
         let: { cardId: '$cardId' },
@@ -49,7 +49,7 @@ async function getOrdersWithAddress(_id, stageId) {
         pipeline: [{ $match: { $expr: { $eq: ['$$cardId', '$_id'] } } }, ...secureCardTemplate],
       },
     },
-    { $unwind: { path: '$card', preserveNullAndEmptyArrays: true } },
+    { $unwind: { path: '$card', preserveNullAndEmptyArrays: true } }, */
   ]);
 }
 
