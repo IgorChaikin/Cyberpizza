@@ -1,9 +1,13 @@
 const express = require('express');
 const { Types } = require('mongoose');
-const { itemServerValidationSchema, titleValidationSchema } = require('../../validationShemas');
+const {
+  itemServerValidationSchema,
+  titleValidationSchema,
+  discountValidationSchema,
+} = require('../../validationShemas');
 
 const adminId = process.env.ADMIN_ID;
-const { Item, Category, Filter } = require('../models');
+const { Item, Category, Filter, Discount } = require('../models');
 const {
   checkTokenMiddleware,
   checkActiveMiddleware,
@@ -130,6 +134,40 @@ admindb.delete('/filters/:id', async (request, response) => {
     { $pull: { filterIds: ObjectId(deletedId) } }
   );
   return Filter.find({}).then((result) => response.json(result));
+});
+
+// ---------------------------------------------------------------------------------------------------------
+admindb.get('/discounts', (request, response) => {
+  return Discount.find({}).then((result) => response.json(result));
+});
+
+admindb.post('/discounts', (request, response) => {
+  discountValidationSchema
+    .validate(request.body)
+    .then(async () => {
+      const { title, value } = request.body;
+      await new Discount({ title, value }).save();
+      return Discount.find({}).then((result) => response.json(result));
+    })
+    .catch(() => response.sendStatus(422));
+});
+
+admindb.put('/discounts/:id', (request, response) => {
+  const editedId = request.params.id;
+  discountValidationSchema
+    .validate(request.body)
+    .then(async () => {
+      const { title, value } = request.body;
+      await Discount.updateOne({ _id: ObjectId(editedId) }, { $set: { title, value } });
+      return Discount.find({}).then((result) => response.json(result));
+    })
+    .catch(() => response.sendStatus(422));
+});
+
+admindb.delete('/discounts/:id', async (request, response) => {
+  const deletedId = request.params.id;
+  await Discount.deleteOne({ _id: ObjectId(deletedId) });
+  return Discount.find({}).then((result) => response.json(result));
 });
 
 module.exports = admindb;

@@ -3,21 +3,6 @@ const { Order } = require('./models');
 
 const { ObjectId } = Types;
 
-const getOrderWithPrice = (orderId) => {
-  return Order.aggregate([
-    { $match: { $expr: { $eq: ['$_id', ObjectId(orderId)] } } },
-    {
-      $lookup: {
-        from: 'items',
-        localField: 'itemId',
-        foreignField: '_id',
-        as: 'item',
-      },
-    },
-    { $unwind: { path: '$item', preserveNullAndEmptyArrays: true } },
-  ]).then((query) => query[0]);
-};
-
 const withAddressTemplate = [
   {
     $lookup: {
@@ -64,6 +49,18 @@ const withItemAndSortTemplate = [
   { $sort: { time: -1 } },
 ];
 
+const withDiscountTemplate = [
+  {
+    $lookup: {
+      from: 'discounts',
+      let: { orderId: '$_id' },
+      as: 'discount',
+      pipeline: [{ $match: { $expr: { $in: ['$$orderId', '$orderIds'] } } }],
+    },
+  },
+  { $unwind: { path: '$discount', preserveNullAndEmptyArrays: true } },
+];
+
 const secureCardTemplate = [
   {
     $addFields: {
@@ -73,10 +70,19 @@ const secureCardTemplate = [
   { $project: { number: 0, name: 0, date: 0, cvv: 0, userId: 0 } },
 ];
 
+const getOrderWithPrice = (orderId) => {
+  return Order.aggregate([
+    { $match: { $expr: { $eq: ['$_id', ObjectId(orderId)] } } },
+    ...withItemAndSortTemplate,
+    ...withDiscountTemplate,
+  ]).then((query) => query[0]);
+};
+
 module.exports = {
   getOrderWithPrice,
   withAddressTemplate,
   withCityAndStreetTemplate,
   withItemAndSortTemplate,
+  withDiscountTemplate,
   secureCardTemplate,
 };

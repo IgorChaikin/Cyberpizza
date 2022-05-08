@@ -35,22 +35,12 @@ const usersTemplate = [
       as: 'firstNameFromDb',
     },
   },
-  /* {
-    $lookup: {
-      from: 'patronymics',
-      localField: 'patronymicId',
-      foreignField: '_id',
-      as: 'patronymicFromDb',
-    },
-  }, */
   { $unwind: { path: '$lastNameFromDb', preserveNullAndEmptyArrays: true } },
   { $unwind: { path: '$firstNameFromDb', preserveNullAndEmptyArrays: true } },
-  // { $unwind: { path: '$patronymicFromDb', preserveNullAndEmptyArrays: true } },
   {
     $addFields: {
       lastName: '$lastNameFromDb.name',
       firstName: '$firstNameFromDb.name',
-      // patronymic: '$patronymicFromDb.name',
     },
   },
   { $project: { lastNameFromDb: 0, firstNameFromDb: 0, /* patronymicFromDb: 0, */ password: 0 } },

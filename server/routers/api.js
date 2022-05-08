@@ -13,7 +13,7 @@ const {
   OrderStage,
   Address,
   Shop,
-  // Card,
+  Discount,
 } = require('../models');
 const { checkActiveMiddleware } = require('../middlewares');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
@@ -62,6 +62,40 @@ function getOrders(cartId) {
       result.stages = query ?? [];
       return result;
     });
+}
+
+function getDiscounts(cartId) {
+  return Discount.aggregate([
+    { $match: { $expr: { $in: [cartId, '$cartIds'] } } },
+    { $sort: { _id: 1 } },
+    {
+      $lookup: {
+        from: 'orders',
+        let: { orderIds: '$orderIds' },
+        as: 'orders',
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $ne: ['$orderStageId', ObjectId(payedId)] },
+                  { $in: ['$_id', '$$orderIds'] },
+                ],
+              },
+            },
+          },
+        ],
+      },
+    },
+    { $addFields: { orderCount: { $size: '$orders' } } },
+    { $match: { $expr: { $gt: ['$orderCount', 0] } } },
+  ]);
+}
+
+async function getPreOrderedIdsFilter(cartId) {
+  const cart = await Cart.findOne({ _id: cartId });
+  const { orderIds } = cart;
+  return { _id: { $in: orderIds }, orderStageId: ObjectId(preOrderedId) };
 }
 
 function createCart(userId = null) {
@@ -194,13 +228,7 @@ api.delete('/orders', (request, response) => {
 api.put('/orders/confirm', async (request, response) => {
   const { cartId } = request.cookies;
   const { isPickup, isPaid, shopId, cityId, streetId, house, building, apartment } = request.body;
-  const cart = await Cart.findOne({ _id: ObjectId(cartId) });
-  /* const card = await Card.findOne({ _id: ObjectId(cardId) });
-  if (!cart || (card && !card.userId.equals(ObjectId(request.decoded._id)))) {
-    return response.sendStatus(422);
-  } */
-  const { orderIds } = cart;
-  const filter = { _id: { $in: orderIds }, orderStageId: ObjectId(preOrderedId) };
+  const filter = await getPreOrderedIdsFilter(ObjectId(cartId));
 
   const schema = isPickup ? withShopValidationSchema : withAddressValidationSchema;
   return schema
@@ -232,6 +260,36 @@ api.put('/orders/confirm', async (request, response) => {
       return getOrders(cartId).then((res) => response.json(res));
     })
     .catch(() => response.sendStatus(422));
+});
+
+api.get('/discounts', (request, response) => {
+  const { cartId } = request.cookies;
+  return getDiscounts(cartId).then((result) => response.json(result));
+});
+
+api.patch('/orders/discount', async (request, response) => {
+  const { cartId } = request.cookies;
+  const { title } = request.body;
+  const filter = await getPreOrderedIdsFilter(ObjectId(cartId));
+  const preOrderedOrderIds = (await Order.find(filter, { _id: 1 })).map((elem) => elem._id);
+
+  const discount = await Discount.findOne({
+    $or: [
+      { cartIds: { $in: [ObjectId(cartId)] }, title },
+      { orderIds: { $in: preOrderedOrderIds } },
+    ],
+  });
+
+  if (discount) {
+    return response.sendStatus(422);
+  }
+
+  await Discount.updateOne(
+    { cartIds: { $nin: [ObjectId(cartId)] }, orderIds: { $nin: preOrderedOrderIds }, title },
+    { $push: { cartIds: cartId, orderIds: preOrderedOrderIds } }
+  );
+
+  return getDiscounts(cartId).then((result) => response.json(result));
 });
 
 module.exports = api;

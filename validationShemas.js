@@ -100,6 +100,16 @@ const cardValidationSchema = yup.object().shape({
     .required('CVV is required'),
 });
 
+const discountValidationSchema = yup.object().shape({
+  ...titleValidationObject,
+  value: yup
+    .number()
+    .min(0)
+    .max(100)
+    .typeError('Значение должно быть числом между 0 и 100')
+    .required('Поле "Значение" обязательно'),
+});
+
 const titleValidationSchema = yup.object().shape(titleValidationObject);
 
 const itemClientValidationSchema = yup.object().shape(itemClientValidationObject);
@@ -118,4 +128,5 @@ module.exports = {
   titleValidationSchema,
   itemClientValidationSchema,
   itemServerValidationSchema,
+  discountValidationSchema,
 };
