@@ -56,13 +56,14 @@ async function getShopWithAddress(shopId) {
 
 async function payOrder(orderId) {
   const order = await getOrderWithPrice(orderId);
-  const payedPrice = order?.item.price * order?.count * (1 - (order?.discount?.value ?? 0) / 100);
+  const absolutePayedPrice = order?.item.price * order?.count;
+  const payedPrice = absolutePayedPrice * (1 - (order?.discount?.value ?? 0) / 100);
   return Cart.updateOne(
     { orderIds: { $in: [order._id] }, price: { $gte: payedPrice } },
     {
       $inc: {
         generalPrice: payedPrice,
-        price: -payedPrice,
+        price: -absolutePayedPrice,
       },
     }
   );
