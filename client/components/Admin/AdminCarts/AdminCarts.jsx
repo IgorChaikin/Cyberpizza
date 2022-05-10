@@ -20,7 +20,7 @@ function AdminCarts(props) {
         <td className={cart.username ? '' : 'anonymous-container'}>
           {cart.username ?? '[ANONYMOUS]'}
         </td>
-        <td>{cart.generalPrice.toFixed(2)}$</td>
+        <td>{cart.generalPrice.toFixed(2)}р.</td>
         <td>{`${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1)
           .toString()
           .padStart(2, '0')}.${date.getFullYear()} ${date

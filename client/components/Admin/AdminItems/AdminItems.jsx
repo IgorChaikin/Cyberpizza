@@ -47,7 +47,7 @@ function AdminItems(props) {
           {item.title}
         </span>
       </td>
-      <td>{item.price?.toFixed(2)}$</td>
+      <td>{item.price?.toFixed(2)}р.</td>
       <td>{item.description}</td>
       <td>
         {filters

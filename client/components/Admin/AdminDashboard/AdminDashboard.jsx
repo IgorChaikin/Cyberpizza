@@ -38,7 +38,7 @@ function AdminDashboard(props) {
         </section>
         <section>
           <h2>Total price</h2>
-          <p>{totalPrice?.toFixed(2)}$</p>
+          <p>{totalPrice?.toFixed(2)}р.</p>
         </section>
         <section>
           <h2>Total count</h2>

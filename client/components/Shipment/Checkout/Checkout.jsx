@@ -121,29 +121,30 @@ function Checkout(props) {
       <h1>Confirm order</h1>
 
       <div className="decoration decoration_light" />
-
       <Formik initialValues={initialDiscountValues} onSubmit={submitDiscountCallback}>
         {({ values, handleChange, handleBlur, handleSubmit, isSubmitting, dirty, isValid }) => (
           <form className="auth__form" onSubmit={handleSubmit}>
-            <label htmlFor="title-id" className="row">
-              Промокод
-              <input
-                className="form__input"
-                id="title-id"
-                name="title"
-                type="text"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.house}
-              />
+            <div className="row">
+              <label htmlFor="title-id" className="row">
+                Промокод
+                <input
+                  className="form__input"
+                  id="title-id"
+                  name="title"
+                  type="text"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.house}
+                />
+              </label>
               <button
                 className="auth-button auth-button_login"
                 type="submit"
                 disabled={isSubmitting || !dirty || !isValid}
               >
-                Применить промокод
+                Применить
               </button>
-            </label>
+            </div>
             <p className="form__error"> {discountError}</p>
           </form>
         )}

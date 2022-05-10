@@ -30,7 +30,7 @@ export function fetchDiscounts() {
 }
 
 export function applyDiscount(values) {
-  const payload = new Promise((resolve) => {
+  const payload = new Promise((resolve, reject) => {
     fetch('/api/orders/discount', {
       method: 'PATCH',
       credentials: 'include',
@@ -40,7 +40,8 @@ export function applyDiscount(values) {
       .then((response) => response.json())
       .then((result) => {
         resolve(result);
-      });
+      })
+      .catch((err) => reject(err));
   });
   return {
     type: APPLY_DISCOUNT,
@@ -55,7 +56,7 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case FETCH_DISCOUNTS:
+    case FETCH_DISCOUNTS_FULFILLED:
       return {
         ...state,
         discounts: action.payload,
@@ -64,6 +65,7 @@ export default function reducer(state = initialState, action) {
       alert('Промокод успешно применён!');
       return {
         ...state,
+        discountError: null,
         discounts: action.payload,
       };
     }

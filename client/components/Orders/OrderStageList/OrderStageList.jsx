@@ -16,8 +16,6 @@ function OrderStageList(props) {
     </div>
   ));
 
-  console.log('MYLOG_discountsList ', discountsList);
-
   const discountValue = stages.reduce((prevValue, currentStage) => {
     const stageDiscount = currentStage.orders.reduce(
       (prevStageDiscount, order) =>
@@ -46,7 +44,7 @@ function OrderStageList(props) {
         {discountsList?.length > 0 ? discountsList : ''}
         <div className="modal__price modal__price_aligned">
           <p className="title">Итого</p>
-          <p className="price">${(price - discountValue)?.toFixed(2)}</p>
+          <p className="price">{(price - discountValue)?.toFixed(2)}р.</p>
         </div>
       </div>
     </div>

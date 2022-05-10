@@ -65,7 +65,13 @@ function StaffOrders(props) {
       <td className="checkbox-container">
         <div className="count">{order.count}</div>
       </td>
-      <td>{(order.item?.price * order.count || 0).toFixed(2)}$</td>
+      <td>
+        {(order.item?.price * order.count * (1 - (order.discount?.value ?? 0) / 100) || 0).toFixed(
+          2
+        )}
+        р.
+        {order.discount ? <span className="discount-accent">(-{order.discount?.value}%)</span> : ''}
+      </td>
       <td className="checkbox-container">
         <input type="checkbox" checked={order.isPickup} disabled readOnly />
       </td>

@@ -275,13 +275,14 @@ api.patch('/orders/discount', async (request, response) => {
   const preOrderedOrderIds = (await Order.find(filter, { _id: 1 })).map((elem) => elem._id);
 
   const discount = await Discount.findOne({
-    $or: [
-      { cartIds: { $in: [ObjectId(cartId)] }, title },
-      { orderIds: { $in: preOrderedOrderIds } },
-    ],
+    $or: [{ title }, { orderIds: { $in: preOrderedOrderIds } }],
   });
 
-  if (discount) {
+  if (
+    !discount ||
+    discount.orderIds.filter((value) => preOrderedOrderIds.includes(value)) > 0 ||
+    discount.cartIds.includes(ObjectId(cartId))
+  ) {
     return response.sendStatus(422);
   }
 
