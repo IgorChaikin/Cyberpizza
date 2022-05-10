@@ -53,7 +53,7 @@ function AdminCategories(props) {
 
   return (
     <div className="admin-dashboard__container">
-      <h2>Categories</h2>
+      <h2>Категории</h2>
       {[
         categories?.length > 0 ? (
           <table

@@ -30,7 +30,7 @@ function Categories(props) {
 
   return (
     <div className="categories-list">
-      <p>categories</p>
+      <p>категории</p>
       <ul onClick={categoriesCallback}>{categoriesList}</ul>
     </div>
   );

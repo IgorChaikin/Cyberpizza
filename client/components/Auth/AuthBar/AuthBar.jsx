@@ -16,9 +16,11 @@ function AuthBar(props) {
         <p className="auth-bar__username">{username}</p>
         <div className="auth-bar">
           <button type="button" className="auth-button auth-button_logout" onClick={logoutCallback}>
-            LogOut
+            Выход
           </button>
-          {isUser ? '' : [<Link to="/admin">I am admin</Link>, <Link to="/staff">I am staff</Link>]}
+          {isUser
+            ? ''
+            : [<Link to="/admin">Я администратор</Link>, <Link to="/staff">Я персонал</Link>]}
         </div>
       </div>
     );
@@ -28,12 +30,12 @@ function AuthBar(props) {
     <div className="auth-bar">
       <Link to="/register">
         <button type="button" className="auth-button auth-button_login">
-          Register
+          Регистрация
         </button>
       </Link>
       <Link to="/login">
         <button type="button" className="auth-button auth-button_login">
-          LogIn
+          Вход
         </button>
       </Link>
     </div>

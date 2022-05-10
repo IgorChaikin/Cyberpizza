@@ -120,13 +120,17 @@
       }
     }
 
+    .modal__price_aligned {
+      border-bottom: rgba($grey-color, 0.5) solid 1px;
+      border-top: rgba($grey-color, 0.5) solid 1px;
+    }
+
     .modal__price {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
       margin: 0 1rem;
-      border-bottom: rgba($grey-color, 0.5) solid 1px;
 
       .title {
         font: $price-text-serif;

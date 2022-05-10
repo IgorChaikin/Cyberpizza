@@ -23,6 +23,7 @@ const {
   LastName,
   FirstName,
   Patronymic,
+  Discount,
 } = models;
 
 const adminId = process.env.ADMIN_ID;
@@ -37,74 +38,74 @@ const initialData = {
   categories: [
     {
       _id: ObjectId('000000000000000000000000'),
-      title: 'Pizza',
+      title: 'Пицца',
     },
     {
       _id: ObjectId('000000000000000000000001'),
-      title: 'Pasta',
+      title: 'Паста',
     },
 
     {
       _id: ObjectId('000000000000000000000002'),
-      title: 'Sandwiches',
+      title: 'Сэндвичи',
     },
 
     {
       _id: ObjectId('000000000000000000000003'),
-      title: 'Soup',
+      title: 'Супы',
     },
 
     {
       _id: ObjectId('000000000000000000000004'),
-      title: 'Salads',
+      title: 'Салаты',
     },
 
     {
       _id: ObjectId('000000000000000000000005'),
-      title: 'Sides',
+      title: 'Гарниры',
     },
 
     {
       _id: ObjectId('000000000000000000000006'),
-      title: 'Deserts',
+      title: 'Десерты',
     },
 
     {
       _id: ObjectId('000000000000000000000007'),
-      title: 'Drinks',
+      title: 'Напитки',
     },
   ],
   orderStages: [
     {
       _id: ObjectId(preOrderedId),
-      title: 'pre ordered',
+      title: 'корзина',
     },
     {
       _id: ObjectId(orderedId),
-      title: 'ordered',
+      title: 'заказано',
     },
     {
       _id: ObjectId('000000000000000000000002'),
-      title: 'baking',
+      title: 'готовится',
     },
     {
       _id: ObjectId('000000000000000000000003'),
-      title: 'finishing',
+      title: 'готово',
     },
     {
       _id: ObjectId('000000000000000000000004'),
-      title: 'served',
+      title: 'доставлено',
     },
     {
       _id: ObjectId(payedId),
-      title: 'payed',
+      title: 'получено',
     },
   ],
   items: [
     {
       imgPath: '/ham_and_cheese.png',
       price: 26.75,
-      title: 'Ham and cheese',
+      title: 'Ветчина и сыр',
       description: 'Ham and cheese ham and cheese ham and cheese ham and cheese ham and cheese',
       filterIds: [],
       categoryId: ObjectId('000000000000000000000000'),
@@ -112,7 +113,7 @@ const initialData = {
     {
       imgPath: '/margarita.png',
       price: 20.5,
-      title: 'Margarita',
+      title: 'Маргарита',
       description: 'Margarita margarita margarita margarita margarita margarita margarita',
       filterIds: [],
       categoryId: ObjectId('000000000000000000000000'),
@@ -120,7 +121,7 @@ const initialData = {
     {
       imgPath: '/pepperoni.png',
       price: 20.5,
-      title: 'Pepperoni',
+      title: 'Пепперони',
       description: 'Pepperoni pepperoni pepperoni pepperoni pepperoni',
       filterIds: [],
       categoryId: ObjectId('000000000000000000000000'),
@@ -128,7 +129,7 @@ const initialData = {
     {
       imgPath: '/vegetable.png',
       price: 17.3,
-      title: 'Vegetable',
+      title: 'Овощная',
       description: 'Vegetable vegetable vegetable vegetable vegetable',
       filterIds: [ObjectId('000000000000000000000000'), ObjectId('000000000000000000000001')],
       categoryId: ObjectId('000000000000000000000000'),
@@ -136,7 +137,7 @@ const initialData = {
     {
       imgPath: '/italian.png',
       price: 28.0,
-      title: 'Italian',
+      title: 'Итальянская',
       description: 'Italian italian italian italian italian italian italian',
       filterIds: [],
       categoryId: ObjectId('000000000000000000000000'),
@@ -144,7 +145,7 @@ const initialData = {
     {
       imgPath: '/carbonara.png',
       price: 31.5,
-      title: 'Carbonara',
+      title: 'Карбонара',
       description: 'Carbonara carbonara carbonara carbonara carbonara carbonara carbonara',
       filterIds: [ObjectId('000000000000000000000000')],
       categoryId: ObjectId('000000000000000000000001'),
@@ -152,7 +153,7 @@ const initialData = {
     {
       imgPath: '/spaghetti_bolognese.png',
       price: 33.9,
-      title: 'Spaghetti bolognese',
+      title: 'Спагетти болоньезе',
       description: 'Spaghetti spaghetti spaghetti spaghetti spaghetti spaghetti spaghetti',
       filterIds: [],
       categoryId: ObjectId('000000000000000000000001'),
@@ -160,7 +161,7 @@ const initialData = {
     {
       imgPath: '/cola.png',
       price: 11.1,
-      title: 'Cola',
+      title: 'Кока-кола',
       filterIds: [],
       categoryId: ObjectId('000000000000000000000007'),
     },
@@ -168,64 +169,64 @@ const initialData = {
   filters: [
     {
       _id: ObjectId('000000000000000000000000'),
-      name: 'vegetarian',
+      name: 'вегетарианский',
     },
     {
       _id: ObjectId('000000000000000000000001'),
-      name: 'vegan',
+      name: 'веганский',
     },
     {
       _id: ObjectId('000000000000000000000002'),
-      name: 'tag0',
+      name: 'острый',
     },
     {
       _id: ObjectId('000000000000000000000003'),
-      name: 'tag1',
+      name: 'мясо',
     },
     {
       _id: ObjectId('000000000000000000000004'),
-      name: 'tag2',
+      name: 'сыр',
     },
   ],
   roles: [
     {
       _id: ObjectId(adminId),
-      title: 'Admin',
+      title: 'Администратор',
     },
     {
       _id: ObjectId(staffId),
-      title: 'Staff',
+      title: 'Персонал',
     },
     {
       _id: ObjectId(userId),
-      title: 'User',
+      title: 'Пользователь',
     },
   ],
 
   cities: [
     {
       _id: ObjectId('000000000000000000000000'),
-      title: 'City-1',
+      title: 'Минск',
     },
     {
       _id: ObjectId('000000000000000000000001'),
-      title: 'City-2',
+      title: 'Витебск',
     },
   ],
   streets: [
     {
       _id: ObjectId('000000000000000000000000'),
-      title: 'Street-1',
+      title: 'Независимости',
       cityIds: [ObjectId('000000000000000000000000')],
     },
     {
       _id: ObjectId('000000000000000000000001'),
-      title: 'Street-2',
+      title: 'Баграмяна',
       cityIds: [ObjectId('000000000000000000000001')],
     },
     {
       _id: ObjectId('000000000000000000000002'),
-      title: 'Street-1-2',
+      title: 'Советская',
       cityIds: [ObjectId('000000000000000000000001'), ObjectId('000000000000000000000000')],
     },
   ],
@@ -260,6 +261,20 @@ const initialData = {
       addressId: ObjectId('000000000000000000000002'),
     },
   ],
+  discounts: [
+    {
+      value: 10,
+      title: 'FIRST',
+    },
+    {
+      value: 20,
+      title: '2ND',
+    },
+    {
+      value: 30,
+      title: '3RD',
+    },
+  ],
 };
 
 module.exports = async (dbConn) => {
@@ -288,6 +303,7 @@ module.exports = async (dbConn) => {
     Street.deleteMany({}).then(() => Street.insertMany(initialData.streets)),
     Address.deleteMany({}).then(() => Address.insertMany(initialData.addresses)),
     Shop.deleteMany({}).then(() => Shop.insertMany(initialData.shops)),
+    Discount.deleteMany({}).then(() => Discount.insertMany(initialData.discounts)),
 
     Card.deleteMany({}),
     Order.deleteMany({}),

@@ -23,10 +23,12 @@ function Checkout(props) {
     isConfirmable,
     // isCardAdding,
     orderError,
+    discountError,
     onMount,
     onCitySelected,
     onChange,
     onSubmit,
+    onDiscountApply,
   } = props;
 
   useEffect(() => {
@@ -49,6 +51,10 @@ function Checkout(props) {
     house: null,
     building: null,
     apartment: null,
+  };
+
+  const initialDiscountValues = {
+    title: '',
   };
 
   const changeCallback = useCallback(
@@ -84,6 +90,14 @@ function Checkout(props) {
     [onSubmit]
   );
 
+  const submitDiscountCallback = useCallback(
+    (values, { setSubmitting }) => {
+      setSubmitting(false);
+      onDiscountApply(values);
+    },
+    [onDiscountApply]
+  );
+
   /* const goToCardCallback = useCallback(() => {
     onChange('isCardAdding', true);
   }, [onChange]); */
@@ -107,6 +121,33 @@ function Checkout(props) {
       <h1>Confirm order</h1>
 
       <div className="decoration decoration_light" />
+
+      <Formik initialValues={initialDiscountValues} onSubmit={submitDiscountCallback}>
+        {({ values, handleChange, handleBlur, handleSubmit, isSubmitting, dirty, isValid }) => (
+          <form className="auth__form" onSubmit={handleSubmit}>
+            <label htmlFor="title-id" className="row">
+              Промокод
+              <input
+                className="form__input"
+                id="title-id"
+                name="title"
+                type="text"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.house}
+              />
+              <button
+                className="auth-button auth-button_login"
+                type="submit"
+                disabled={isSubmitting || !dirty || !isValid}
+              >
+                Применить промокод
+              </button>
+            </label>
+            <p className="form__error"> {discountError}</p>
+          </form>
+        )}
+      </Formik>
 
       <Formik
         initialValues={initialValues}
@@ -302,9 +343,11 @@ Checkout.propTypes = {
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   onMount: PropTypes.func.isRequired,
+  onDiscountApply: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   onCitySelected: PropTypes.bool.isRequired,
   orderError: PropTypes.string,
+  discountError: PropTypes.string,
   isConfirmable: PropTypes.bool.isRequired,
   isPickup: PropTypes.bool.isRequired,
   /* isCardAdding: PropTypes.bool.isRequired,
@@ -317,6 +360,7 @@ Checkout.propTypes = {
 
 Checkout.defaultProps = {
   orderError: null,
+  discountError: null,
   selectedCityId: null,
 };
 

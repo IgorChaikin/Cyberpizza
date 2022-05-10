@@ -2,7 +2,7 @@ const express = require('express');
 const { Types } = require('mongoose');
 const path = require('path');
 const { withItemAndSortTemplate } = require('../shared');
-const { getOrderWithPrice, withAddressTemplate } = require('../shared');
+const { getOrderWithPrice, withAddressTemplate, withDiscountTemplate } = require('../shared');
 const { withAddressValidationSchema, withShopValidationSchema } = require('../../validationShemas');
 const {
   Category,
@@ -51,6 +51,7 @@ function getOrders(cartId) {
                 },
               },
               ...withItemAndSortTemplate,
+              ...withDiscountTemplate,
               { $addFields: { isEditable: { $eq: ['$orderStageId', ObjectId(preOrderedId)] } } },
             ],
           },
@@ -66,7 +67,7 @@ function getOrders(cartId) {
 
 function getDiscounts(cartId) {
   return Discount.aggregate([
-    { $match: { $expr: { $in: [cartId, '$cartIds'] } } },
+    { $match: { $expr: { $in: [ObjectId(cartId), '$cartIds'] } } },
     { $sort: { _id: 1 } },
     {
       $lookup: {
@@ -286,7 +287,7 @@ api.patch('/orders/discount', async (request, response) => {
 
   await Discount.updateOne(
     { cartIds: { $nin: [ObjectId(cartId)] }, orderIds: { $nin: preOrderedOrderIds }, title },
-    { $push: { cartIds: cartId, orderIds: preOrderedOrderIds } }
+    { $push: { cartIds: ObjectId(cartId), orderIds: preOrderedOrderIds } }
   );
 
   return getDiscounts(cartId).then((result) => response.json(result));

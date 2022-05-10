@@ -3,6 +3,7 @@ import promise from 'redux-promise-middleware';
 import categories from './actions/items/actions.categories';
 import items from './actions/items/actions.items';
 import filters from './actions/items/actions.filters';
+import discounts from './actions/actions.discounts';
 import orders from './actions/actions.orders';
 import auth from './actions/actions.auth';
 import admin from './actions/admin/actions.admin';
@@ -20,6 +21,7 @@ const reducer = combineReducers({
   items,
   categories,
   filters,
+  discounts,
   orders,
   auth,
   admin,

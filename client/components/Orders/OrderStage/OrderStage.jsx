@@ -30,22 +30,22 @@ function OrderStage(props) {
   );
 
   const intervals = [
-    [3600, ' hours'],
-    [60, ' minutes'],
-    [10, '0 seconds'],
+    [3600, ' часов'],
+    [60, ' минут'],
+    [10, '0 секунд'],
   ];
   const stringParams = intervals.reduce(
     (accumulator, currentValue) =>
-      currentValue[0] <= accumulator[0] && accumulator[1] === 'just now'
+      currentValue[0] <= accumulator[0] && accumulator[1] === 'недавно'
         ? currentValue
         : accumulator,
-    [diff, 'just now']
+    [diff, 'недавно']
   );
 
   const timeString =
-    stringParams[1] === 'just now'
+    stringParams[1] === 'недавно'
       ? stringParams[1]
-      : `${Math.floor(diff / stringParams[0])}${stringParams[1]} ago`;
+      : `${Math.floor(diff / stringParams[0])}${stringParams[1]} назад`;
 
   /* const counts = {};
 
@@ -98,7 +98,7 @@ function OrderStage(props) {
         <div className="button-container">
           <Link to="/checkout">
             <button className="auth-button auth-button_login" type="button">
-              Confirm order
+              Подтвердить заказ
             </button>
           </Link>
         </div>

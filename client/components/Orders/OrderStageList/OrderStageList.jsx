@@ -4,9 +4,29 @@ import PropTypes from 'prop-types';
 import OrderStage from '../../../containers/Orders/OrderStage';
 
 function OrderStageList(props) {
-  const { stages, price, onClose } = props;
+  const { stages, price, onClose, discounts } = props;
 
   const stagesList = stages.map((elem) => <OrderStage key={elem._id} id={elem._id} />);
+
+  const discountsList = discounts.map((elem) => (
+    <div className="modal__price">
+      <p className="title">{elem.title}</p>
+
+      <p className="price">-{elem.value?.toFixed(0)}%</p>
+    </div>
+  ));
+
+  console.log('MYLOG_discountsList ', discountsList);
+
+  const discountValue = stages.reduce((prevValue, currentStage) => {
+    const stageDiscount = currentStage.orders.reduce(
+      (prevStageDiscount, order) =>
+        prevStageDiscount + (order.item.price * order.count * (order.discount?.value ?? 0)) / 100,
+      0
+    );
+    return prevValue + stageDiscount;
+  }, 0);
+
   const stopPropagationCallback = useCallback((e) => e.stopPropagation(), []);
 
   return (
@@ -14,20 +34,19 @@ function OrderStageList(props) {
       <div className="modal" onClick={stopPropagationCallback}>
         <div className="modal__divided-part">
           <header>
-            <h1>Order Status</h1>
+            <h1>Статус Заказа</h1>
 
             <button type="button" onClick={onClose}>
-              <span>Hide</span>
+              <span>Скрыть</span>
               <img src="/right-arrow.svg" alt="right-arrow.svg" />
             </button>
           </header>
           <ul>{stagesList}</ul>
         </div>
-
-        <div className="modal__price">
-          <p className="title">Total</p>
-
-          <p className="price">${price?.toFixed(2)}</p>
+        {discountsList?.length > 0 ? discountsList : ''}
+        <div className="modal__price modal__price_aligned">
+          <p className="title">Итого</p>
+          <p className="price">${(price - discountValue)?.toFixed(2)}</p>
         </div>
       </div>
     </div>
@@ -43,6 +62,12 @@ OrderStageList.propTypes = {
     })
   ).isRequired,
   price: PropTypes.number.isRequired,
+  discounts: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      value: PropTypes.number.isRequired,
+    })
+  ).isRequired,
 };
 
 export default OrderStageList;
