@@ -1,22 +1,22 @@
 import React, { useCallback } from 'react';
 
-import './AdminFilters.scss';
+import './AdminDiscounts.scss';
 import PropTypes from 'prop-types';
 import getEventArgs from '../../../../utils/getEventArgs';
 import Placeholder from '../../Utils/Placeholder/Placeholder';
-import SingleFieldForm from '../../../containers/Admin/SingleFieldForm';
+import DiscountForm from '../../../containers/Admin/DiscountForm';
 
-function AdminFilters(props) {
-  const { filters, editedId, isAdding, onSelectDeleted, onSelectEdited, onAdding } = props;
+function AdminDiscounts(props) {
+  const { discounts, editedId, isAdding, onSelectDeleted, onSelectEdited, onAdding } = props;
 
   const selectDeletedCallback = useCallback(
     (e) => {
       const { args } = getEventArgs(e, ['BUTTON']);
       switch (args[1]) {
-        case 'DELFILTER':
+        case 'DELDISCOUNT':
           onSelectDeleted(args[0]);
           break;
-        case 'EDITFILTER':
+        case 'EDITDISCOUNT':
           onSelectEdited(args[0]);
           break;
         default:
@@ -26,15 +26,16 @@ function AdminFilters(props) {
     [onSelectDeleted, onSelectEdited]
   );
 
-  const usersList = filters.map((filter) => (
-    <tr key={filter._id}>
-      <td>{filter._id}</td>
-      <td>{filter.name}</td>
+  const discountsList = discounts.map((discount) => (
+    <tr key={discount._id}>
+      <td>{discount._id}</td>
+      <td>{discount.title}</td>
+      <td>{discount.value}</td>
       <td className="checkbox-container">
         {isAdding || editedId ? (
           ' '
         ) : (
-          <button type="button" id={`${filter._id}_EDITFILTER`}>
+          <button type="button" id={`${discount._id}_EDITDISCOUNT`}>
             Edit
           </button>
         )}
@@ -43,7 +44,7 @@ function AdminFilters(props) {
         {isAdding || editedId ? (
           ' '
         ) : (
-          <button type="button" id={`${filter._id}_DELFILTER`}>
+          <button type="button" id={`${discount._id}_DELDISCOUNT`}>
             X
           </button>
         )}
@@ -53,9 +54,9 @@ function AdminFilters(props) {
 
   return (
     <div className="admin-dashboard__container">
-      <h2>Filters</h2>
+      <h2>Промокоды</h2>
       {[
-        filters?.length > 0 ? (
+        discounts?.length > 0 ? (
           <table
             className="main-content"
             onChange={selectDeletedCallback}
@@ -64,12 +65,13 @@ function AdminFilters(props) {
             <thead>
               <tr>
                 <th>Id</th>
-                <th>Title</th>
+                <th>Промокод</th>
+                <th>Значение скидки (%)</th>
                 <th> </th>
                 <th> </th>
               </tr>
             </thead>
-            <tbody>{usersList}</tbody>
+            <tbody>{discountsList}</tbody>
           </table>
         ) : (
           <div className="admin-dashboard__placeholder-container">
@@ -77,7 +79,7 @@ function AdminFilters(props) {
           </div>
         ),
         isAdding || editedId ? (
-          <SingleFieldForm entity="filter" />
+          <DiscountForm entity="скидку" />
         ) : (
           <button className="auth-button auth-button_login" type="button" onClick={onAdding}>
             Добавить
@@ -88,8 +90,8 @@ function AdminFilters(props) {
   );
 }
 
-AdminFilters.propTypes = {
-  filters: PropTypes.arrayOf(PropTypes.any).isRequired,
+AdminDiscounts.propTypes = {
+  discounts: PropTypes.arrayOf(PropTypes.any).isRequired,
   editedId: PropTypes.string,
   isAdding: PropTypes.bool.isRequired,
   onSelectDeleted: PropTypes.func.isRequired,
@@ -97,8 +99,8 @@ AdminFilters.propTypes = {
   onAdding: PropTypes.func.isRequired,
 };
 
-AdminFilters.defaultProps = {
+AdminDiscounts.defaultProps = {
   editedId: null,
 };
 
-export default AdminFilters;
+export default AdminDiscounts;

@@ -20,7 +20,8 @@ const mapStateToProps = (state) => ({
     (state.users.deletedId && 'user') ||
     (state.adminitems.deletedId && 'item') ||
     (state.admincategories.deletedId && 'category') ||
-    (state.adminfilters.deletedId && 'filter'),
+    (state.adminfilters.deletedId && 'filter') ||
+    (state.admindiscounts.deletedId && 'discounts'),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminDashboard);

@@ -10,6 +10,7 @@ import admin from './actions/admin/actions.admin';
 import adminitems from './actions/admin/actions.admin.items';
 import admincategories from './actions/admin/actions.admin.categories';
 import adminfilters from './actions/admin/actions.admin.filters';
+import admindiscounts from './actions/admin/actions.admin.discounts';
 import users from './actions/admin/actions.admin.users';
 import carts from './actions/admin/actions.admin.carts';
 import shipment from './actions/actions.shipment';
@@ -34,6 +35,7 @@ const reducer = combineReducers({
   adminitems,
   admincategories,
   adminfilters,
+  admindiscounts,
 });
 
 const store = createStore(reducer, applyMiddleware(promise));

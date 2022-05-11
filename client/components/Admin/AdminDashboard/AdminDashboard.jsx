@@ -13,6 +13,7 @@ import AdminStaff from '../../../containers/Admin/AdminStaff';
 import AdminItems from '../../../containers/Admin/AdminItems';
 import AdminCategories from '../../../containers/Admin/AdminCategories';
 import AdminFilters from '../../../containers/Admin/AdminFilters';
+import AdminDiscounts from '../../../containers/Admin/AdminDiscounts';
 
 function AdminDashboard(props) {
   const { requestError, entity, totalCount, totalPrice, username, onMount } = props;
@@ -48,29 +49,32 @@ function AdminDashboard(props) {
       <main>
         <nav>
           <h2>
-            <Link to={`${match.url}/users`}>Users</Link>
+            <Link to={`${match.url}/users`}>Пользователи</Link>
           </h2>
           <h2>
-            <Link to={`${match.url}/carts`}>Carts</Link>
+            <Link to={`${match.url}/carts`}>Корзины</Link>
           </h2>
           <h2>
-            <Link to={`${match.url}/staff`}>Staff</Link>
+            <Link to={`${match.url}/staff`}>Персонал</Link>
           </h2>
           <h2>
-            <Link to={`${match.url}/items`}>Items</Link>
+            <Link to={`${match.url}/items`}>Товары</Link>
           </h2>
           <h2>
-            <Link to={`${match.url}/categories`}>Categories</Link>
+            <Link to={`${match.url}/categories`}>Категории</Link>
           </h2>
           <h2>
-            <Link to={`${match.url}/filters`}>Filters</Link>
+            <Link to={`${match.url}/filters`}>Тэги</Link>
+          </h2>
+          <h2>
+            <Link to={`${match.url}/discounts`}>Промокоды</Link>
           </h2>
         </nav>
         <div className="admin-dashboard__router">
           <Switch>
             <Route exact path={`${match.url}/`}>
               <div className="admin-dashboard__placeholder-container">
-                <Placeholder message={`Welcome, ${username}`} />
+                <Placeholder message={`Добро пожаловать, ${username}`} />
               </div>
             </Route>
             <Route exact path={`${match.url}/carts`}>
@@ -93,6 +97,9 @@ function AdminDashboard(props) {
             </Route>
             <Route path={`${match.url}/filters`}>
               <AdminFilters />
+            </Route>
+            <Route path={`${match.url}/discounts`}>
+              <AdminDiscounts />
             </Route>
           </Switch>
         </div>

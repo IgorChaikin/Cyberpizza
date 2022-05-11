@@ -112,7 +112,7 @@ function AdminItems(props) {
           <ItemForm />
         ) : (
           <button className="auth-button auth-button_login" type="button" onClick={onAdding}>
-            Add new
+            Добавить
           </button>
         ),
       ]}

@@ -76,7 +76,7 @@ function StaffDashboard(props) {
           <Switch>
             <Route exact path={`${match.url}/`}>
               <div className="admin-dashboard__placeholder-container">
-                <Placeholder message={`Welcome, ${username}`} />
+                <Placeholder message={`Добро пожаловать, ${username}`} />
               </div>
             </Route>
             <Route exact path={`${match.url}/orders/:id`}>

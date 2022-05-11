@@ -64,7 +64,7 @@ function AdminCategories(props) {
             <thead>
               <tr>
                 <th>Id</th>
-                <th>Title</th>
+                <th>Название</th>
                 <th> </th>
                 <th> </th>
               </tr>
@@ -80,7 +80,7 @@ function AdminCategories(props) {
           <SingleFieldForm entity="category" />
         ) : (
           <button className="auth-button auth-button_login" type="button" onClick={onAdding}>
-            Add new
+            Добавить
           </button>
         ),
       ]}

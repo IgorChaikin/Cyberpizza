@@ -150,7 +150,10 @@ export default function reducer(state = initialState, action) {
       };
     }
     case CONFIRM_ORDER_REJECTED:
-      return { ...state, orderError: 'Selected shop is unavailable or no available shops' };
+      return {
+        ...state,
+        orderError: 'Выбранное заведение недоступно или нет недоступных заведений',
+      };
     case SWITCH_ORDERS:
       return { ...state, isOrdersVisible: !state.isOrdersVisible };
     case REFRESH_ORDERS_ERROR:

@@ -20,6 +20,7 @@ import {
   cancelSelected as cancelDeletedFilter,
   deleteFilterAsAdmin,
 } from '../../actions/admin/actions.admin.filters';
+import { cancelSelected, deleteDiscountAsAdmin } from '../../actions/admin/actions.admin.discounts';
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const { entity } = ownProps;
@@ -49,6 +50,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     case 'filter': {
       onClose = () => dispatch(cancelDeletedFilter());
       onDelete = (deletedId) => dispatch(deleteFilterAsAdmin(deletedId));
+      break;
+    }
+    case 'скидку': {
+      onClose = () => dispatch(cancelSelected());
+      onDelete = (deletedId) => dispatch(deleteDiscountAsAdmin(deletedId));
       break;
     }
     default:
@@ -89,6 +95,11 @@ const mapStateToProps = (state, ownProps) => {
     case 'order': {
       deletedId = state.stafforders.deletedId;
       selectedId = state.stafforders.selectedId;
+      break;
+    }
+    case 'скидку': {
+      deletedId = state.admindiscounts.deletedId;
+      selectedId = null;
       break;
     }
     default:
