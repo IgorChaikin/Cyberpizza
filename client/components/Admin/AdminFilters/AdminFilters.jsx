@@ -64,7 +64,7 @@ function AdminFilters(props) {
             <thead>
               <tr>
                 <th>Id</th>
-                <th>Title</th>
+                <th>Название</th>
                 <th> </th>
                 <th> </th>
               </tr>
@@ -73,11 +73,11 @@ function AdminFilters(props) {
           </table>
         ) : (
           <div className="admin-dashboard__placeholder-container">
-            <Placeholder message="There is nothing to show.." />
+            <Placeholder message="Список пуст" />
           </div>
         ),
         isAdding || editedId ? (
-          <SingleFieldForm entity="filter" />
+          <SingleFieldForm entity="тэг" />
         ) : (
           <button className="auth-button auth-button_login" type="button" onClick={onAdding}>
             Добавить

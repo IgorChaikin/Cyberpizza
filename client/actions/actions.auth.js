@@ -105,7 +105,7 @@ export default function reducer(state = initialState, action) {
     case REGISTER_USER_FULFILLED: {
       return {
         requestError: null,
-        username: action.payload.phone,
+        username: action.payload.username,
         isUser: action.payload.isUser,
         isAuthenticated: true,
       };
@@ -116,9 +116,9 @@ export default function reducer(state = initialState, action) {
     case FETCH_USERNAME_FULFILLED: {
       return {
         ...state,
-        username: action.payload.phone,
+        username: action.payload.username,
         isUser: action.payload.isUser,
-        isAuthenticated: !!action.payload.phone,
+        isAuthenticated: !!action.payload.username,
       };
     }
     case REGISTER_USER_REJECTED: {

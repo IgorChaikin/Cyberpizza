@@ -181,3 +181,14 @@
   background-color: $accent-color;
   color: $white-color;
 }
+
+.form_small {
+  background-color: $light-color;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 1em;
+  font: $regular-text;
+  label {
+    font: $regular-text;
+  }
+}

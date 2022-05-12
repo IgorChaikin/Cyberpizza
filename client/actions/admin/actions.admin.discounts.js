@@ -110,9 +110,15 @@ export default function reducer(state = initialState, action) {
     case DELETE_DISCOUNT_AS_ADMIN_FULFILLED:
     case UPDATE_DISCOUNT_AS_ADMIN_FULFILLED:
     case ADD_DISCOUNT_AS_ADMIN_FULFILLED:
-    case CANCEL_SELECTED_DISCOUNT: {
+      return {
+        ...state,
+        discounts: action.payload,
+        deletedId: null,
+        editedId: null,
+        isAdding: false,
+      };
+    case CANCEL_SELECTED_DISCOUNT:
       return { ...state, deletedId: null, editedId: null, isAdding: false };
-    }
     case ADDING_DISCOUNT_ON: {
       return { ...state, deletedId: null, editedId: null, isAdding: true };
     }

@@ -18,7 +18,7 @@ function DiscountForm(props) {
 
   const initialValues = {
     title: discount?.title ?? '',
-    value: discount?.value ?? '00.00',
+    value: discount?.value ?? '0',
   };
 
   return (
@@ -38,41 +38,35 @@ function DiscountForm(props) {
         handleSubmit,
         isSubmitting,
       }) => (
-        <form className="item-edit-form" onSubmit={handleSubmit}>
-          <div className="row">
-            <label htmlFor="title-id" className="col">
-              Промокод
-              <input
-                id="title-id"
-                className={`form__input${
-                  errors.title && touched.title ? ' form__input_wrong' : ''
-                }`}
-                name="title"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.title}
-              />
-            </label>
+        <form className="form_small" onSubmit={handleSubmit}>
+          <label htmlFor="title-id" className="col">
+            Промокод
+            <input
+              id="title-id"
+              className={`form__input${errors.title && touched.title ? ' form__input_wrong' : ''}`}
+              name="title"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.title}
+            />
+          </label>
 
-            <label htmlFor="price-id" className="col">
-              Значение скидки (%)
-              <input
-                id="price-id"
-                className={`form__input${
-                  errors.price && touched.price ? ' form__input_wrong' : ''
-                }`}
-                name="price"
-                type="number"
-                lang="en-150"
-                step={0.01}
-                min={0}
-                max={100}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.price}
-              />
-            </label>
-          </div>
+          <label htmlFor="value-id" className="col">
+            Значение скидки (%)
+            <input
+              id="value-id"
+              className={`form__input${errors.value && touched.value ? ' form__input_wrong' : ''}`}
+              name="value"
+              type="number"
+              lang="en-150"
+              step={1}
+              min={0}
+              max={100}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.value}
+            />
+          </label>
           <p className="form__error">
             {(touched.title && errors.title) || (touched.value && errors.value)}
           </p>

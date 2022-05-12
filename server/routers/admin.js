@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { Types } = require('mongoose');
-const { withItemAndSortTemplate } = require('../shared');
+const { withItemAndSortTemplate, withFullNameTemplate } = require('../shared');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const staffId = process.env.STAFF_ID;
@@ -43,7 +43,7 @@ const usersTemplate = [
       firstName: '$firstNameFromDb.name',
     },
   },
-  { $project: { lastNameFromDb: 0, firstNameFromDb: 0, /* patronymicFromDb: 0, */ password: 0 } },
+  { $project: { lastNameFromDb: 0, firstNameFromDb: 0, password: 0 } },
 ];
 
 function getTotal() {
@@ -101,12 +101,14 @@ function getCarts() {
         from: 'users',
         let: { userId: '$userId' },
         as: 'user',
-        pipeline: [{ $match: { $expr: { $eq: ['$$userId', '$_id'] } } }],
+        pipeline: [{ $match: { $expr: { $eq: ['$$userId', '$_id'] } } }, ...withFullNameTemplate],
       },
     },
     { $unwind: { path: '$lastUpdateAggregate', preserveNullAndEmptyArrays: true } },
     { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
-    { $addFields: { lastUpdate: '$lastUpdateAggregate.lastOrderDate', username: '$user.phone' } },
+    {
+      $addFields: { lastUpdate: '$lastUpdateAggregate.lastOrderDate', username: '$user.username' },
+    },
     { $project: { lastUpdateAggregate: 0, user: 0 } },
   ]);
 }

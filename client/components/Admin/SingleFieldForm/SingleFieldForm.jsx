@@ -37,7 +37,7 @@ function SingleFieldForm(props) {
       }) => (
         <form className="form_small" onSubmit={handleSubmit}>
           <label htmlFor="title-id" className="row">
-            Title
+            Название
             <input
               id="title-id"
               className={`form__input${errors.title && touched.title ? ' form__input_wrong' : ''}`}
@@ -51,7 +51,7 @@ function SingleFieldForm(props) {
           <p className="form__error">{touched.title && errors.title}</p>
           <div className="row">
             <button className="auth-button auth-button_logout" type="button" onClick={onCancel}>
-              Cancel
+              Отмена
             </button>
 
             <button
@@ -59,7 +59,7 @@ function SingleFieldForm(props) {
               type="submit"
               disabled={isSubmitting || !dirty || !isValid}
             >
-              Submit
+              Подтвердить
             </button>
           </div>
         </form>

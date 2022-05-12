@@ -34,15 +34,15 @@ function AdminDashboard(props) {
       {entity ? <DeleteModal entity={entity} /> : ''}
       <header>
         <section>
-          <h2>Current admin</h2>
+          <h2>Администратор</h2>
           <p>{username}</p>
         </section>
         <section>
-          <h2>Total price</h2>
+          <h2>Выручка</h2>
           <p>{totalPrice?.toFixed(2)}р.</p>
         </section>
         <section>
-          <h2>Total count</h2>
+          <h2>Заказов</h2>
           <div className="count">{totalCount}</div>
         </section>
       </header>

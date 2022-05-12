@@ -14,7 +14,7 @@ function DeleteModal(props) {
   return (
     <div className="admin-delete-wrapper" onClick={onClose}>
       <div className="admin-delete-modal" onClick={stopPropagationCallback}>
-        <h1> {`Уверены, что хотете удалить ${entity}?`} </h1>
+        <h1> {`Уверены, что хотите удалить ${entity}?`} </h1>
         <button type="button" onClick={deleteCallback}>
           Да
         </button>

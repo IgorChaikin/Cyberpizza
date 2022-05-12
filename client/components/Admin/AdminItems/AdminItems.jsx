@@ -92,11 +92,11 @@ function AdminItems(props) {
             <thead>
               <tr>
                 <th>Id</th>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Description</th>
-                <th>Tags</th>
-                <th>Category</th>
+                <th>Товар</th>
+                <th>Цена</th>
+                <th>Описание</th>
+                <th>Тэги</th>
+                <th>Категория</th>
                 <th> </th>
                 <th> </th>
               </tr>
@@ -105,7 +105,7 @@ function AdminItems(props) {
           </table>
         ) : (
           <div className="admin-dashboard__placeholder-container">
-            <Placeholder message="There is nothing to show.." />
+            <Placeholder message="Список пуст" />
           </div>
         ),
         isAdding || editedId ? (

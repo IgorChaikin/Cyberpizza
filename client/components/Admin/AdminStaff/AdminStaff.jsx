@@ -38,7 +38,7 @@ function AdminStaff(props) {
   if (!staff || staff.length <= 0) {
     return (
       <div className="admin-dashboard__placeholder-container">
-        <Placeholder message="There is nothing to show.." />
+        <Placeholder message="Список пуст" />
       </div>
     );
   }

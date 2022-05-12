@@ -28,7 +28,7 @@ function AdminCarts(props) {
           .toString()
           .padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`}</td>
         <td className="link-container">
-          <Link to={`${match.url}/${cart._id}`}>Show details...</Link>
+          <Link to={`${match.url}/${cart._id}`}>Подробнее...</Link>
         </td>
       </tr>
     );
@@ -37,21 +37,21 @@ function AdminCarts(props) {
   if (!carts || carts.length <= 0) {
     return (
       <div className="admin-dashboard__placeholder-container">
-        <Placeholder message="There is nothing to show.." />
+        <Placeholder message="Список пуст" />
       </div>
     );
   }
 
   return (
     <div className="admin-dashboard__container">
-      <h2>Carts</h2>
+      <h2>Корзины</h2>
       <table className="main-content">
         <thead>
           <tr>
             <th>Id</th>
-            <th>User e-mail</th>
-            <th>Total price</th>
-            <th>Last update</th>
+            <th>Пользователь</th>
+            <th>Выручка</th>
+            <th>Последнее обновление</th>
             <th> </th>
           </tr>
         </thead>

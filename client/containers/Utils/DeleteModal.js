@@ -27,7 +27,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   let onClose;
   let onDelete;
   switch (entity) {
-    case 'user': {
+    case 'пользователя': {
       onClose = () => dispatch(cancelDeletedUser());
       onDelete = (id) => dispatch(deleteUser(id));
       break;
@@ -37,22 +37,22 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       onDelete = (deletedId, id) => dispatch(deleteOrder(deletedId, id));
       break;
     }
-    case 'item': {
+    case 'товар': {
       onClose = () => dispatch(cancelDeletedItem());
       onDelete = (deletedId) => dispatch(deleteItemAsAdmin(deletedId));
       break;
     }
-    case 'category': {
+    case 'категорию': {
       onClose = () => dispatch(cancelDeletedCategory());
       onDelete = (deletedId) => dispatch(deleteCategoryAsAdmin(deletedId));
       break;
     }
-    case 'filter': {
+    case 'тэг': {
       onClose = () => dispatch(cancelDeletedFilter());
       onDelete = (deletedId) => dispatch(deleteFilterAsAdmin(deletedId));
       break;
     }
-    case 'скидку': {
+    case 'промокод': {
       onClose = () => dispatch(cancelSelected());
       onDelete = (deletedId) => dispatch(deleteDiscountAsAdmin(deletedId));
       break;
@@ -72,22 +72,22 @@ const mapStateToProps = (state, ownProps) => {
   let selectedId;
 
   switch (entity) {
-    case 'user': {
+    case 'пользователя': {
       deletedId = state.users.deletedId;
       selectedId = null;
       break;
     }
-    case 'item': {
+    case 'товар': {
       deletedId = state.adminitems.deletedId;
       selectedId = null;
       break;
     }
-    case 'category': {
+    case 'категорию': {
       deletedId = state.admincategories.deletedId;
       selectedId = null;
       break;
     }
-    case 'filter': {
+    case 'тэг': {
       deletedId = state.adminfilters.deletedId;
       selectedId = null;
       break;
@@ -97,7 +97,7 @@ const mapStateToProps = (state, ownProps) => {
       selectedId = state.stafforders.selectedId;
       break;
     }
-    case 'скидку': {
+    case 'промокод': {
       deletedId = state.admindiscounts.deletedId;
       selectedId = null;
       break;

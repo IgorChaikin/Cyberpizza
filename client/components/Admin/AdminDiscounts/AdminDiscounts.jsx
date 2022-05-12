@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import './AdminDiscounts.scss';
 import PropTypes from 'prop-types';
@@ -7,7 +7,10 @@ import Placeholder from '../../Utils/Placeholder/Placeholder';
 import DiscountForm from '../../../containers/Admin/DiscountForm';
 
 function AdminDiscounts(props) {
-  const { discounts, editedId, isAdding, onSelectDeleted, onSelectEdited, onAdding } = props;
+  const { discounts, editedId, isAdding, onSelectDeleted, onSelectEdited, onAdding, onMount } =
+    props;
+
+  useEffect(() => onMount(), []);
 
   const selectDeletedCallback = useCallback(
     (e) => {
@@ -75,11 +78,11 @@ function AdminDiscounts(props) {
           </table>
         ) : (
           <div className="admin-dashboard__placeholder-container">
-            <Placeholder message="There is nothing to show.." />
+            <Placeholder message="Список пуст" />
           </div>
         ),
         isAdding || editedId ? (
-          <DiscountForm entity="скидку" />
+          <DiscountForm />
         ) : (
           <button className="auth-button auth-button_login" type="button" onClick={onAdding}>
             Добавить
@@ -97,6 +100,7 @@ AdminDiscounts.propTypes = {
   onSelectDeleted: PropTypes.func.isRequired,
   onSelectEdited: PropTypes.func.isRequired,
   onAdding: PropTypes.func.isRequired,
+  onMount: PropTypes.func.isRequired,
 };
 
 AdminDiscounts.defaultProps = {

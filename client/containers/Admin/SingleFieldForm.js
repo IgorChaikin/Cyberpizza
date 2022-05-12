@@ -15,13 +15,13 @@ import {
 const mapDispatchToProps = (dispatch, ownProps) => {
   const { entity } = ownProps;
   switch (entity) {
-    case 'category':
+    case 'категорию':
       return {
         onSubmit: (changes, id) =>
           id ? dispatch(updateCategoryAsAdmin(id, changes)) : dispatch(addCategoryAsAdmin(changes)),
         onCancel: () => dispatch(cancelCategory()),
       };
-    case 'filter':
+    case 'тэг':
       return {
         onSubmit: (changes, id) =>
           id ? dispatch(updateFilterAsAdmin(id, changes)) : dispatch(addFilterAsAdmin(changes)),
@@ -36,12 +36,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 const mapStateToProps = (state, ownProps) => {
   const { entity } = ownProps;
   switch (entity) {
-    case 'category':
+    case 'категорию':
       return {
         item: state.categories.find((elem) => elem._id === state.admincategories.editedId),
         editedId: state.admincategories.editedId,
       };
-    case 'filter': {
+    case 'тэг': {
       const filter = state.filters.tags.find((elem) => elem._id === state.adminfilters.editedId);
       if (filter) {
         filter.title = filter.name;

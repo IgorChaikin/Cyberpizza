@@ -73,11 +73,11 @@ function AdminCategories(props) {
           </table>
         ) : (
           <div className="admin-dashboard__placeholder-container">
-            <Placeholder message="There is nothing to show.." />
+            <Placeholder message="Список пуст" />
           </div>
         ),
         isAdding || editedId ? (
-          <SingleFieldForm entity="category" />
+          <SingleFieldForm entity="категорию" />
         ) : (
           <button className="auth-button auth-button_login" type="button" onClick={onAdding}>
             Добавить

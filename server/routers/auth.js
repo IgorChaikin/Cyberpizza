@@ -3,8 +3,9 @@ const bcrypt = require('bcryptjs');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 const { Types } = require('mongoose');
-const { User, Cart, LastName, /* Patronymic, */ FirstName } = require('../models');
+const { User, Cart, LastName, FirstName } = require('../models');
 const { signToken } = require('../../utils/jwt');
+const { withFullNameTemplate } = require('../shared');
 const { loginValidationSchema, registerValidationSchema } = require('../../validationShemas');
 const { checkTokenMiddleware, checkActiveMiddleware } = require('../middlewares');
 
@@ -19,7 +20,7 @@ auth.use('/logout', checkActiveMiddleware);
 auth.use('/username', checkTokenMiddleware);
 auth.use('/username', checkActiveMiddleware);
 
-async function createUser(lastName, firstName, /* patronymic, */ phone, password) {
+async function createUser(lastName, firstName, phone, password) {
   let lastNameFromDb = await LastName.findOne({ name: lastName });
   if (!lastNameFromDb) {
     lastNameFromDb = await new LastName({ name: lastName }).save();
@@ -29,11 +30,6 @@ async function createUser(lastName, firstName, /* patronymic, */ phone, password
   if (!firstNameFromDb) {
     firstNameFromDb = await new FirstName({ name: firstName }).save();
   }
-
-  /* let patronymicFromDb = patronymic ? await Patronymic.findOne({ name: patronymic }) : null;
-  if (!patronymicFromDb && patronymic) {
-    patronymicFromDb = await new Patronymic({ name: patronymic }).save();
-  } */
 
   const hash = bcrypt.hashSync(password, 8);
 
@@ -110,13 +106,17 @@ auth.post('/logout', (request, response) => {
   });
 });
 
-auth.get('/username', (request, response) => {
+auth.get('/username', async (request, response) => {
   const { decoded } = request;
-  return User.findOne({ _id: decoded?._id, isActive: true }).then((result) => {
-    response.json({
-      phone: result?.phone,
-      isUser: result ? result.roleId.equals(ObjectId(userId)) : true,
-    });
+
+  const result = await User.aggregate([
+    { $match: { _id: ObjectId(decoded?._id), isActive: true } },
+    ...withFullNameTemplate,
+  ]);
+
+  return response.json({
+    username: result[0]?.username,
+    isUser: result ? result[0]?.roleId.equals(ObjectId(userId)) : true,
   });
 });
 

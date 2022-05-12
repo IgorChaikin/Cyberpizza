@@ -17,11 +17,11 @@ const mapStateToProps = (state) => ({
   totalPrice: state.admin.totalPrice,
   username: state.auth.username,
   entity:
-    (state.users.deletedId && 'user') ||
-    (state.adminitems.deletedId && 'item') ||
-    (state.admincategories.deletedId && 'category') ||
-    (state.adminfilters.deletedId && 'filter') ||
-    (state.admindiscounts.deletedId && 'discounts'),
+    (state.users.deletedId && 'пользователя') ||
+    (state.adminitems.deletedId && 'товар') ||
+    (state.admincategories.deletedId && 'категорию') ||
+    (state.adminfilters.deletedId && 'тэг') ||
+    (state.admindiscounts.deletedId && 'промокод'),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminDashboard);

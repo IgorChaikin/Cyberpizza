@@ -61,13 +61,31 @@ const withDiscountTemplate = [
   { $unwind: { path: '$discount', preserveNullAndEmptyArrays: true } },
 ];
 
-const secureCardTemplate = [
+const withFullNameTemplate = [
   {
-    $addFields: {
-      secureNumber: { $concat: ['****-****-****-', { $substr: ['$number', 12, -1] }] },
+    $lookup: {
+      from: 'lastnames',
+      localField: 'lastNameId',
+      foreignField: '_id',
+      as: 'lastNameFromDb',
     },
   },
-  { $project: { number: 0, name: 0, date: 0, cvv: 0, userId: 0 } },
+  {
+    $lookup: {
+      from: 'firstnames',
+      localField: 'firstNameId',
+      foreignField: '_id',
+      as: 'firstNameFromDb',
+    },
+  },
+  { $unwind: { path: '$lastNameFromDb', preserveNullAndEmptyArrays: true } },
+  { $unwind: { path: '$firstNameFromDb', preserveNullAndEmptyArrays: true } },
+  {
+    $addFields: {
+      username: { $concat: ['$firstNameFromDb.name', ' ', '$lastNameFromDb.name'] },
+    },
+  },
+  { $project: { lastNameFromDb: 0, firstNameFromDb: 0, password: 0 } },
 ];
 
 const getOrderWithPrice = (orderId) => {
@@ -84,5 +102,5 @@ module.exports = {
   withCityAndStreetTemplate,
   withItemAndSortTemplate,
   withDiscountTemplate,
-  secureCardTemplate,
+  withFullNameTemplate,
 };

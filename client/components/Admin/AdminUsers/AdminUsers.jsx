@@ -207,7 +207,7 @@ function AdminUsers(props) {
         ]
       ) : (
         <div className="admin-dashboard__placeholder-container">
-          <Placeholder message="There is nothing to show.." />
+          <Placeholder message="Список пуст" />
         </div>
       )}
     </div>

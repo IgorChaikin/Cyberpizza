@@ -1,13 +1,15 @@
 import { connect } from 'react-redux';
-import AdminDiscounts from '../../components/Admin/AdminCategories/AdminCategories';
+import AdminDiscounts from '../../components/Admin/AdminDiscounts/AdminDiscounts';
 import {
   selectDeleted,
   selectEdited,
   turnAddingOn,
+  fetchDiscountsAsAdmin,
 } from '../../actions/admin/actions.admin.discounts';
 
 const mapDispatchToProps = (dispatch) => ({
   onAdding: () => dispatch(turnAddingOn()),
+  onMount: () => dispatch(fetchDiscountsAsAdmin()),
   onSelectDeleted: (id) => dispatch(selectDeleted(id)),
   onSelectEdited: (id) => dispatch(selectEdited(id)),
 });
