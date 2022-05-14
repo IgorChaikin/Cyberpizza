@@ -2,8 +2,9 @@ import React, { useCallback, useEffect } from 'react';
 
 import './StaffDashboard.scss';
 import PropTypes from 'prop-types';
-import { useRouteMatch } from 'react-router';
 import { Route, Switch, Link } from 'react-router-dom';
+import { useRouteMatch } from 'react-router';
+
 import Placeholder from '../../Utils/Placeholder/Placeholder';
 import DeleteModal from '../../../containers/Utils/DeleteModal';
 import getFormatAddress from '../../../../utils/getFormatAddress';

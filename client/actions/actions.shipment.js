@@ -12,7 +12,7 @@ export const FETCH_SHOPS_FULFILLED = `${FETCH_SHOPS}_${ActionType.Fulfilled}`;
 
 export function fetchCities() {
   const payload = new Promise((resolve) => {
-    fetch('/api/shipment/cities', { method: 'GET', credentials: 'include' })
+    fetch('/api/shipment/cities', { method: 'GET' /* , credentials: 'same-origin' */ })
       .then((response) => response.json())
       .then((result) => {
         resolve(result);
@@ -27,7 +27,7 @@ export function fetchCities() {
 
 export function fetchShops() {
   const payload = new Promise((resolve) => {
-    fetch('/api/shipment/shops', { method: 'GET', credentials: 'include' })
+    fetch('/api/shipment/shops', { method: 'GET' /* , credentials: 'same-origin' */ })
       .then((response) => response.json())
       .then((result) => {
         resolve(result);
@@ -42,7 +42,9 @@ export function fetchShops() {
 
 export function fetchStreets(cityId) {
   const payload = new Promise((resolve) => {
-    fetch(`/api/shipment/streets?cityId=${cityId}`, { method: 'GET', credentials: 'include' })
+    fetch(`/api/shipment/streets?cityId=${cityId}`, {
+      method: 'GET' /* , credentials: 'same-origin' */,
+    })
       .then((response) => response.json())
       .then((result) => {
         resolve(result);

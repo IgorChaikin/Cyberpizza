@@ -191,7 +191,7 @@ api.post('/orders', async (request, response) => {
     // create new cart if order is first and no cart id in cookies
     cartId = await createCart(decoded?._id);
     // set new cart id in cookies
-    response.cookie('cartId', cartId, { secure: false, maxAge: 3600 * 24 });
+    response.cookie('cartId', cartId /* , { secure: false, maxAge: 3600 * 24 } */);
   }
   await updateCart(cartId, newOrder._id);
   const res = await getOrders(cartId);

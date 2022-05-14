@@ -1,0 +1,83 @@
+@import '../../../styles/vars';
+
+.qr-wrapper {
+  overflow-x: hidden;
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background-color: rgba($grey-color, 0.5);
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media (min-width: 1240px) {
+    .qr-modal {
+      width: 30%;
+      min-height: 55%;
+
+      .qr-modal__reader {
+        height: 15em;
+        width: 15em;
+      }
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape),
+    (max-width: 768px) and (orientation: landscape) {
+    .qr-modal {
+      width: 70vh;
+      height: 70vh;
+
+      .qr-modal__reader {
+        min-height: 40vh;
+        width: 40vh;
+      }
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait),
+    (max-width: 768px) and (orientation: portrait) {
+    .qr-modal {
+      width: 70vw;
+      height: 70vw;
+
+      .qr-modal__reader {
+        min-height: 40vw;
+        width: 40vw;
+      }
+    }
+  }
+
+  .qr-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    position: absolute;
+    z-index: 2;
+    padding: 1rem;
+    background-color: $white-color;
+    border-radius: 2rem;
+
+    h1 {
+      color: $black-color;
+      font: $bold-header-text-serif;
+      text-align: center;
+    }
+
+    .button-close {
+      align-self: flex-end;
+      background: none;
+      color: $grey-color;
+      font: $price-text;
+      border: none;
+      cursor: pointer;
+    }
+  }
+}

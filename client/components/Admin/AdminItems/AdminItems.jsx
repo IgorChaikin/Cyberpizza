@@ -62,7 +62,7 @@ function AdminItems(props) {
           ' '
         ) : (
           <button type="button" id={`${item._id}_EDITITEM`}>
-            Edit
+            Изменить
           </button>
         )}
       </td>

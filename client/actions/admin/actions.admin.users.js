@@ -79,7 +79,7 @@ export function updateUsers(changes) {
   const payload = new Promise((resolve) => {
     fetch('/api/admin/users', {
       method: 'PUT',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         changes,

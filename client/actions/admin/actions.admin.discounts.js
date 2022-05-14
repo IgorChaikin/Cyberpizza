@@ -69,7 +69,7 @@ export function updateDiscountAsAdmin(id, changes) {
   const payload = new Promise((resolve) => {
     fetch(`/api/admin/db/discounts/${id}`, {
       method: 'PUT',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(changes),
     })
@@ -85,7 +85,7 @@ export function addDiscountAsAdmin(changes) {
   const payload = new Promise((resolve) => {
     fetch('/api/admin/db/discounts/', {
       method: 'POST',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(changes),
     })

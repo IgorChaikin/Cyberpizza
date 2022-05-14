@@ -4,7 +4,7 @@ import AuthBar from '../../components/Auth/AuthBar/AuthBar';
 import { logoutUser } from '../../actions/actions.auth';
 
 const mapDispatchToProps = (dispatch) => ({
-  onLogout: (username) => dispatch(logoutUser(username)),
+  onLogout: () => dispatch(logoutUser()),
 });
 
 const mapStateToProps = (state) => ({

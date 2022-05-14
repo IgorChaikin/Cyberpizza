@@ -4,6 +4,7 @@ export const REFRESH_DISCOUNTS_ERROR = 'REFRESH_DISCOUNTS_ERROR';
 
 export const APPLY_DISCOUNT = 'APPLY_DISCOUNT_FULFILLED';
 export const FETCH_DISCOUNTS = 'FETCH_DISCOUNTS';
+export const TURN_QR_MODAL_SHOWING = 'TURN_QR_MODAL_SHOWING';
 
 export const APPLY_DISCOUNT_FULFILLED = `${APPLY_DISCOUNT}_${ActionType.Fulfilled}`;
 export const FETCH_DISCOUNTS_FULFILLED = `${FETCH_DISCOUNTS}_${ActionType.Fulfilled}`;
@@ -14,9 +15,13 @@ export function refreshDiscountsError() {
   return { type: REFRESH_DISCOUNTS_ERROR };
 }
 
+export function setQrModalShowing(isShowing) {
+  return { type: TURN_QR_MODAL_SHOWING, payload: isShowing };
+}
+
 export function fetchDiscounts() {
   const payload = new Promise((resolve) => {
-    fetch('/api/discounts', { method: 'GET', credentials: 'include' })
+    fetch('/api/discounts', { method: 'GET' /* , credentials: 'same-origin' */ })
       .then((response) => response.json())
       .then((result) => {
         resolve(result);
@@ -33,7 +38,7 @@ export function applyDiscount(values) {
   const payload = new Promise((resolve, reject) => {
     fetch('/api/orders/discount', {
       method: 'PATCH',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(values),
     })
@@ -52,6 +57,7 @@ export function applyDiscount(values) {
 const initialState = {
   discounts: [],
   discountError: null,
+  isQrModalShowing: false,
 };
 
 export default function reducer(state = initialState, action) {
@@ -59,8 +65,15 @@ export default function reducer(state = initialState, action) {
     case FETCH_DISCOUNTS_FULFILLED:
       return {
         ...state,
+        discountError: null,
         discounts: action.payload,
       };
+    case TURN_QR_MODAL_SHOWING: {
+      return {
+        ...state,
+        isQrModalShowing: action.payload,
+      };
+    }
     case APPLY_DISCOUNT_FULFILLED: {
       alert('Промокод успешно применён!');
       return {

@@ -35,7 +35,7 @@ function AdminCategories(props) {
           ' '
         ) : (
           <button type="button" id={`${category._id}_EDITCATEGORY`}>
-            Edit
+            Изменить
           </button>
         )}
       </td>

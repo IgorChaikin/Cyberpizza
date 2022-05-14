@@ -52,7 +52,7 @@ export function updateCategoryAsAdmin(id, changes) {
   const payload = new Promise((resolve) => {
     fetch(`/api/admin/db/categories/${id}`, {
       method: 'PUT',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(changes),
     })
@@ -68,7 +68,7 @@ export function addCategoryAsAdmin(changes) {
   const payload = new Promise((resolve) => {
     fetch('/api/admin/db/categories/', {
       method: 'POST',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(changes),
     })

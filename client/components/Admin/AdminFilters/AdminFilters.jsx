@@ -35,7 +35,7 @@ function AdminFilters(props) {
           ' '
         ) : (
           <button type="button" id={`${filter._id}_EDITFILTER`}>
-            Edit
+            Изменить
           </button>
         )}
       </td>
@@ -53,7 +53,7 @@ function AdminFilters(props) {
 
   return (
     <div className="admin-dashboard__container">
-      <h2>Filters</h2>
+      <h2>Тэги</h2>
       {[
         filters?.length > 0 ? (
           <table

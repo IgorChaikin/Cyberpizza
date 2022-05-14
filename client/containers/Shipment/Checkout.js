@@ -3,7 +3,11 @@ import Checkout from '../../components/Shipment/Checkout/Checkout';
 
 import { fetchStreets, changeValue } from '../../actions/actions.shipment';
 import { refreshOrderError, confirmOrder } from '../../actions/actions.orders';
-import { refreshDiscountsError, applyDiscount } from '../../actions/actions.discounts';
+import {
+  refreshDiscountsError,
+  applyDiscount,
+  setQrModalShowing,
+} from '../../actions/actions.discounts';
 
 const mapDispatchToProps = (dispatch) => ({
   onSubmit: (values) => dispatch(confirmOrder(values)),
@@ -14,6 +18,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onChange: (key, value) => dispatch(changeValue({ key, value })),
   onCitySelected: (cityId) => dispatch(fetchStreets(cityId)),
+  onOpenModal: () => dispatch(setQrModalShowing(true)),
 });
 
 const mapStateToProps = (state) => ({
@@ -21,12 +26,12 @@ const mapStateToProps = (state) => ({
   cities: state.shipment.cities,
   streets: state.shipment.streets,
   shops: state.shipment.shops,
+  isQrModalShowing: state.discounts.isQrModalShowing,
 
   selectedCityId: state.shipment.selectedCityId,
   isPickup: state.shipment.isPickup,
 
   isAuthenticated: state.auth.isAuthenticated,
-  isCardAdding: state.shipment.isCardAdding,
   isConfirmable: state.orders.isConfirmable,
   orderError: state.orders.orderError,
   discountError: state.discounts.discountError,

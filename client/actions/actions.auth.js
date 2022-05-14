@@ -54,12 +54,11 @@ export function loginUser(values) {
   };
 }
 
-export function logoutUser(phone) {
+export function logoutUser() {
   const payload = new Promise((resolve, reject) => {
     fetch('/api/auth/logout', {
-      method: 'POST',
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone }),
     })
       .then((result) => {
         resolve(result);

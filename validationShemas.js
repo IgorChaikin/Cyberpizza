@@ -3,34 +3,40 @@ const yup = require('yup');
 const loginValidationObject = {
   phone: yup
     .string()
-    .typeError('Телефон должен быть строкой')
+    .typeError('Поле "Телефон" должно быть строкой')
     .matches(/^\+375(\(\d{2,3}\))[\d]{3}[\-][\d]{2}[\-][\d]{2}$/, 'Неверный шаблон телефона')
     .required('Поле "Телефон" обязательно'),
   password: yup
     .string()
-    .typeError('Пароль должен быть строкой')
+    .typeError('Поле "Пароль" должно быть строкой')
     .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, 'Слабый пароль')
     .required('Поле "Пароль" обязательно'),
 };
 
 const checkoutValidationObject = {
-  isPickup: yup.bool().required('Choose if order should be pickup'),
+  isPickup: yup.bool().required('Выберите: самовывоз или доставка'),
   isPaid: yup.mixed(),
 };
 
 const titleValidationObject = {
-  title: yup.string().typeError('Title should be a string').required('Title is required'),
+  title: yup
+    .string()
+    .typeError('Поле "Название" должно быть строкой')
+    .required('Поле "Название" обязательно'),
 };
 
 const itemClientValidationObject = {
   ...titleValidationObject,
-  imgPath: yup.string().typeError('Img path should be a string').required('Img path is required'),
+  imgPath: yup
+    .string()
+    .typeError('Поле "Путь к изображению" должно быть строкой')
+    .required('Поле "Путь к изображению" обязательно'),
   price: yup
     .number()
     .min(0)
-    .typeError('Price should be a positive number')
-    .required('Price is required'),
-  categoryId: yup.string().nullable(true).typeError('Category id should be a string'),
+    .typeError('Поле "Цена" должно быть положительным числом')
+    .required('Поле "Цена" обязательно'),
+  categoryId: yup.string().nullable(true).typeError('Поле "Категория" должно быть строкой'),
 };
 
 const loginValidationSchema = yup.object().shape(loginValidationObject);
@@ -40,64 +46,37 @@ const registerValidationSchema = yup.object().shape({
     .oneOf([yup.ref('password')], 'Пароли не совпадают')
     .required('Поле "Повторить пароль" обязательно'),
 
-  lastName: yup.string().typeError('Lastname should be a string').required('Lastname is required'),
+  lastName: yup
+    .string()
+    .typeError('Поле "Фамилия" должон быть строкой')
+    .required('Поле "Фамилия" обязательно'),
   firstName: yup
     .string()
-    .typeError('Firstname should be a string')
-    .required('Firstname is required'),
-  // patronymic: yup.string().nullable(true).typeError('Patronymic should be a string'),
+    .typeError('Поле "Имя" должно быть строкой')
+    .required('Поле "Имя" обязательно'),
   ...loginValidationObject,
 });
 
 const withShopValidationSchema = yup.object().shape({
-  shopId: yup.string().required('Shop is required'),
+  shopId: yup.string().required('Поле "Адрес заведения" обязательно'),
   ...checkoutValidationObject,
 });
 
 const withAddressValidationSchema = yup.object().shape({
-  cityId: yup.string().required('City is required'),
-  streetId: yup.string().required('Street is required'),
+  cityId: yup.string().required('Поле "Город" обязательно'),
+  streetId: yup.string().required('Поле "Улица" обязательно'),
   house: yup
     .number()
     .min(0)
-    .typeError('House should be a positive number')
-    .required('House number is required'),
-  building: yup.number().min(0).nullable(true).typeError('Building should be a positive number'),
+    .typeError('Поле "Дом" должно быть числом')
+    .required('Поле "Дом" обязательно'),
+  building: yup.number().min(0).nullable(true).typeError('Поле "Корпус" должно быть числом'),
   apartment: yup
     .number()
     .min(0)
-    .typeError('Apartment should be a positive number')
-    .required('Apartment number is required'),
+    .typeError('Поле "Квартира" должно быть числом')
+    .required('Поле "Квартира" обязательно'),
   ...checkoutValidationObject,
-});
-
-// SHOULD BE DELETED
-const cardValidationSchema = yup.object().shape({
-  number: yup
-    .string()
-    .typeError('Card number should be a string')
-    .matches(/^\d{16}$/, 'Card number is not valid')
-    .required('Card number is required'),
-  name: yup
-    .string()
-    .typeError('Holder name should be a string')
-    .matches(/^(?:[A-Z]+?) (?:[A-Z]+?)$/, 'Holder name is not valid')
-    .required('Holder name is required'),
-  month: yup
-    .string()
-    .typeError('Month should be a string')
-    .matches(/^\d{2}$/, 'Month is not valid')
-    .required('Month is required'),
-  year: yup
-    .string()
-    .typeError('Year should be a string')
-    .matches(/^\d{2}$/, 'Year is not valid')
-    .required('Year is required'),
-  cvv: yup
-    .string()
-    .typeError('CVV should be a string')
-    .matches(/^\d{3}$/, 'CVV is not valid')
-    .required('CVV is required'),
 });
 
 const discountValidationSchema = yup.object().shape({
@@ -116,7 +95,7 @@ const itemClientValidationSchema = yup.object().shape(itemClientValidationObject
 
 const itemServerValidationSchema = yup.object().shape({
   ...itemClientValidationObject,
-  filterIds: yup.array().min(0).of(yup.string()).required('Filter ids is required'),
+  filterIds: yup.array().min(0).of(yup.string()).required('ID тэгов обязательны'),
 });
 
 module.exports = {
@@ -124,7 +103,6 @@ module.exports = {
   registerValidationSchema,
   withShopValidationSchema,
   withAddressValidationSchema,
-  cardValidationSchema,
   titleValidationSchema,
   itemClientValidationSchema,
   itemServerValidationSchema,

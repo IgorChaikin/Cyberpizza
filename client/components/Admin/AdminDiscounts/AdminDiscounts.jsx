@@ -39,7 +39,7 @@ function AdminDiscounts(props) {
           ' '
         ) : (
           <button type="button" id={`${discount._id}_EDITDISCOUNT`}>
-            Edit
+            Изменить
           </button>
         )}
       </td>

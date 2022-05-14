@@ -7,8 +7,8 @@ function AuthBar(props) {
   const { username, isUser, onLogout } = props;
 
   const logoutCallback = useCallback(() => {
-    onLogout(username);
-  }, [onLogout, username]);
+    onLogout();
+  }, [onLogout]);
 
   if (username) {
     return (

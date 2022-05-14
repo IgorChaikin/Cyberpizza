@@ -26,7 +26,6 @@ const mapStateToProps = (state) => {
       (elem) =>
         elem.lastName?.indexOf(state.users.searchData.lastName) !== -1 &&
         elem.firstName?.indexOf(state.users.searchData.firstName) !== -1 &&
-        // elem.patronymic?.indexOf(state.users.searchData.patronymic) !== -1 &&
         (state.users.searchData.roleId === null || elem.roleId === state.users.searchData.roleId) &&
         (state.users.searchData.isActive === null ||
           elem.isActive === state.users.searchData.isActive)

@@ -30,7 +30,8 @@
     "jsx-a11y/no-noninteractive-element-interactions": "off",
     "react-perf/jsx-no-new-object-as-prop": "off",
     "react/jsx-boolean-value": "off",
-    "no-useless-escape": "off"
+    "no-useless-escape": "off",
+    "react/forbid-prop-types": "off"
   },
   "overrides": [
     {

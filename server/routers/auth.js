@@ -61,7 +61,7 @@ auth.post('/register', (request, response) => {
       const { cartId } = request.cookies;
       await Cart.updateOne({ _id: ObjectId(cartId) }, { $set: { userId: _id } });
       const token = signToken({ _id, roleId, isActive });
-      response.cookie('token', token, { secure: false, maxAge: 3600 * 24 });
+      response.cookie('token', token /* , { secure: false, maxAge: 3600 * 24 } */);
       return response.json({ phone, isUser: roleId.equals(ObjectId(userId)) });
     })
     .catch(() => response.sendStatus(422));
@@ -80,12 +80,16 @@ auth.post('/login', (request, response) => {
         const { _id, roleId, isActive } = user;
         return Cart.findOne({ userId: ObjectId(_id) }).then((cart) => {
           if (cart) {
-            response.cookie('cartId', cart._id, { secure: false, maxAge: 3600 * 24 });
+            response.cookie('cartId', cart._id /* , { secure: false, maxAge: 3600 * 24 } */);
           } else {
-            response.clearCookie('cartId', { secure: false, maxAge: 0 });
+            response.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+            response.header('Expires', '-1');
+            response.header('Pragma', 'no-cache');
+
+            response.clearCookie('cartId', { path: '/' /* , domain: 'localhost' */ });
           }
           const token = signToken({ _id, roleId, isActive });
-          response.cookie('token', token, { secure: false, maxAge: 3600 * 24 });
+          response.cookie('token', token /* , { secure: false, maxAge: 3600 * 24 } */);
           response.json({ phone, isUser: roleId.equals(ObjectId(userId)) });
         });
       });
@@ -93,16 +97,20 @@ auth.post('/login', (request, response) => {
     .catch(() => response.sendStatus(422));
 });
 
-auth.post('/logout', (request, response) => {
+auth.patch('/logout', (request, response) => {
   const { decoded } = request;
-  const { phone } = request.body;
-  return User.findOne({ _id: decoded._id, phone }).then((result) => {
+  return User.findOne({ _id: ObjectId(decoded._id) }).then((result) => {
     if (!result) {
       return response.sendStatus(403);
     }
-    response.clearCookie('token', { secure: false, maxAge: 0 });
-    response.clearCookie('cartId', { secure: false, maxAge: 0 });
-    return response.sendStatus(201);
+    response.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    response.header('Expires', '-1');
+    response.header('Pragma', 'no-cache');
+
+    response.clearCookie('token', { path: '/' });
+    response.clearCookie('cartId', { path: '/' });
+
+    return response.sendStatus(200);
   });
 });
 

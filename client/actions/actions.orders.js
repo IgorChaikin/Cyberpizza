@@ -23,7 +23,7 @@ export function switchOrders() {
 
 export function fetchOrders() {
   const payload = new Promise((resolve) => {
-    fetch('/api/orders', { method: 'GET', credentials: 'include' })
+    fetch('/api/orders', { method: 'GET' /* , credentials: 'same-origin' */ })
       .then((response) => response.json())
       .then((result) => {
         resolve(result);
@@ -40,7 +40,7 @@ export function postOrder(id) {
   const payload = new Promise((resolve) => {
     fetch('/api/orders', {
       method: 'POST',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id,
@@ -62,7 +62,7 @@ export function updateOrder(id, amount) {
   const payload = new Promise((resolve) => {
     fetch('/api/orders', {
       method: 'PATCH',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id,
@@ -84,7 +84,7 @@ export function deleteOrder(id) {
   const payload = new Promise((resolve) => {
     fetch('/api/orders', {
       method: 'DELETE',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id,
@@ -109,7 +109,7 @@ export function confirmOrder(values) {
   const payload = new Promise((resolve, reject) => {
     fetch('/api/orders/confirm', {
       method: 'PUT',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(values),
     })

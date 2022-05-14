@@ -10,10 +10,10 @@ import {
 } from '../../../../validationShemas';
 import getFormatAddress from '../../../../utils/getFormatAddress';
 import getEventArgs from '../../../../utils/getEventArgs';
+import QRReader from '../../../containers/Shipment/QRReader';
 
 function Checkout(props) {
   const {
-    // cards,
     cities,
     streets,
     shops,
@@ -21,14 +21,15 @@ function Checkout(props) {
     isPickup,
     isAuthenticated,
     isConfirmable,
-    // isCardAdding,
     orderError,
     discountError,
+    isQrModalShowing,
     onMount,
     onCitySelected,
     onChange,
     onSubmit,
     onDiscountApply,
+    onOpenModal,
   } = props;
 
   useEffect(() => {
@@ -98,10 +99,6 @@ function Checkout(props) {
     [onDiscountApply]
   );
 
-  /* const goToCardCallback = useCallback(() => {
-    onChange('isCardAdding', true);
-  }, [onChange]); */
-
   if (!isAuthenticated) {
     return <Redirect to="/register" />;
   }
@@ -138,11 +135,18 @@ function Checkout(props) {
                 />
               </label>
               <button
-                className="auth-button auth-button_login"
+                className="auth-button auth-button_login auth-button_shifted"
                 type="submit"
                 disabled={isSubmitting || !dirty || !isValid}
               >
                 Применить
+              </button>
+              <button
+                className="auth-button auth-button_login auth-button_shifted"
+                type="button"
+                onClick={onOpenModal}
+              >
+                QR
               </button>
             </div>
             <p className="form__error"> {discountError}</p>
@@ -336,6 +340,7 @@ function Checkout(props) {
       </Formik>
 
       <div className="decoration decoration_dark" />
+      {isQrModalShowing ? <QRReader /> : ''}
     </main>
   );
 }
@@ -345,18 +350,18 @@ Checkout.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onMount: PropTypes.func.isRequired,
   onDiscountApply: PropTypes.func.isRequired,
+  onOpenModal: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   onCitySelected: PropTypes.bool.isRequired,
   orderError: PropTypes.string,
   discountError: PropTypes.string,
   isConfirmable: PropTypes.bool.isRequired,
   isPickup: PropTypes.bool.isRequired,
-  /* isCardAdding: PropTypes.bool.isRequired,
-  cards: PropTypes.arrayOf(PropTypes.any).isRequired, */
   cities: PropTypes.arrayOf(PropTypes.any).isRequired,
   streets: PropTypes.arrayOf(PropTypes.any).isRequired,
   shops: PropTypes.arrayOf(PropTypes.any).isRequired,
   selectedCityId: PropTypes.string,
+  isQrModalShowing: PropTypes.bool.isRequired,
 };
 
 Checkout.defaultProps = {

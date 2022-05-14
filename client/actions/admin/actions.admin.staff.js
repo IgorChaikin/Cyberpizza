@@ -33,7 +33,7 @@ export function updateStaff(changes) {
   const payload = new Promise((resolve) => {
     fetch('/api/admin/staff', {
       method: 'PUT',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         changes,
