@@ -40,10 +40,18 @@ const checkBodyMiddleware = (request, response, next) => {
   return next();
 };
 
+const setHeadersMiddleware = (request, response, next) => {
+  response.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  response.header('Expires', '-1');
+  response.header('Pragma', 'no-cache');
+  return next();
+};
+
 module.exports = {
   verifyTokenMiddleware,
   checkTokenMiddleware,
   checkActiveMiddleware,
   checkBodyMiddleware,
   checkRoleMiddleware,
+  setHeadersMiddleware,
 };

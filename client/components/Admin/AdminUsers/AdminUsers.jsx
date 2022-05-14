@@ -54,14 +54,24 @@ function AdminUsers(props) {
   const submitCallback = useCallback(
     (values, { setSubmitting }) => {
       setSubmitting(false);
-      onSearch({
+      const convertedValues = {
         ...values,
         isActive: values.isActive === 'null' ? null : values.isActive === 'true',
         roleId: values.roleId === 'null' ? null : values.roleId,
-      });
+      };
+      console.log(convertedValues);
+      onSearch(convertedValues);
     },
     [onSearch]
   );
+
+  const initialValues = {
+    lastName: '',
+    firstName: '',
+    roleId: null,
+    isActive: null,
+    amount: 100,
+  };
 
   const usersList = users.map((user) => (
     <tr key={user._id}>
@@ -74,12 +84,12 @@ function AdminUsers(props) {
           type="checkbox"
           id={`${user._id}_ACT`}
           checked={user.isActive}
-          disabled={user.phone === username}
+          disabled={`${user.firstName} ${user.lastName}` === username}
           readOnly
         />
       </td>
       <td className="checkbox-container">
-        <select id={`${user._id}_ADM`} disabled={user.phone === username}>
+        <select id={`${user._id}_ADM`} disabled={`${user.firstName} ${user.lastName}` === username}>
           {roles.map((role) => (
             <option value={role._id} selected={role._id === user.roleId}>
               {role.title}
@@ -99,83 +109,104 @@ function AdminUsers(props) {
     </tr>
   ));
 
-  const initialValues = {
-    lastName: '',
-    firstName: '',
-    // patronymic: '',
-    roleId: null,
-    isActive: null,
-  };
-
   return (
     <div className="admin-dashboard__container">
       <h2>Пользователи</h2>
       <Formik initialValues={initialValues} onSubmit={submitCallback}>
-        {({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
+        {({ values, handleChange, handleBlur, handleSubmit, isSubmitting, resetForm }) => (
           <form className="search-form" onSubmit={handleSubmit}>
-            <label htmlFor="lastname-id" className="col">
-              Фамилия
-              <input
-                id="lastname-id"
-                className="form__input"
-                name="lastName"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.lastName}
-              />
-            </label>
-            <label htmlFor="firstname-id" className="col">
-              Имя
-              <input
-                id="firstname-id"
-                className="form__input"
-                name="firstName"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.firstName}
-              />
-            </label>
-            <label htmlFor="role-id" className="col">
-              Роль
-              <select
-                id="role-id"
-                className="form__input"
-                name="roleId"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.roleId}
-              >
-                <option value={null}>Не выбрано</option>
-                {roles.map((elem) => (
-                  <option value={elem._id} selected={elem._id === values.roleId}>
-                    {elem.title}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <div className="row">
+              <label htmlFor="lastname-id" className="col">
+                Фамилия
+                <input
+                  id="lastname-id"
+                  className="form__input"
+                  name="lastName"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.lastName}
+                />
+              </label>
+              <label htmlFor="firstname-id" className="col">
+                Имя
+                <input
+                  id="firstname-id"
+                  className="form__input"
+                  name="firstName"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.firstName}
+                />
+              </label>
+              <label htmlFor="role-id" className="col">
+                Роль
+                <select
+                  id="role-id"
+                  className="form__input"
+                  name="roleId"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.roleId}
+                >
+                  <option value={null}>Не выбрано</option>
+                  {roles.map((elem) => (
+                    <option value={elem._id} selected={elem._id === values.roleId}>
+                      {elem.title}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-            <label htmlFor="active-id" className="col">
-              Активен
-              <select
-                id="active-id"
-                className="form__input"
-                name="isActive"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.isActive}
-              >
-                <option value="null">Не выбрано</option>
-                <option value="true" selected={values.isActive === true}>
-                  Да
-                </option>
-                <option value="false" selected={values.isActive === false}>
-                  Нет
-                </option>
-              </select>
-            </label>
-            <button className="auth-button auth-button_login" type="submit" disabled={isSubmitting}>
-              Поиск
-            </button>
+              <label htmlFor="active-id" className="col">
+                Активен
+                <select
+                  id="active-id"
+                  className="form__input"
+                  name="isActive"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.isActive}
+                >
+                  <option value={null}>Не выбрано</option>
+                  <option value="true" selected={values.isActive === true}>
+                    Да
+                  </option>
+                  <option value="false" selected={values.isActive === false}>
+                    Нет
+                  </option>
+                </select>
+              </label>
+            </div>
+            <div className="row row_bottom">
+              <label htmlFor="amount-id" className="col">
+                Величина выбоки
+                <input
+                  id="amount-id"
+                  className="form__input"
+                  name="amount"
+                  type="number"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.amount}
+                />
+              </label>
+              <span className="button-group">
+                <button
+                  className="auth-button auth-button_logout"
+                  type="button"
+                  onClick={resetForm}
+                >
+                  Сброс
+                </button>
+                <button
+                  className="auth-button auth-button_login"
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  Поиск
+                </button>
+              </span>
+            </div>
           </form>
         )}
       </Formik>

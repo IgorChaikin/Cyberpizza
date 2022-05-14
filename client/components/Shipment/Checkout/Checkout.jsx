@@ -146,7 +146,7 @@ function Checkout(props) {
                 type="button"
                 onClick={onOpenModal}
               >
-                QR
+                <img src="/qr-white.png" alt="qr-white.png" />
               </button>
             </div>
             <p className="form__error"> {discountError}</p>

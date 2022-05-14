@@ -25,8 +25,6 @@ function QRReader(props) {
     [handleScan]
   );
 
-  // style={{ height: 240, width: 320 }}
-
   return (
     <div className="qr-wrapper" onClick={onClose}>
       <div className="qr-modal" onClick={stopPropagationCallback}>

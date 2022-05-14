@@ -14,9 +14,10 @@ import AdminItems from '../../../containers/Admin/AdminItems';
 import AdminCategories from '../../../containers/Admin/AdminCategories';
 import AdminFilters from '../../../containers/Admin/AdminFilters';
 import AdminDiscounts from '../../../containers/Admin/AdminDiscounts';
+import GenerateQRModal from '../../../containers/Admin/GenerateQRModal';
 
 function AdminDashboard(props) {
-  const { requestError, entity, totalCount, totalPrice, username, onMount } = props;
+  const { requestError, entity, totalCount, totalPrice, username, onMount, discountForQr } = props;
   const match = useRouteMatch();
 
   useEffect(() => onMount(), []);
@@ -32,6 +33,7 @@ function AdminDashboard(props) {
   return (
     <div className="admin-dashboard">
       {entity ? <DeleteModal entity={entity} /> : ''}
+      {discountForQr ? <GenerateQRModal /> : ''}
       <header>
         <section>
           <h2>Администратор</h2>
@@ -42,7 +44,7 @@ function AdminDashboard(props) {
           <p>{totalPrice?.toFixed(2)}р.</p>
         </section>
         <section>
-          <h2>Заказов</h2>
+          <h2>Доставлено заказов</h2>
           <div className="count">{totalCount}</div>
         </section>
       </header>
@@ -115,12 +117,18 @@ AdminDashboard.propTypes = {
   requestError: PropTypes.string,
   username: PropTypes.string,
   entity: PropTypes.string,
+  discountForQr: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    value: PropTypes.number.isRequired,
+  }),
 };
 
 AdminDashboard.defaultProps = {
   requestError: null,
   username: null,
   entity: null,
+  discountForQr: null,
 };
 
 export default AdminDashboard;

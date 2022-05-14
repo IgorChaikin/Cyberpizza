@@ -7,8 +7,16 @@ import Placeholder from '../../Utils/Placeholder/Placeholder';
 import DiscountForm from '../../../containers/Admin/DiscountForm';
 
 function AdminDiscounts(props) {
-  const { discounts, editedId, isAdding, onSelectDeleted, onSelectEdited, onAdding, onMount } =
-    props;
+  const {
+    discounts,
+    editedId,
+    isAdding,
+    onSelectDeleted,
+    onSelectEdited,
+    onAdding,
+    onMount,
+    onSelectForQr,
+  } = props;
 
   useEffect(() => onMount(), []);
 
@@ -22,6 +30,9 @@ function AdminDiscounts(props) {
         case 'EDITDISCOUNT':
           onSelectEdited(args[0]);
           break;
+        case 'GENERATEQR':
+          onSelectForQr(args[0]);
+          break;
         default:
           break;
       }
@@ -34,6 +45,15 @@ function AdminDiscounts(props) {
       <td>{discount._id}</td>
       <td>{discount.title}</td>
       <td>{discount.value}</td>
+      <td className="checkbox-container">
+        {isAdding || editedId ? (
+          ' '
+        ) : (
+          <button type="button" id={`${discount._id}_GENERATEQR`}>
+            <img src="/qr.svg" alt="qr.svg" />
+          </button>
+        )}
+      </td>
       <td className="checkbox-container">
         {isAdding || editedId ? (
           ' '
@@ -72,6 +92,7 @@ function AdminDiscounts(props) {
                 <th>Значение скидки (%)</th>
                 <th> </th>
                 <th> </th>
+                <th> </th>
               </tr>
             </thead>
             <tbody>{discountsList}</tbody>
@@ -101,6 +122,7 @@ AdminDiscounts.propTypes = {
   onSelectEdited: PropTypes.func.isRequired,
   onAdding: PropTypes.func.isRequired,
   onMount: PropTypes.func.isRequired,
+  onSelectForQr: PropTypes.func.isRequired,
 };
 
 AdminDiscounts.defaultProps = {

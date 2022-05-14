@@ -21,7 +21,7 @@ export function setQrModalShowing(isShowing) {
 
 export function fetchDiscounts() {
   const payload = new Promise((resolve) => {
-    fetch('/api/discounts', { method: 'GET' /* , credentials: 'same-origin' */ })
+    fetch('/api/discounts', { method: 'GET' })
       .then((response) => response.json())
       .then((result) => {
         resolve(result);
@@ -38,7 +38,6 @@ export function applyDiscount(values) {
   const payload = new Promise((resolve, reject) => {
     fetch('/api/orders/discount', {
       method: 'PATCH',
-      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(values),
     })

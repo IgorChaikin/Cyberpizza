@@ -16,6 +16,7 @@ const mapStateToProps = (state) => ({
   totalCount: state.admin.totalCount,
   totalPrice: state.admin.totalPrice,
   username: state.auth.username,
+  discountForQr: state.admindiscounts.discountForQr,
   entity:
     (state.users.deletedId && 'пользователя') ||
     (state.adminitems.deletedId && 'товар') ||

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import './StaffOrders.scss';
 import PropTypes from 'prop-types';
@@ -11,8 +11,29 @@ function StaffOrders(props) {
   const { id } = useParams();
 
   const { orders, stages, isChanged, onApply, onAdd, onSelectDeleted, onMount } = props;
+  const [intervalSubscription, setIntervalSubscription] = useState(0);
 
-  useEffect(() => onMount(id), [onMount, id]);
+  // subscribe to order updates
+  useEffect(() => {
+    onMount(id);
+    if (intervalSubscription) {
+      clearInterval(intervalSubscription);
+    }
+    const tmpIntervalSubscription = setInterval(() => {
+      onMount(id);
+    }, 10000);
+    setIntervalSubscription(tmpIntervalSubscription);
+  }, [onMount, id]);
+
+  // unsubscribe while destroying
+  useEffect(() => {
+    return () => {
+      console.log('cleaned up');
+      if (intervalSubscription) {
+        clearInterval(intervalSubscription);
+      }
+    };
+  }, []);
 
   const usersCallback = useCallback(
     (e) => {

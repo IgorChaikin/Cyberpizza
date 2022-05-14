@@ -61,7 +61,7 @@ const withDiscountTemplate = [
   { $unwind: { path: '$discount', preserveNullAndEmptyArrays: true } },
 ];
 
-const withFullNameTemplate = [
+const withNamesTemplate = [
   {
     $lookup: {
       from: 'lastnames',
@@ -82,10 +82,19 @@ const withFullNameTemplate = [
   { $unwind: { path: '$firstNameFromDb', preserveNullAndEmptyArrays: true } },
   {
     $addFields: {
-      username: { $concat: ['$firstNameFromDb.name', ' ', '$lastNameFromDb.name'] },
+      lastName: '$lastNameFromDb.name',
+      firstName: '$firstNameFromDb.name',
     },
   },
   { $project: { lastNameFromDb: 0, firstNameFromDb: 0, password: 0 } },
+];
+
+const withFullNameTemplate = [
+  {
+    $addFields: {
+      username: { $concat: ['$firstName', ' ', '$lastName'] },
+    },
+  },
 ];
 
 const getOrderWithPrice = (orderId) => {
@@ -102,5 +111,6 @@ module.exports = {
   withCityAndStreetTemplate,
   withItemAndSortTemplate,
   withDiscountTemplate,
+  withNamesTemplate,
   withFullNameTemplate,
 };

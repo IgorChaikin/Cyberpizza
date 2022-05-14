@@ -5,9 +5,13 @@ require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 const { Types } = require('mongoose');
 const { User, Cart, LastName, FirstName } = require('../models');
 const { signToken } = require('../../utils/jwt');
-const { withFullNameTemplate } = require('../shared');
+const { withFullNameTemplate, withNamesTemplate } = require('../shared');
 const { loginValidationSchema, registerValidationSchema } = require('../../validationShemas');
-const { checkTokenMiddleware, checkActiveMiddleware } = require('../middlewares');
+const {
+  checkTokenMiddleware,
+  checkActiveMiddleware,
+  setHeadersMiddleware,
+} = require('../middlewares');
 
 const auth = express.Router();
 const { ObjectId } = Types;
@@ -17,6 +21,8 @@ const userId = process.env.USER_ID;
 
 auth.use('/logout', checkTokenMiddleware);
 auth.use('/logout', checkActiveMiddleware);
+auth.use('/logout', setHeadersMiddleware);
+auth.use('/login', setHeadersMiddleware);
 auth.use('/username', checkTokenMiddleware);
 auth.use('/username', checkActiveMiddleware);
 
@@ -36,7 +42,6 @@ async function createUser(lastName, firstName, phone, password) {
   return new User({
     lastNameId: lastNameFromDb._id,
     firstNameId: firstNameFromDb._id,
-    // patronymicId: patronymicFromDb?._id ?? null,
     phone,
     password: hash,
   });
@@ -80,16 +85,12 @@ auth.post('/login', (request, response) => {
         const { _id, roleId, isActive } = user;
         return Cart.findOne({ userId: ObjectId(_id) }).then((cart) => {
           if (cart) {
-            response.cookie('cartId', cart._id /* , { secure: false, maxAge: 3600 * 24 } */);
+            response.cookie('cartId', cart._id);
           } else {
-            response.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-            response.header('Expires', '-1');
-            response.header('Pragma', 'no-cache');
-
-            response.clearCookie('cartId', { path: '/' /* , domain: 'localhost' */ });
+            response.clearCookie('cartId', { path: '/' });
           }
           const token = signToken({ _id, roleId, isActive });
-          response.cookie('token', token /* , { secure: false, maxAge: 3600 * 24 } */);
+          response.cookie('token', token);
           response.json({ phone, isUser: roleId.equals(ObjectId(userId)) });
         });
       });
@@ -103,10 +104,6 @@ auth.patch('/logout', (request, response) => {
     if (!result) {
       return response.sendStatus(403);
     }
-    response.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-    response.header('Expires', '-1');
-    response.header('Pragma', 'no-cache');
-
     response.clearCookie('token', { path: '/' });
     response.clearCookie('cartId', { path: '/' });
 
@@ -119,6 +116,7 @@ auth.get('/username', async (request, response) => {
 
   const result = await User.aggregate([
     { $match: { _id: ObjectId(decoded?._id), isActive: true } },
+    ...withNamesTemplate,
     ...withFullNameTemplate,
   ]);
 

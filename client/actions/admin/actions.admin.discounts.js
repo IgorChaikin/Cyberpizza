@@ -4,6 +4,7 @@ export const SELECT_DELETED_DISCOUNT = 'SELECT_DELETED_DISCOUNT';
 export const SELECT_EDITED_DISCOUNT = 'SELECT_EDITED_DISCOUNT';
 export const CANCEL_SELECTED_DISCOUNT = 'CANCEL_SELECTED_DISCOUNT';
 export const ADDING_DISCOUNT_ON = 'ADDING_DISCOUNT_ON';
+export const SET_DISCOUNT_FOR_QR = 'SET_DISCOUNT_FOR_QR';
 
 export const DELETE_DISCOUNT_AS_ADMIN = 'DELETE_DISCOUNT_AS_ADMIN';
 export const UPDATE_DISCOUNT_AS_ADMIN = 'UPDATE_DISCOUNT_AS_ADMIN';
@@ -19,12 +20,16 @@ export const DELETE_DISCOUNT_AS_ADMIN_REJECTED = `${DELETE_DISCOUNT_AS_ADMIN}_${
 export const UPDATE_DISCOUNT_AS_ADMIN_REJECTED = `${UPDATE_DISCOUNT_AS_ADMIN}_${ActionType.Rejected}`;
 export const ADD_DISCOUNT_AS_ADMIN_REJECTED = `${ADD_DISCOUNT_AS_ADMIN}_${ActionType.Rejected}`;
 
-export function selectDeleted(payload) {
-  return { type: SELECT_DELETED_DISCOUNT, payload };
+export function setDiscountForQr(payload) {
+  return { type: SET_DISCOUNT_FOR_QR, payload };
 }
 
 export function selectEdited(payload) {
   return { type: SELECT_EDITED_DISCOUNT, payload };
+}
+
+export function selectDeleted(payload) {
+  return { type: SELECT_DELETED_DISCOUNT, payload };
 }
 
 export function turnAddingOn() {
@@ -102,10 +107,15 @@ const initialState = {
   deletedId: null,
   editedId: null,
   isAdding: false,
+  discountForQr: null,
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case SET_DISCOUNT_FOR_QR: {
+      const discountForQr = state.discounts.find((elem) => elem._id === action.payload);
+      return { ...state, discountForQr };
+    }
     case FETCH_DISCOUNTS_AS_ADMIN_FULFILLED:
     case DELETE_DISCOUNT_AS_ADMIN_FULFILLED:
     case UPDATE_DISCOUNT_AS_ADMIN_FULFILLED:

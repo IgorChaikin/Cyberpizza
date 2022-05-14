@@ -13,15 +13,15 @@ function AuthBar(props) {
   if (username) {
     return (
       <div className="auth-wrapper">
-        <p className="auth-bar__username">{username}</p>
         <div className="auth-bar">
+          <p className="auth-bar__username">{username}</p>
           <button type="button" className="auth-button auth-button_logout" onClick={logoutCallback}>
             Выход
           </button>
-          {isUser
-            ? ''
-            : [<Link to="/admin">Я администратор</Link>, <Link to="/staff">Я персонал</Link>]}
         </div>
+        {isUser
+          ? ''
+          : [<Link to="/admin">Я администратор</Link>, <Link to="/staff">Я персонал</Link>]}
       </div>
     );
   }

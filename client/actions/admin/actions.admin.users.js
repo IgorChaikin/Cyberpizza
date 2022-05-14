@@ -109,7 +109,6 @@ const initialState = {
   searchData: {
     lastName: '',
     firstName: '',
-    // patronymic: '',
     roleId: null,
     isActive: null,
   },

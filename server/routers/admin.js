@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { Types } = require('mongoose');
-const { withItemAndSortTemplate, withFullNameTemplate } = require('../shared');
+const { withItemAndSortTemplate, withFullNameTemplate, withNamesTemplate } = require('../shared');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const staffId = process.env.STAFF_ID;
@@ -17,34 +17,6 @@ const {
 
 const admin = express.Router();
 const { ObjectId } = Types;
-
-const usersTemplate = [
-  {
-    $lookup: {
-      from: 'lastnames',
-      localField: 'lastNameId',
-      foreignField: '_id',
-      as: 'lastNameFromDb',
-    },
-  },
-  {
-    $lookup: {
-      from: 'firstnames',
-      localField: 'firstNameId',
-      foreignField: '_id',
-      as: 'firstNameFromDb',
-    },
-  },
-  { $unwind: { path: '$lastNameFromDb', preserveNullAndEmptyArrays: true } },
-  { $unwind: { path: '$firstNameFromDb', preserveNullAndEmptyArrays: true } },
-  {
-    $addFields: {
-      lastName: '$lastNameFromDb.name',
-      firstName: '$firstNameFromDb.name',
-    },
-  },
-  { $project: { lastNameFromDb: 0, firstNameFromDb: 0, password: 0 } },
-];
 
 function getTotal() {
   return (
@@ -101,7 +73,11 @@ function getCarts() {
         from: 'users',
         let: { userId: '$userId' },
         as: 'user',
-        pipeline: [{ $match: { $expr: { $eq: ['$$userId', '$_id'] } } }, ...withFullNameTemplate],
+        pipeline: [
+          { $match: { $expr: { $eq: ['$$userId', '$_id'] } } },
+          ...withNamesTemplate,
+          ...withFullNameTemplate,
+        ],
       },
     },
     { $unwind: { path: '$lastUpdateAggregate', preserveNullAndEmptyArrays: true } },
@@ -133,11 +109,15 @@ function getSingleCart(cartId) {
         from: 'users',
         let: { userId: '$userId' },
         as: 'user',
-        pipeline: [{ $match: { $expr: { $eq: ['$$userId', '$_id'] } } }],
+        pipeline: [
+          { $match: { $expr: { $eq: ['$$userId', '$_id'] } } },
+          ...withNamesTemplate,
+          ...withFullNameTemplate,
+        ],
       },
     },
     { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
-    { $addFields: { username: '$user.phone' } },
+    { $addFields: { username: '$user.username' } },
   ]).then((query) => query[0]);
 }
 
@@ -148,15 +128,19 @@ function getStaff() {
         from: 'users',
         let: { userId: '$userId' },
         as: 'user',
-        pipeline: [{ $match: { $expr: { $eq: ['$$userId', '$_id'] } } }, ...usersTemplate],
+        pipeline: [{ $match: { $expr: { $eq: ['$$userId', '$_id'] } } }, ...withNamesTemplate],
       },
     },
     { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
   ]);
 }
 
-function getUsers() {
-  return User.aggregate(usersTemplate);
+function getUsers(filters, amount) {
+  const aggregationQuery = [{ $limit: amount }, ...withNamesTemplate];
+  if (Object.keys(filters).length > 0) {
+    aggregationQuery.push({ $match: filters });
+  }
+  return User.aggregate(aggregationQuery);
 }
 
 admin.use(checkTokenMiddleware);
@@ -168,7 +152,17 @@ admin.get('/', (request, response) => {
 });
 
 admin.get('/users', (request, response) => {
-  return getUsers().then((result) => response.json(result));
+  const { amount, roleId, ...queryFilters } = request.query;
+  const aggregateFilter = {};
+  Object.keys(queryFilters).forEach((key) => {
+    if (queryFilters[key]) {
+      aggregateFilter[key] = queryFilters[key];
+    }
+  });
+  if (roleId) {
+    aggregateFilter.roleId = ObjectId(roleId);
+  }
+  return getUsers(aggregateFilter, amount).then((result) => response.json(result));
 });
 
 admin.get('/roles', (request, response) => {

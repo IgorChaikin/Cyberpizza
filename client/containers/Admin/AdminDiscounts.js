@@ -5,6 +5,7 @@ import {
   selectEdited,
   turnAddingOn,
   fetchDiscountsAsAdmin,
+  setDiscountForQr,
 } from '../../actions/admin/actions.admin.discounts';
 
 const mapDispatchToProps = (dispatch) => ({
@@ -12,6 +13,7 @@ const mapDispatchToProps = (dispatch) => ({
   onMount: () => dispatch(fetchDiscountsAsAdmin()),
   onSelectDeleted: (id) => dispatch(selectDeleted(id)),
   onSelectEdited: (id) => dispatch(selectEdited(id)),
+  onSelectForQr: (id) => dispatch(setDiscountForQr(id)),
 });
 
 const mapStateToProps = (state) => ({
