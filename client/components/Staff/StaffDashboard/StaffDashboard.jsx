@@ -35,7 +35,7 @@ function StaffDashboard(props) {
 
   return (
     <div className="admin-dashboard">
-      {deletedId ? <DeleteModal entity="order" /> : ''}
+      {deletedId ? <DeleteModal entity="заказ" /> : ''}
       <header>
         <section>
           <h2>Сотрудник</h2>

@@ -13,6 +13,7 @@ const {
   checkTokenMiddleware,
   checkActiveMiddleware,
   checkRoleMiddleware,
+  userFiltersMiddleware,
 } = require('../middlewares');
 
 const admin = express.Router();
@@ -146,23 +147,14 @@ function getUsers(filters, amount) {
 admin.use(checkTokenMiddleware);
 admin.use(checkActiveMiddleware);
 admin.use(checkRoleMiddleware([adminId]));
+admin.use('/users', userFiltersMiddleware);
 
 admin.get('/', (request, response) => {
   return getTotal().then((result) => response.json(result));
 });
 
 admin.get('/users', (request, response) => {
-  const { amount, roleId, ...queryFilters } = request.query;
-  const aggregateFilter = {};
-  Object.keys(queryFilters).forEach((key) => {
-    if (queryFilters[key]) {
-      aggregateFilter[key] = queryFilters[key];
-    }
-  });
-  if (roleId) {
-    aggregateFilter.roleId = ObjectId(roleId);
-  }
-  return getUsers(aggregateFilter, amount).then((result) => response.json(result));
+  return getUsers(request.filter, request.amount).then((result) => response.json(result));
 });
 
 admin.get('/roles', (request, response) => {
@@ -193,7 +185,7 @@ admin.put('/users', (request, response) => {
             : Staff.deleteOne({ userId: elem._id })
         )
       )
-  ).then(() => getUsers().then((result) => response.json(result)));
+  ).then(() => getUsers(request.filter, request.amount).then((result) => response.json(result)));
 });
 
 admin.delete('/users/:id', async (request, response) => {
@@ -202,7 +194,7 @@ admin.delete('/users/:id', async (request, response) => {
     await User.deleteOne({ _id: deletedId });
     await Staff.deleteOne({ userId: deletedId });
   }
-  getUsers().then((result) => response.json(result));
+  getUsers(request.filter, request.amount).then((result) => response.json(result));
 });
 
 admin.get('/staff', (request, response) => {

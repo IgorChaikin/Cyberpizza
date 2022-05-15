@@ -33,8 +33,8 @@ const itemClientValidationObject = {
     .required('Поле "Путь к изображению" обязательно'),
   price: yup
     .number()
-    .min(0)
     .typeError('Поле "Цена" должно быть положительным числом')
+    .min(0, 'Поле "Цена" должно быть больше 0')
     .required('Поле "Цена" обязательно'),
   categoryId: yup.string().nullable(true).typeError('Поле "Категория" должно быть строкой'),
 };
@@ -67,14 +67,18 @@ const withAddressValidationSchema = yup.object().shape({
   streetId: yup.string().required('Поле "Улица" обязательно'),
   house: yup
     .number()
-    .min(0)
     .typeError('Поле "Дом" должно быть числом')
+    .min(0, 'Поле "Дом" должно быть больше 0')
     .required('Поле "Дом" обязательно'),
-  building: yup.number().min(0).nullable(true).typeError('Поле "Корпус" должно быть числом'),
+  building: yup
+    .number()
+    .typeError('Поле "Корпус" должно быть числом')
+    .min(0, 'Поле "Корпус" должно быть больше 0')
+    .nullable(true),
   apartment: yup
     .number()
-    .min(0)
     .typeError('Поле "Квартира" должно быть числом')
+    .min(0, 'Поле "Квартира" должно быть больше 0')
     .required('Поле "Квартира" обязательно'),
   ...checkoutValidationObject,
 });
@@ -83,10 +87,18 @@ const discountValidationSchema = yup.object().shape({
   ...titleValidationObject,
   value: yup
     .number()
-    .min(0)
-    .max(100)
-    .typeError('Значение должно быть числом между 0 и 100')
+    .typeError('Поле "Значение" должно быть числом')
+    .min(0, 'Поле "Значение" должно быть больше 0')
+    .max(100, 'Поле "Значение" должно быть меньше 100')
     .required('Поле "Значение" обязательно'),
+});
+
+const withAmountSchema = yup.object().shape({
+  amount: yup
+    .number()
+    .typeError('Поле "Величина выбоки" должно быть числом')
+    .min(0, 'Поле "Величина выбоки" должно быть больше 0')
+    .required('Поле "Величина выбоки" обязательно'),
 });
 
 const titleValidationSchema = yup.object().shape(titleValidationObject);
@@ -107,4 +119,5 @@ module.exports = {
   itemClientValidationSchema,
   itemServerValidationSchema,
   discountValidationSchema,
+  withAmountSchema,
 };

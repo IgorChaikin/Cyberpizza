@@ -10,29 +10,26 @@ import {
 } from '../../actions/admin/actions.admin.users';
 
 const mapDispatchToProps = (dispatch) => ({
-  onMount: () => {
-    dispatch(fetchUsers());
+  onMount: (filters) => {
+    dispatch(fetchUsers(filters));
     dispatch(fetchRoles());
   },
   onAdd: (change) => dispatch(addChange(change)),
-  onSearch: (searchData) => dispatch(search(searchData)),
-  onApply: (changes) => dispatch(updateUsers(changes)),
+  onSearch: (searchData) => {
+    dispatch(search(searchData));
+    dispatch(fetchUsers(searchData));
+  },
+  onApply: (changes, filters) => dispatch(updateUsers(changes, filters)),
   onSelectDeleted: (id) => dispatch(selectDeleted(id)),
 });
 
 const mapStateToProps = (state) => {
   return {
-    users: state.users.users.filter(
-      (elem) =>
-        elem.lastName?.indexOf(state.users.searchData.lastName) !== -1 &&
-        elem.firstName?.indexOf(state.users.searchData.firstName) !== -1 &&
-        (state.users.searchData.roleId === null || elem.roleId === state.users.searchData.roleId) &&
-        (state.users.searchData.isActive === null ||
-          elem.isActive === state.users.searchData.isActive)
-    ),
+    users: state.users.users,
     roles: state.users.roles,
     isChanged: state.users.isChanged,
     username: state.auth.username,
+    searchData: state.users.searchData,
   };
 };
 

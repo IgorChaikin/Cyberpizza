@@ -1,12 +1,23 @@
 @import '../../../styles/vars';
 
+.button-search {
+  font: $regular-text;
+  color: $white-color;
+  align-self: flex-start;
+  margin: 0 0 1em 1.5em;
+  outline: none;
+  height: 2em;
+  border-radius: 1em;
+  padding: 0 1em;
+  cursor: pointer;
+
+  &:active {
+    transform: translate(0, 10%);
+  }
+}
+
 .search-form {
-  // display: flex;
   width: 95%;
-  // flex-direction: column;
-  /*align-items: center;
-  justify-content: space-between;*/
-  // height: 4em;
   border-radius: 1em;
   background-color: $light-color;
   margin: 0 0 1em;
@@ -14,9 +25,10 @@
   padding: 1em;
 
   .row_bottom {
+    margin-top: 1em;
     .button-group {
-      .auth-button_login {
-        margin-left: 1em;
+      .auth-button_logout {
+        margin-right: 1em;
       }
     }
   }

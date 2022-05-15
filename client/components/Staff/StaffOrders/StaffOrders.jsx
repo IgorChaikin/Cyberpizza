@@ -28,7 +28,6 @@ function StaffOrders(props) {
   // unsubscribe while destroying
   useEffect(() => {
     return () => {
-      console.log('cleaned up');
       if (intervalSubscription) {
         clearInterval(intervalSubscription);
       }

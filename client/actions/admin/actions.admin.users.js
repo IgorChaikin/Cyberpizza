@@ -1,4 +1,5 @@
 import { ActionType } from 'redux-promise-middleware';
+import getQueryParams from '../../../utils/getQueryParams';
 
 export const ADD_CHANGE = 'ADD_CHANGE';
 export const SELECT_DELETED = 'SELECT_DELETED';
@@ -20,9 +21,9 @@ export const FETCH_ROLES_REJECTED = `${FETCH_ROLES}_${ActionType.Rejected}`;
 export const UPDATE_USERS_REJECTED = `${UPDATE_USERS}_${ActionType.Rejected}`;
 export const DELETE_USER_REJECTED = `${DELETE_USER}_${ActionType.Rejected}`;
 
-export function fetchUsers() {
+export function fetchUsers(filters) {
   const payload = new Promise((resolve, reject) => {
-    fetch('/api/admin/users', {
+    fetch(`/api/admin/users?${getQueryParams(filters)}`, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -35,9 +36,9 @@ export function fetchUsers() {
   return { type: FETCH_USERS, payload };
 }
 
-export function deleteUser(id) {
+export function deleteUser(id, filters) {
   const payload = new Promise((resolve, reject) => {
-    fetch(`/api/admin/users/${id}`, {
+    fetch(`/api/admin/users/${id}?${getQueryParams(filters)}`, {
       method: 'DELETE',
     })
       .then((response) => response.json())
@@ -75,9 +76,9 @@ export function fetchRoles() {
   return { type: FETCH_ROLES, payload };
 }
 
-export function updateUsers(changes) {
+export function updateUsers(changes, filters) {
   const payload = new Promise((resolve) => {
-    fetch('/api/admin/users', {
+    fetch(`/api/admin/users?${getQueryParams(filters)}`, {
       method: 'PUT',
       // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
@@ -111,6 +112,7 @@ const initialState = {
     firstName: '',
     roleId: null,
     isActive: null,
+    amount: 100,
   },
 };
 

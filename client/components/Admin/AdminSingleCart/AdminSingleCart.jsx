@@ -37,7 +37,7 @@ function AdminSingleCart(props) {
       </h2>
       <div className="main-content">{ordersList}</div>
       <p>
-        <span className="cart__total">Total</span>
+        <span className="cart__total">Выручка</span>
         <span className="cart__price">{selectedCart?.generalPrice.toFixed(2)}р.</span>
       </p>
     </div>

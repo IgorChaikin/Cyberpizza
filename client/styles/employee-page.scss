@@ -99,7 +99,7 @@
       font: $nav-item-text;
     }
     .admin-dashboard__router {
-      width: 85%;
+      width: 80%;
       height: calc(100% - 2em);
       margin: 1em 0;
       .auth-button {
@@ -151,11 +151,11 @@
     outline: none;
     cursor: pointer;
 
-    /* @media (min-width: 1240px) {
+    @media (min-width: 1240px) {
       img {
         height: 1.5rem;
       }
-    } */
+    }
 
     @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape),
       (max-width: 768px) and (orientation: landscape),
@@ -167,7 +167,6 @@
     }
 
     img {
-      height: 1.5rem;
       margin: 0;
       padding: 0;
     }
