@@ -111,15 +111,6 @@ const discountScheme = new Schema({
   title: { type: String, required: true },
 });
 
-// SHOULD BE DELETED
-const cardScheme = new Schema({
-  number: { type: String, required: true },
-  name: { type: String, required: true },
-  date: { type: String, required: true },
-  cvv: { type: String, required: true },
-  userId: { type: ObjectId, required: true },
-});
-
 // models definition
 
 module.exports = {
@@ -137,7 +128,6 @@ module.exports = {
   Address: model('Address', addressScheme),
   Staff: model('Staff', staffScheme),
   Shop: model('Shop', shopScheme),
-  Card: model('Card', cardScheme),
   Discount: model('Discount', discountScheme),
 
   Patronymic: model('Patronymic', patronymicScheme),

@@ -11,7 +11,6 @@ import StaffDashboard from './containers/Staff/StaffDashboard';
 import './index.css';
 
 import store from './store';
-// import CardAdding from './containers/Shipment/CardAdding';
 
 const history = createBrowserHistory();
 

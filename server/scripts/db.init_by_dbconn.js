@@ -18,7 +18,6 @@ const {
   Street,
   Address,
   Shop,
-  Card,
   Staff,
   LastName,
   FirstName,
@@ -305,7 +304,6 @@ module.exports = async (dbConn) => {
     Shop.deleteMany({}).then(() => Shop.insertMany(initialData.shops)),
     Discount.deleteMany({}).then(() => Discount.insertMany(initialData.discounts)),
 
-    Card.deleteMany({}),
     Order.deleteMany({}),
     Cart.deleteMany({}),
     User.deleteMany({}),

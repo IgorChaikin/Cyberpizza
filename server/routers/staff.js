@@ -6,7 +6,6 @@ const {
   withCityAndStreetTemplate,
   withItemAndSortTemplate,
   withDiscountTemplate,
-  // secureCardTemplate,
   getOrderWithPrice,
 } = require('../shared');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });

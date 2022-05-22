@@ -107,15 +107,11 @@ function Checkout(props) {
     return <Redirect to="/" />;
   }
 
-  /* if (isCardAdding) {
-    return <Redirect to="/checkout/card" />;
-  } */
-
   const validationsSchema = isPickup ? withShopValidationSchema : withAddressValidationSchema;
 
   return (
     <main className="auth" onChange={changeCallback}>
-      <h1>Confirm order</h1>
+      <h1>Подтверждение заказа</h1>
 
       <div className="decoration decoration_light" />
       <Formik initialValues={initialDiscountValues} onSubmit={submitDiscountCallback}>

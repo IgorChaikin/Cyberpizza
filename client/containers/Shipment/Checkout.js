@@ -22,7 +22,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  cards: state.shipment.cards,
   cities: state.shipment.cities,
   streets: state.shipment.streets,
   shops: state.shipment.shops,
