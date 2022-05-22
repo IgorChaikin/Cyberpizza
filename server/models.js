@@ -4,6 +4,7 @@ const { Schema, model, Types } = mongoose;
 const { ObjectId } = Types;
 
 // schemas definition
+
 // items schemas
 const categoryScheme = new Schema({
   title: { type: String, required: true },
