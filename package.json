@@ -71,6 +71,7 @@
     "optimize-css-assets-webpack-plugin": "^6.0.1",
     "postcss-loader": "^6.1.1",
     "prettier": "^2.3.2",
+    "react-qr-reader": "^2.2.1",
     "redux-devtools": "^3.7.0",
     "resolve-url-loader": "^4.0.0",
     "sass-loader": "^12.1.0",
