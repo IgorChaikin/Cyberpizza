@@ -8,8 +8,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  categories: state.Categories,
-  selectedId: state.Items.selectedCategory,
+  categories: state.categories,
+  selectedId: state.items.selectedCategory,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Categories);

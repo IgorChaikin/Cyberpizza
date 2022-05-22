@@ -80,7 +80,7 @@ function AdminItems(props) {
 
   return (
     <div className="admin-dashboard__container">
-      <h2>Items</h2>
+      <h2>Товары</h2>
 
       {[
         items?.length > 0 ? (

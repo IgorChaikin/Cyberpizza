@@ -26,10 +26,10 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  isOrdersVisible: state.Orders.isOrdersVisible,
-  categories: state.Categories,
-  cities: state.Shipment.cities,
-  isAuthenticated: state.Auth.isAuthenticated,
+  isOrdersVisible: state.orders.isOrdersVisible,
+  categories: state.categories,
+  cities: state.shipment.cities,
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

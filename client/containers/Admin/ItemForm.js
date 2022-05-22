@@ -23,9 +23,9 @@ const mapStateToProps = (state) => {
   return {
     item,
     editedId,
-    filters: state.Filters.tags,
-    categories: state.Categories,
-    selectedFilters: state.AdminItems.selectedFilters,
+    filters: state.filters.tags,
+    categories: state.categories,
+    selectedFilters: state.adminitems.selectedFilters,
   };
 };
 

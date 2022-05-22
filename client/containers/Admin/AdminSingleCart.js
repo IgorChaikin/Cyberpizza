@@ -7,7 +7,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  selectedCart: state.Carts.selectedCart,
+  selectedCart: state.carts.selectedCart,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminSingleCart);
