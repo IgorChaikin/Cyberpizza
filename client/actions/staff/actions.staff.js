@@ -38,7 +38,7 @@ export function updateShopData(enabling) {
   const payload = new Promise((resolve) => {
     fetch('/api/staff/shop', {
       method: 'PUT',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         enabling,

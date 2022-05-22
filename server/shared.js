@@ -1,36 +1,7 @@
 const { Types } = require('mongoose');
-const { Order, Cart } = require('./models');
+const { Order } = require('./models');
 
 const { ObjectId } = Types;
-
-const getOrderWithPrice = (orderId) => {
-  return Order.aggregate([
-    { $match: { $expr: { $eq: ['$_id', ObjectId(orderId)] } } },
-    {
-      $lookup: {
-        from: 'items',
-        localField: 'itemId',
-        foreignField: '_id',
-        as: 'item',
-      },
-    },
-    { $unwind: { path: '$item', preserveNullAndEmptyArrays: true } },
-  ]).then((query) => query[0]);
-};
-
-function updateCart(cartId, orderId, isDelete = false, amount = null) {
-  return getOrderWithPrice(orderId).then((order) => {
-    const validatedAmount = amount * -1 >= order?.count ? 0 : amount;
-    const count = validatedAmount ?? order?.count * (isDelete ? -1 : 1);
-    const update = {
-      $inc: { price: order?.item.price * count },
-    };
-    if (!amount) {
-      update[isDelete ? '$pull' : '$push'] = { orderIds: orderId };
-    }
-    return Cart.updateOne({ _id: cartId }, update);
-  });
-}
 
 const withAddressTemplate = [
   {
@@ -78,20 +49,68 @@ const withItemAndSortTemplate = [
   { $sort: { time: -1 } },
 ];
 
-const secureCardTemplate = [
+const withDiscountTemplate = [
   {
-    $addFields: {
-      secureNumber: { $concat: ['****-****-****-', { $substr: ['$number', 12, -1] }] },
+    $lookup: {
+      from: 'discounts',
+      let: { orderId: '$_id' },
+      as: 'discount',
+      pipeline: [{ $match: { $expr: { $in: ['$$orderId', '$orderIds'] } } }],
     },
   },
-  { $project: { number: 0, name: 0, date: 0, cvv: 0, userId: 0 } },
+  { $unwind: { path: '$discount', preserveNullAndEmptyArrays: true } },
 ];
+
+const withNamesTemplate = [
+  {
+    $lookup: {
+      from: 'lastnames',
+      localField: 'lastNameId',
+      foreignField: '_id',
+      as: 'lastNameFromDb',
+    },
+  },
+  {
+    $lookup: {
+      from: 'firstnames',
+      localField: 'firstNameId',
+      foreignField: '_id',
+      as: 'firstNameFromDb',
+    },
+  },
+  { $unwind: { path: '$lastNameFromDb', preserveNullAndEmptyArrays: true } },
+  { $unwind: { path: '$firstNameFromDb', preserveNullAndEmptyArrays: true } },
+  {
+    $addFields: {
+      lastName: '$lastNameFromDb.name',
+      firstName: '$firstNameFromDb.name',
+    },
+  },
+  { $project: { lastNameFromDb: 0, firstNameFromDb: 0, password: 0 } },
+];
+
+const withFullNameTemplate = [
+  {
+    $addFields: {
+      username: { $concat: ['$firstName', ' ', '$lastName'] },
+    },
+  },
+];
+
+const getOrderWithPrice = (orderId) => {
+  return Order.aggregate([
+    { $match: { $expr: { $eq: ['$_id', ObjectId(orderId)] } } },
+    ...withItemAndSortTemplate,
+    ...withDiscountTemplate,
+  ]).then((query) => query[0]);
+};
 
 module.exports = {
   getOrderWithPrice,
-  updateCart,
   withAddressTemplate,
   withCityAndStreetTemplate,
   withItemAndSortTemplate,
-  secureCardTemplate,
+  withDiscountTemplate,
+  withNamesTemplate,
+  withFullNameTemplate,
 };

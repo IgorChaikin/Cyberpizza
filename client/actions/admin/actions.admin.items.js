@@ -80,7 +80,7 @@ export function updateItemAsAdmin(id, changes) {
   const payload = new Promise((resolve) => {
     fetch(`/api/admin/db/items/${id}`, {
       method: 'PUT',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(changes),
     })
@@ -96,7 +96,7 @@ export function addItemAsAdmin(changes) {
   const payload = new Promise((resolve) => {
     fetch('/api/admin/db/items/', {
       method: 'POST',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(changes),
     })

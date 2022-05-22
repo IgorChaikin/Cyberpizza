@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 
 import './AdminDashboard.scss';
 import PropTypes from 'prop-types';
-import { useRouteMatch } from 'react-router';
 import { Route, Switch, Link } from 'react-router-dom';
+import { useRouteMatch } from 'react-router';
 import AdminUsers from '../../../containers/Admin/AdminUsers';
 import AdminCarts from '../../../containers/Admin/AdminCarts';
 import AdminSingleCart from '../../../containers/Admin/AdminSingleCart';
@@ -13,9 +13,11 @@ import AdminStaff from '../../../containers/Admin/AdminStaff';
 import AdminItems from '../../../containers/Admin/AdminItems';
 import AdminCategories from '../../../containers/Admin/AdminCategories';
 import AdminFilters from '../../../containers/Admin/AdminFilters';
+import AdminDiscounts from '../../../containers/Admin/AdminDiscounts';
+import GenerateQRModal from '../../../containers/Admin/GenerateQRModal';
 
 function AdminDashboard(props) {
-  const { requestError, entity, totalCount, totalPrice, username, onMount } = props;
+  const { requestError, entity, totalCount, totalPrice, username, onMount, discountForQr } = props;
   const match = useRouteMatch();
 
   useEffect(() => onMount(), []);
@@ -31,46 +33,50 @@ function AdminDashboard(props) {
   return (
     <div className="admin-dashboard">
       {entity ? <DeleteModal entity={entity} /> : ''}
+      {discountForQr ? <GenerateQRModal /> : ''}
       <header>
         <section>
-          <h2>Current admin</h2>
+          <h2>Администратор</h2>
           <p>{username}</p>
         </section>
         <section>
-          <h2>Total price</h2>
-          <p>{totalPrice?.toFixed(2)}$</p>
+          <h2>Выручка</h2>
+          <p>{totalPrice?.toFixed(2)}р.</p>
         </section>
         <section>
-          <h2>Total count</h2>
+          <h2>Доставлено заказов</h2>
           <div className="count">{totalCount}</div>
         </section>
       </header>
       <main>
         <nav>
           <h2>
-            <Link to={`${match.url}/users`}>Users</Link>
+            <Link to={`${match.url}/users`}>Пользователи</Link>
           </h2>
           <h2>
-            <Link to={`${match.url}/carts`}>Carts</Link>
+            <Link to={`${match.url}/carts`}>Корзины</Link>
           </h2>
           <h2>
-            <Link to={`${match.url}/staff`}>Staff</Link>
+            <Link to={`${match.url}/staff`}>Персонал</Link>
           </h2>
           <h2>
-            <Link to={`${match.url}/items`}>Items</Link>
+            <Link to={`${match.url}/items`}>Товары</Link>
           </h2>
           <h2>
-            <Link to={`${match.url}/categories`}>Categories</Link>
+            <Link to={`${match.url}/categories`}>Категории</Link>
           </h2>
           <h2>
-            <Link to={`${match.url}/filters`}>Filters</Link>
+            <Link to={`${match.url}/filters`}>Тэги</Link>
+          </h2>
+          <h2>
+            <Link to={`${match.url}/discounts`}>Промокоды</Link>
           </h2>
         </nav>
         <div className="admin-dashboard__router">
           <Switch>
             <Route exact path={`${match.url}/`}>
               <div className="admin-dashboard__placeholder-container">
-                <Placeholder message={`Welcome, ${username}`} />
+                <Placeholder message={`Добро пожаловать, ${username}`} />
               </div>
             </Route>
             <Route exact path={`${match.url}/carts`}>
@@ -94,6 +100,9 @@ function AdminDashboard(props) {
             <Route path={`${match.url}/filters`}>
               <AdminFilters />
             </Route>
+            <Route path={`${match.url}/discounts`}>
+              <AdminDiscounts />
+            </Route>
           </Switch>
         </div>
       </main>
@@ -108,12 +117,18 @@ AdminDashboard.propTypes = {
   requestError: PropTypes.string,
   username: PropTypes.string,
   entity: PropTypes.string,
+  discountForQr: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    value: PropTypes.number.isRequired,
+  }),
 };
 
 AdminDashboard.defaultProps = {
   requestError: null,
   username: null,
   entity: null,
+  discountForQr: null,
 };
 
 export default AdminDashboard;

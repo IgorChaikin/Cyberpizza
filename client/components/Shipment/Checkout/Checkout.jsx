@@ -10,10 +10,10 @@ import {
 } from '../../../../validationShemas';
 import getFormatAddress from '../../../../utils/getFormatAddress';
 import getEventArgs from '../../../../utils/getEventArgs';
+import QRReader from '../../../containers/Shipment/QRReader';
 
 function Checkout(props) {
   const {
-    cards,
     cities,
     streets,
     shops,
@@ -21,12 +21,15 @@ function Checkout(props) {
     isPickup,
     isAuthenticated,
     isConfirmable,
-    isCardAdding,
     orderError,
+    discountError,
+    isQrModalShowing,
     onMount,
     onCitySelected,
     onChange,
     onSubmit,
+    onDiscountApply,
+    onOpenModal,
   } = props;
 
   useEffect(() => {
@@ -41,7 +44,7 @@ function Checkout(props) {
   }, [cities, selectedCityId]);
 
   const initialValues = {
-    cardId: null,
+    isPaid: 'false',
     isPickup,
     shopId: shops[0]?._id,
     cityId: cities[0]?._id,
@@ -49,6 +52,10 @@ function Checkout(props) {
     house: null,
     building: null,
     apartment: null,
+  };
+
+  const initialDiscountValues = {
+    title: '',
   };
 
   const changeCallback = useCallback(
@@ -79,14 +86,18 @@ function Checkout(props) {
   const submitCallback = useCallback(
     (values, { setSubmitting }) => {
       setSubmitting(false);
-      onSubmit({ ...values, cardId: values.cardId === 'null' ? null : values.cardId });
+      onSubmit({ ...values, isPaid: values.isPaid === 'true' });
     },
     [onSubmit]
   );
 
-  const goToCardCallback = useCallback(() => {
-    onChange('isCardAdding', true);
-  }, [onChange]);
+  const submitDiscountCallback = useCallback(
+    (values, { setSubmitting }) => {
+      setSubmitting(false);
+      onDiscountApply(values);
+    },
+    [onDiscountApply]
+  );
 
   if (!isAuthenticated) {
     return <Redirect to="/register" />;
@@ -96,17 +107,48 @@ function Checkout(props) {
     return <Redirect to="/" />;
   }
 
-  if (isCardAdding) {
-    return <Redirect to="/checkout/card" />;
-  }
-
   const validationsSchema = isPickup ? withShopValidationSchema : withAddressValidationSchema;
 
   return (
     <main className="auth" onChange={changeCallback}>
-      <h1>Confirm order</h1>
+      <h1>Подтверждение заказа</h1>
 
       <div className="decoration decoration_light" />
+      <Formik initialValues={initialDiscountValues} onSubmit={submitDiscountCallback}>
+        {({ values, handleChange, handleBlur, handleSubmit, isSubmitting, dirty, isValid }) => (
+          <form className="auth__form" onSubmit={handleSubmit}>
+            <div className="row">
+              <label htmlFor="title-id" className="row">
+                Промокод
+                <input
+                  className="form__input"
+                  id="title-id"
+                  name="title"
+                  type="text"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.house}
+                />
+              </label>
+              <button
+                className="auth-button auth-button_login auth-button_shifted"
+                type="submit"
+                disabled={isSubmitting || !dirty || !isValid}
+              >
+                Применить
+              </button>
+              <button
+                className="auth-button auth-button_login auth-button_shifted"
+                type="button"
+                onClick={onOpenModal}
+              >
+                <img src="/qr-white.png" alt="qr-white.png" />
+              </button>
+            </div>
+            <p className="form__error"> {discountError}</p>
+          </form>
+        )}
+      </Formik>
 
       <Formik
         initialValues={initialValues}
@@ -125,31 +167,24 @@ function Checkout(props) {
           isValid,
         }) => (
           <form className="auth__form" onSubmit={handleSubmit}>
-            <label htmlFor="card-id" className="row">
-              Payment method
+            <label htmlFor="isPaid-id" className="row">
+              Способ оплаты
               <select
                 className={`form__input${
-                  errors.cardId && touched.cardId ? ' form__input_wrong' : ''
+                  errors.isPaid && touched.isPaid ? ' form__input_wrong' : ''
                 }`}
-                id="card-id"
-                name="cardId"
+                id="isPaid-id"
+                name="isPaid"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.cardId}
+                value={values.isPaid}
               >
-                <option value="null">By cash while receiving</option>
-                {cards.map((elem) => (
-                  <option value={elem._id} selected={elem._id === values.cardId}>
-                    {elem.secureNumber}
-                  </option>
-                ))}
+                <option value="false">Наличными при получении</option>
+                <option value="true">Оплата онлайн</option>
               </select>
-              <button onClick={goToCardCallback} className="button_small" type="button">
-                +
-              </button>
             </label>
             <label htmlFor="isPickup_CHANGE" className="row">
-              Pickup order
+              Самовывоз
               <input
                 className={`form__input form__input_shadowless${
                   errors.isPickup && touched.isPickup ? ' form__input_wrong' : ''
@@ -166,7 +201,7 @@ function Checkout(props) {
             {isPickup
               ? [
                   <label htmlFor="shop-id" className="row">
-                    Shop
+                    Адрес заведения
                     <select
                       className={`form__input${
                         errors.shopId && touched.shopId ? ' form__input_wrong' : ''
@@ -187,7 +222,7 @@ function Checkout(props) {
                 ]
               : [
                   <label htmlFor="selectedCityId_CHANGE" className="row">
-                    City
+                    Город
                     <select
                       className={`form__input${
                         errors.cityId && touched.cityId ? ' form__input_wrong' : ''
@@ -206,7 +241,7 @@ function Checkout(props) {
                     </select>
                   </label>,
                   <label htmlFor="street-id" className="row">
-                    Street
+                    Улица
                     <select
                       className={`form__input${
                         errors.streetId && touched.streetId ? ' form__input_wrong' : ''
@@ -225,7 +260,7 @@ function Checkout(props) {
                     </select>
                   </label>,
                   <label htmlFor="house-id" className="row">
-                    House
+                    Дом
                     <input
                       className={`form__input${
                         errors.house && touched.house ? ' form__input_wrong' : ''
@@ -240,7 +275,7 @@ function Checkout(props) {
                     />
                   </label>,
                   <label htmlFor="building-id" className="row">
-                    Building
+                    Корпус
                     <input
                       className={`form__input${
                         errors.building && touched.building ? ' form__input_wrong' : ''
@@ -256,7 +291,7 @@ function Checkout(props) {
                   </label>,
 
                   <label htmlFor="apartment-id" className="row">
-                    Apartment
+                    Квартира
                     <input
                       className={`form__input${
                         errors.apartment && touched.apartment ? ' form__input_wrong' : ''
@@ -272,7 +307,7 @@ function Checkout(props) {
                   </label>,
                 ]}
             <p className="form__error">
-              {(touched.cardId && errors.cardId) ||
+              {(touched.isPaid && errors.isPaid) ||
                 (touched.isPickup && errors.isPickup) ||
                 (touched.shopId && errors.shopId) ||
                 (touched.cityId && errors.cityId) ||
@@ -285,7 +320,7 @@ function Checkout(props) {
             <div className="row">
               <Link to="/">
                 <button className="auth-button auth-button_logout" type="button">
-                  Back to site
+                  Вернуться на сайт
                 </button>
               </Link>
               <button
@@ -293,7 +328,7 @@ function Checkout(props) {
                 type="submit"
                 disabled={isSubmitting || !dirty || !isValid}
               >
-                Confirm order
+                Подтвердить заказ
               </button>
             </div>
           </form>
@@ -301,6 +336,7 @@ function Checkout(props) {
       </Formik>
 
       <div className="decoration decoration_dark" />
+      {isQrModalShowing ? <QRReader /> : ''}
     </main>
   );
 }
@@ -309,21 +345,24 @@ Checkout.propTypes = {
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   onMount: PropTypes.func.isRequired,
+  onDiscountApply: PropTypes.func.isRequired,
+  onOpenModal: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   onCitySelected: PropTypes.bool.isRequired,
   orderError: PropTypes.string,
+  discountError: PropTypes.string,
   isConfirmable: PropTypes.bool.isRequired,
   isPickup: PropTypes.bool.isRequired,
-  isCardAdding: PropTypes.bool.isRequired,
-  cards: PropTypes.arrayOf(PropTypes.any).isRequired,
   cities: PropTypes.arrayOf(PropTypes.any).isRequired,
   streets: PropTypes.arrayOf(PropTypes.any).isRequired,
   shops: PropTypes.arrayOf(PropTypes.any).isRequired,
   selectedCityId: PropTypes.string,
+  isQrModalShowing: PropTypes.bool.isRequired,
 };
 
 Checkout.defaultProps = {
   orderError: null,
+  discountError: null,
   selectedCityId: null,
 };
 

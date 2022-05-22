@@ -35,7 +35,7 @@ function AdminCategories(props) {
           ' '
         ) : (
           <button type="button" id={`${category._id}_EDITCATEGORY`}>
-            Edit
+            Изменить
           </button>
         )}
       </td>
@@ -53,7 +53,7 @@ function AdminCategories(props) {
 
   return (
     <div className="admin-dashboard__container">
-      <h2>Categories</h2>
+      <h2>Категории</h2>
       {[
         categories?.length > 0 ? (
           <table
@@ -64,7 +64,7 @@ function AdminCategories(props) {
             <thead>
               <tr>
                 <th>Id</th>
-                <th>Title</th>
+                <th>Название</th>
                 <th> </th>
                 <th> </th>
               </tr>
@@ -73,14 +73,14 @@ function AdminCategories(props) {
           </table>
         ) : (
           <div className="admin-dashboard__placeholder-container">
-            <Placeholder message="There is nothing to show.." />
+            <Placeholder message="Список пуст" />
           </div>
         ),
         isAdding || editedId ? (
-          <SingleFieldForm entity="category" />
+          <SingleFieldForm entity="категорию" />
         ) : (
           <button className="auth-button auth-button_login" type="button" onClick={onAdding}>
-            Add new
+            Добавить
           </button>
         ),
       ]}

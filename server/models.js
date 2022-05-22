@@ -22,7 +22,7 @@ const orderScheme = new Schema({
   addressId: ObjectId,
   shopId: ObjectId,
   isPickup: { type: Boolean, default: false },
-  cardId: ObjectId,
+  isPaid: { type: Boolean, default: false },
 });
 
 const itemScheme = new Schema({
@@ -64,7 +64,7 @@ const firstNameScheme = new Schema({
 });
 
 const userScheme = new Schema({
-  email: { type: String, required: true },
+  phone: { type: String, required: true },
 
   password: { type: String, required: true },
   isActive: { type: Boolean, default: true },
@@ -72,7 +72,7 @@ const userScheme = new Schema({
   roleId: ObjectId,
   firstNameId: { type: ObjectId, required: true },
   lastNameId: { type: ObjectId, required: true },
-  patronymicId: ObjectId,
+  // patronymicId: ObjectId,
 });
 
 // shop addresses schemas
@@ -104,12 +104,11 @@ const shopScheme = new Schema({
   isEnabled: { type: Boolean, default: true },
 });
 
-const cardScheme = new Schema({
-  number: { type: String, required: true },
-  name: { type: String, required: true },
-  date: { type: String, required: true },
-  cvv: { type: String, required: true },
-  userId: { type: ObjectId, required: true },
+const discountScheme = new Schema({
+  cartIds: { type: [ObjectId], default: [] },
+  orderIds: { type: [ObjectId], default: [] },
+  value: { type: Number, required: true },
+  title: { type: String, required: true },
 });
 
 // models definition
@@ -129,7 +128,7 @@ module.exports = {
   Address: model('Address', addressScheme),
   Staff: model('Staff', staffScheme),
   Shop: model('Shop', shopScheme),
-  Card: model('Card', cardScheme),
+  Discount: model('Discount', discountScheme),
 
   Patronymic: model('Patronymic', patronymicScheme),
   LastName: model('LastName', lastNameScheme),

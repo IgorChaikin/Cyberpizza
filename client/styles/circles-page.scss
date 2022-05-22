@@ -17,6 +17,14 @@
     margin-bottom: 1em;
   }
 
+  @media (min-width: 1240px),
+    (min-width: 768px) and (max-width: 1024px) and (orientation: landscape),
+    (max-width: 768px) and (orientation: landscape) {
+    .auth__form {
+      width: 40%;
+    }
+  }
+
   @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait),
     (max-width: 768px) and (orientation: portrait) {
     .auth__form {
@@ -30,6 +38,11 @@
   .auth__form {
     display: flex;
     flex-direction: column;
+    .row {
+      .auth-button_logout {
+        margin: 0 1em;
+      }
+    }
   }
 
   .auth__back-link {

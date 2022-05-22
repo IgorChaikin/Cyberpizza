@@ -38,7 +38,7 @@ function AdminStaff(props) {
   if (!staff || staff.length <= 0) {
     return (
       <div className="admin-dashboard__placeholder-container">
-        <Placeholder message="There is nothing to show.." />
+        <Placeholder message="Список пуст" />
       </div>
     );
   }
@@ -48,8 +48,7 @@ function AdminStaff(props) {
       <td>{employee._id}</td>
       <td>{employee.user.lastName}</td>
       <td>{employee.user.firstName}</td>
-      <td>{employee.user.patronymic}</td>
-      <td>{employee.user.email}</td>
+      <td>{employee.user.phone}</td>
       <td className="checkbox-container">
         <select id={`${employee._id}_SHOP`}>
           <option value="null">No selected</option>
@@ -65,16 +64,15 @@ function AdminStaff(props) {
 
   return (
     <div className="admin-dashboard__container">
-      <h2>Staff</h2>
+      <h2>Персонал</h2>
       <table className="main-content" onChange={staffCallback}>
         <thead>
           <tr>
             <th>Id</th>
-            <th>Last name</th>
-            <th>First name</th>
-            <th>Patronymic</th>
-            <th>E-mail</th>
-            <th>Shop</th>
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Телефон</th>
+            <th>Учреждение</th>
           </tr>
         </thead>
         <tbody>{usersList}</tbody>
@@ -85,7 +83,7 @@ function AdminStaff(props) {
         onClick={applyCallback}
         disabled={!isChanged}
       >
-        Apply changes
+        Применить изменения
       </button>
     </div>
   );
@@ -99,7 +97,7 @@ AdminStaff.propTypes = {
       shopId: PropTypes.bool.isRequired,
       user: PropTypes.shape({
         _id: PropTypes.string.isRequired,
-        email: PropTypes.string.isRequired,
+        phone: PropTypes.string.isRequired,
         isActive: PropTypes.bool.isRequired,
         roleId: PropTypes.string.isRequired,
       }),

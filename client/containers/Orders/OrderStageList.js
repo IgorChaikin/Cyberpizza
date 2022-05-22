@@ -8,12 +8,13 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const { Orders } = state;
-  const { stages, price } = Orders;
+  const { orders, discounts } = state;
+  const { stages, price } = orders;
 
   return {
     stages,
     price,
+    discounts: discounts.discounts,
   };
 };
 

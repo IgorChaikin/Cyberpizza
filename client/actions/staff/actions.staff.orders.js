@@ -57,7 +57,7 @@ export function updateOrders(id, changes) {
   const payload = new Promise((resolve) => {
     fetch(`/api/staff/orders/${id}`, {
       method: 'PUT',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         changes,
@@ -75,7 +75,7 @@ export function deleteOrder(deletedId, id) {
   const payload = new Promise((resolve) => {
     fetch(`/api/staff/orders/${id}`, {
       method: 'DELETE',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         deletedId,

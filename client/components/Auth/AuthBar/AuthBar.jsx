@@ -7,19 +7,21 @@ function AuthBar(props) {
   const { username, isUser, onLogout } = props;
 
   const logoutCallback = useCallback(() => {
-    onLogout(username);
-  }, [onLogout, username]);
+    onLogout();
+  }, [onLogout]);
 
   if (username) {
     return (
       <div className="auth-wrapper">
-        <p className="auth-bar__username">{username}</p>
         <div className="auth-bar">
+          <p className="auth-bar__username">{username}</p>
           <button type="button" className="auth-button auth-button_logout" onClick={logoutCallback}>
-            LogOut
+            Выход
           </button>
-          {isUser ? '' : [<Link to="/admin">I am admin</Link>, <Link to="/staff">I am staff</Link>]}
         </div>
+        {isUser
+          ? ''
+          : [<Link to="/admin">Я администратор</Link>, <Link to="/staff">Я персонал</Link>]}
       </div>
     );
   }
@@ -28,12 +30,12 @@ function AuthBar(props) {
     <div className="auth-bar">
       <Link to="/register">
         <button type="button" className="auth-button auth-button_login">
-          Register
+          Регистрация
         </button>
       </Link>
       <Link to="/login">
         <button type="button" className="auth-button auth-button_login">
-          LogIn
+          Вход
         </button>
       </Link>
     </div>

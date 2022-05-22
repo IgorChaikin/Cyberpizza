@@ -14,23 +14,6 @@
   }
 }
 
-.checkbox-container {
-  text-align: center;
-  button {
-    font: $regular-text;
-    background-color: transparent;
-    border: none;
-    outline: none;
-  }
-
-  select {
-    font: $regular-text;
-    background-color: transparent;
-    border: none;
-    outline: none;
-  }
-}
-
 .admin-dashboard {
   height: 100vh;
   width: 100vw;
@@ -108,7 +91,7 @@
       }
     }
     nav {
-      width: 15%;
+      width: 20%;
       height: calc(100% - 2em);
       margin: 1em 0;
       padding-left: 1em;
@@ -116,7 +99,7 @@
       font: $nav-item-text;
     }
     .admin-dashboard__router {
-      width: 85%;
+      width: 80%;
       height: calc(100% - 2em);
       margin: 1em 0;
       .auth-button {
@@ -166,6 +149,27 @@
     background-color: transparent;
     border: none;
     outline: none;
+    cursor: pointer;
+
+    @media (min-width: 1240px) {
+      img {
+        height: 1.5rem;
+      }
+    }
+
+    @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape),
+      (max-width: 768px) and (orientation: landscape),
+      (min-width: 768px) and (max-width: 1024px) and (orientation: portrait),
+      (max-width: 768px) and (orientation: portrait) {
+      img {
+        height: 0.5rem;
+      }
+    }
+
+    img {
+      margin: 0;
+      padding: 0;
+    }
   }
 
   select {
@@ -180,4 +184,15 @@
   text-align: center;
   background-color: $accent-color;
   color: $white-color;
+}
+
+.form_small {
+  background-color: $light-color;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 1em;
+  font: $regular-text;
+  label {
+    font: $regular-text;
+  }
 }

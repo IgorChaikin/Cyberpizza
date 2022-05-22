@@ -12,15 +12,17 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  requestError: state.Admin.requestError,
-  totalCount: state.Admin.totalCount,
-  totalPrice: state.Admin.totalPrice,
-  username: state.Auth.username,
+  requestError: state.admin.requestError,
+  totalCount: state.admin.totalCount,
+  totalPrice: state.admin.totalPrice,
+  username: state.auth.username,
+  discountForQr: state.admindiscounts.discountForQr,
   entity:
-    (state.Users.deletedId && 'user') ||
-    (state.AdminItems.deletedId && 'item') ||
-    (state.AdminCategories.deletedId && 'category') ||
-    (state.AdminFilters.deletedId && 'filter'),
+    (state.users.deletedId && 'пользователя') ||
+    (state.adminitems.deletedId && 'товар') ||
+    (state.admincategories.deletedId && 'категорию') ||
+    (state.adminfilters.deletedId && 'тэг') ||
+    (state.admindiscounts.deletedId && 'промокод'),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminDashboard);

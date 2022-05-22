@@ -38,7 +38,7 @@ function List(props) {
         </div>
       ) : (
         <div className="list__placeholder-container">
-          <Placeholder message="There is nothing to show.." />
+          <Placeholder message="Список пуст" />
         </div>
       )}
     </main>

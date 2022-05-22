@@ -82,7 +82,7 @@ function ItemForm(props) {
         <form className="item-edit-form" onSubmit={handleSubmit}>
           <div className="row">
             <label htmlFor="title-id" className="col">
-              Title
+              Название
               <input
                 id="title-id"
                 className={`form__input${
@@ -96,7 +96,7 @@ function ItemForm(props) {
             </label>
 
             <label htmlFor="imgPath-id" className="col">
-              Img path
+              Путь к изображению
               <input
                 id="imgPath-id"
                 className={`form__input${
@@ -110,7 +110,7 @@ function ItemForm(props) {
             </label>
 
             <label htmlFor="price-id" className="col">
-              Price
+              Цена
               <input
                 id="price-id"
                 className={`form__input${
@@ -128,7 +128,7 @@ function ItemForm(props) {
             </label>
 
             <label htmlFor="categoryId-id" className="col">
-              Category
+              Категрия
               <select
                 id="categoryId-id"
                 className={`form__input${
@@ -149,7 +149,7 @@ function ItemForm(props) {
           </div>
 
           <label htmlFor="description-id" className="row">
-            Description
+            Описание
             <input
               id="description-id"
               className="form__input input_large"
@@ -161,7 +161,7 @@ function ItemForm(props) {
           </label>
 
           <label htmlFor="filtersIds-id" className="col">
-            Filters
+            Тэги
             <div
               className="tag_edit-container"
               id="filtersIds-id"
@@ -201,7 +201,7 @@ function ItemForm(props) {
           </p>
           <div className="row">
             <button className="auth-button auth-button_logout" type="button" onClick={onCancel}>
-              Cancel
+              Отмена
             </button>
 
             <button
@@ -209,7 +209,7 @@ function ItemForm(props) {
               type="submit"
               disabled={isSubmitting || !dirty || !isValid}
             >
-              Submit
+              Подтвердить
             </button>
           </div>
         </form>

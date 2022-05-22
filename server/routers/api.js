@@ -2,7 +2,7 @@ const express = require('express');
 const { Types } = require('mongoose');
 const path = require('path');
 const { withItemAndSortTemplate } = require('../shared');
-const { updateCart, withAddressTemplate } = require('../shared');
+const { getOrderWithPrice, withAddressTemplate, withDiscountTemplate } = require('../shared');
 const { withAddressValidationSchema, withShopValidationSchema } = require('../../validationShemas');
 const {
   Category,
@@ -13,7 +13,7 @@ const {
   OrderStage,
   Address,
   Shop,
-  Card,
+  Discount,
 } = require('../models');
 const { checkActiveMiddleware } = require('../middlewares');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
@@ -51,6 +51,7 @@ function getOrders(cartId) {
                 },
               },
               ...withItemAndSortTemplate,
+              ...withDiscountTemplate,
               { $addFields: { isEditable: { $eq: ['$orderStageId', ObjectId(preOrderedId)] } } },
             ],
           },
@@ -64,15 +65,63 @@ function getOrders(cartId) {
     });
 }
 
+function getDiscounts(cartId) {
+  return Discount.aggregate([
+    { $match: { $expr: { $in: [ObjectId(cartId), '$cartIds'] } } },
+    { $sort: { _id: 1 } },
+    {
+      $lookup: {
+        from: 'orders',
+        let: { orderIds: '$orderIds' },
+        as: 'orders',
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $ne: ['$orderStageId', ObjectId(payedId)] },
+                  { $in: ['$_id', '$$orderIds'] },
+                ],
+              },
+            },
+          },
+        ],
+      },
+    },
+    { $addFields: { orderCount: { $size: '$orders' } } },
+    { $match: { $expr: { $gt: ['$orderCount', 0] } } },
+  ]);
+}
+
+async function getPreOrderedIdsFilter(cartId) {
+  const cart = await Cart.findOne({ _id: cartId });
+  const { orderIds } = cart;
+  return { _id: { $in: orderIds }, orderStageId: ObjectId(preOrderedId) };
+}
+
 function createCart(userId = null) {
   const cart = new Cart({ userId });
   return cart.save().then((item) => item._id);
 }
 
-async function confirmOrder(filter, shopId, cardId, isPickup, addressId = null) {
+function updateCart(cartId, orderId, isDelete = false, amount = null) {
+  return getOrderWithPrice(orderId).then((order) => {
+    const validatedAmount = amount * -1 >= order?.count ? 0 : amount;
+    const count = validatedAmount ?? order?.count * (isDelete ? -1 : 1);
+    const update = {
+      $inc: { price: order?.item.price * count },
+    };
+    if (!amount) {
+      update[isDelete ? '$pull' : '$push'] = { orderIds: orderId };
+    }
+    return Cart.updateOne({ _id: cartId }, update);
+  });
+}
+
+async function confirmOrder(filter, shopId, isPaid, isPickup, addressId = null) {
   const update = {
     shopId,
-    cardId,
+    isPaid,
     isPickup,
     orderStageId: orderedId,
   };
@@ -142,9 +191,9 @@ api.post('/orders', async (request, response) => {
     // create new cart if order is first and no cart id in cookies
     cartId = await createCart(decoded?._id);
     // set new cart id in cookies
-    response.cookie('cartId', cartId, { secure: false, maxAge: 3600 * 24 });
+    response.cookie('cartId', cartId /* , { secure: false, maxAge: 3600 * 24 } */);
   }
-  await updateCart(ObjectId(cartId), newOrder._id);
+  await updateCart(cartId, newOrder._id);
   const res = await getOrders(cartId);
   return response.json(res);
 });
@@ -153,7 +202,7 @@ api.patch('/orders', (request, response) => {
   const { cartId } = request.cookies;
   const { id, amount } = request.body;
 
-  return updateCart(ObjectId(cartId), id, false, amount).then(() =>
+  return updateCart(cartId, id, false, amount).then(() =>
     Order.updateOne(
       {
         _id: id,
@@ -169,7 +218,7 @@ api.delete('/orders', (request, response) => {
   const { cartId } = request.cookies;
   const { id } = request.body;
   // remove order from cart
-  return updateCart(ObjectId(cartId), id, true).then(() =>
+  return updateCart(cartId, id, true).then(() =>
     // then delete order from db
     Order.deleteOne({ _id: id, orderStageId: ObjectId(preOrderedId) }).then(() =>
       getOrders(cartId).then((res) => response.json(res))
@@ -179,14 +228,8 @@ api.delete('/orders', (request, response) => {
 
 api.put('/orders/confirm', async (request, response) => {
   const { cartId } = request.cookies;
-  const { isPickup, cardId, shopId, cityId, streetId, house, building, apartment } = request.body;
-  const cart = await Cart.findOne({ _id: ObjectId(cartId) });
-  const card = await Card.findOne({ _id: ObjectId(cardId) });
-  if (!cart || (card && !card.userId.equals(ObjectId(request.decoded._id)))) {
-    return response.sendStatus(422);
-  }
-  const { orderIds } = cart;
-  const filter = { _id: { $in: orderIds }, orderStageId: ObjectId(preOrderedId) };
+  const { isPickup, isPaid, shopId, cityId, streetId, house, building, apartment } = request.body;
+  const filter = await getPreOrderedIdsFilter(ObjectId(cartId));
 
   const schema = isPickup ? withShopValidationSchema : withAddressValidationSchema;
   return schema
@@ -197,7 +240,7 @@ api.put('/orders/confirm', async (request, response) => {
         if (!shop) {
           return response.sendStatus(422);
         }
-        await confirmOrder(filter, shop._id, ObjectId(cardId), isPickup, shop.addressId);
+        await confirmOrder(filter, shop._id, isPaid, isPickup, shop.addressId);
       } else {
         let address = await Address.findOne({ cityId, streetId, house, building, apartment });
         if (!address) {
@@ -213,11 +256,42 @@ api.put('/orders/confirm', async (request, response) => {
         if (!shop) {
           return response.sendStatus(422);
         }
-        await confirmOrder(filter, shop._id, ObjectId(cardId), isPickup, address._id);
+        await confirmOrder(filter, shop._id, isPaid, isPickup, address._id);
       }
       return getOrders(cartId).then((res) => response.json(res));
     })
     .catch(() => response.sendStatus(422));
+});
+
+api.get('/discounts', (request, response) => {
+  const { cartId } = request.cookies;
+  return getDiscounts(cartId).then((result) => response.json(result));
+});
+
+api.patch('/orders/discount', async (request, response) => {
+  const { cartId } = request.cookies;
+  const { title } = request.body;
+  const filter = await getPreOrderedIdsFilter(ObjectId(cartId));
+  const preOrderedOrderIds = (await Order.find(filter, { _id: 1 })).map((elem) => elem._id);
+
+  const discount = await Discount.findOne({
+    $or: [{ title }, { orderIds: { $in: preOrderedOrderIds } }],
+  });
+
+  if (
+    !discount ||
+    discount.orderIds.filter((value) => preOrderedOrderIds.includes(value)) > 0 ||
+    discount.cartIds.includes(ObjectId(cartId))
+  ) {
+    return response.sendStatus(422);
+  }
+
+  await Discount.updateOne(
+    { cartIds: { $nin: [ObjectId(cartId)] }, orderIds: { $nin: preOrderedOrderIds }, title },
+    { $push: { cartIds: ObjectId(cartId), orderIds: preOrderedOrderIds } }
+  );
+
+  return getDiscounts(cartId).then((result) => response.json(result));
 });
 
 module.exports = api;

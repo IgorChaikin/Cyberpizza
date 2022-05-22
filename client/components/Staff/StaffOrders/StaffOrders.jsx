@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import './StaffOrders.scss';
 import PropTypes from 'prop-types';
@@ -11,8 +11,28 @@ function StaffOrders(props) {
   const { id } = useParams();
 
   const { orders, stages, isChanged, onApply, onAdd, onSelectDeleted, onMount } = props;
+  const [intervalSubscription, setIntervalSubscription] = useState(0);
 
-  useEffect(() => onMount(id), [onMount, id]);
+  // subscribe to order updates
+  useEffect(() => {
+    onMount(id);
+    if (intervalSubscription) {
+      clearInterval(intervalSubscription);
+    }
+    const tmpIntervalSubscription = setInterval(() => {
+      onMount(id);
+    }, 10000);
+    setIntervalSubscription(tmpIntervalSubscription);
+  }, [onMount, id]);
+
+  // unsubscribe while destroying
+  useEffect(() => {
+    return () => {
+      if (intervalSubscription) {
+        clearInterval(intervalSubscription);
+      }
+    };
+  }, []);
 
   const usersCallback = useCallback(
     (e) => {
@@ -65,12 +85,20 @@ function StaffOrders(props) {
       <td className="checkbox-container">
         <div className="count">{order.count}</div>
       </td>
-      <td>{(order.item?.price * order.count || 0).toFixed(2)}$</td>
+      <td>
+        {(order.item?.price * order.count * (1 - (order.discount?.value ?? 0) / 100) || 0).toFixed(
+          2
+        )}
+        р.
+        {order.discount ? <span className="discount-accent">(-{order.discount?.value}%)</span> : ''}
+      </td>
       <td className="checkbox-container">
         <input type="checkbox" checked={order.isPickup} disabled readOnly />
       </td>
       <td>{order.isPickup ? '' : getFormatAddress(order.address)}</td>
-      <td>{order.card ? order.card.secureNumber : 'By cash'}</td>
+      <td className="checkbox-container">
+        <input type="checkbox" checked={order.isPaid} disabled readOnly />
+      </td>
       <td className="checkbox-container">
         <select id={`${order._id}_STAGE`}>
           {stages.map((stage) => (
@@ -96,13 +124,13 @@ function StaffOrders(props) {
             <thead>
               <tr>
                 <th>Id</th>
-                <th>Item</th>
-                <th>Count</th>
-                <th>Price</th>
-                <th>Is pickup</th>
-                <th>Address</th>
-                <th>Payment</th>
-                <th>Order stage</th>
+                <th>Товар</th>
+                <th>Количество</th>
+                <th>Цена</th>
+                <th>Самовывоз</th>
+                <th>Адрес</th>
+                <th>Оплачено</th>
+                <th>Стадия заказа</th>
                 <th> </th>
               </tr>
             </thead>
@@ -114,12 +142,12 @@ function StaffOrders(props) {
             onClick={applyCallback}
             disabled={!isChanged}
           >
-            Apply changes
+            Применить изменения
           </button>,
         ]
       ) : (
         <div className="admin-dashboard__placeholder-container">
-          <Placeholder message="There is nothing to show.." />
+          <Placeholder message="Список пуст" />
         </div>
       )}
     </div>

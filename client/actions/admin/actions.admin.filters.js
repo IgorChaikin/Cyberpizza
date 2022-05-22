@@ -52,7 +52,7 @@ export function updateFilterAsAdmin(id, changes) {
   const payload = new Promise((resolve) => {
     fetch(`/api/admin/db/filters/${id}`, {
       method: 'PUT',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(changes),
     })
@@ -68,7 +68,7 @@ export function addFilterAsAdmin(changes) {
   const payload = new Promise((resolve) => {
     fetch('/api/admin/db/filters/', {
       method: 'POST',
-      credentials: 'include',
+      // credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(changes),
     })

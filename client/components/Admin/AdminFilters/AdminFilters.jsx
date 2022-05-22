@@ -35,7 +35,7 @@ function AdminFilters(props) {
           ' '
         ) : (
           <button type="button" id={`${filter._id}_EDITFILTER`}>
-            Edit
+            Изменить
           </button>
         )}
       </td>
@@ -53,7 +53,7 @@ function AdminFilters(props) {
 
   return (
     <div className="admin-dashboard__container">
-      <h2>Filters</h2>
+      <h2>Тэги</h2>
       {[
         filters?.length > 0 ? (
           <table
@@ -64,7 +64,7 @@ function AdminFilters(props) {
             <thead>
               <tr>
                 <th>Id</th>
-                <th>Title</th>
+                <th>Название</th>
                 <th> </th>
                 <th> </th>
               </tr>
@@ -73,14 +73,14 @@ function AdminFilters(props) {
           </table>
         ) : (
           <div className="admin-dashboard__placeholder-container">
-            <Placeholder message="There is nothing to show.." />
+            <Placeholder message="Список пуст" />
           </div>
         ),
         isAdding || editedId ? (
-          <SingleFieldForm entity="filter" />
+          <SingleFieldForm entity="тэг" />
         ) : (
           <button className="auth-button auth-button_login" type="button" onClick={onAdding}>
-            Add new
+            Добавить
           </button>
         ),
       ]}

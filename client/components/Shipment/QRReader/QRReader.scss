@@ -1,0 +1,32 @@
+@import '../../../styles/qr-page';
+
+.qr-wrapper {
+  @media (min-width: 1240px) {
+    .qr-modal {
+      .qr-modal__reader {
+        min-height: 15em;
+        width: 15em;
+      }
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape),
+    (max-width: 768px) and (orientation: landscape) {
+    .qr-modal {
+      .qr-modal__reader {
+        min-height: 40vh;
+        width: 40vh;
+      }
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait),
+    (max-width: 768px) and (orientation: portrait) {
+    .qr-modal {
+      .qr-modal__reader {
+        min-height: 40vw;
+        width: 40vw;
+      }
+    }
+  }
+}

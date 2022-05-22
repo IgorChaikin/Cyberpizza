@@ -20,35 +20,41 @@ import {
   cancelSelected as cancelDeletedFilter,
   deleteFilterAsAdmin,
 } from '../../actions/admin/actions.admin.filters';
+import { cancelSelected, deleteDiscountAsAdmin } from '../../actions/admin/actions.admin.discounts';
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const { entity } = ownProps;
   let onClose;
   let onDelete;
   switch (entity) {
-    case 'user': {
+    case 'пользователя': {
       onClose = () => dispatch(cancelDeletedUser());
-      onDelete = (id) => dispatch(deleteUser(id));
+      onDelete = (id, filters) => dispatch(deleteUser(id, filters));
       break;
     }
-    case 'order': {
+    case 'заказ': {
       onClose = () => dispatch(cancelDeletedOrder());
       onDelete = (deletedId, id) => dispatch(deleteOrder(deletedId, id));
       break;
     }
-    case 'item': {
+    case 'товар': {
       onClose = () => dispatch(cancelDeletedItem());
       onDelete = (deletedId) => dispatch(deleteItemAsAdmin(deletedId));
       break;
     }
-    case 'category': {
+    case 'категорию': {
       onClose = () => dispatch(cancelDeletedCategory());
       onDelete = (deletedId) => dispatch(deleteCategoryAsAdmin(deletedId));
       break;
     }
-    case 'filter': {
+    case 'тэг': {
       onClose = () => dispatch(cancelDeletedFilter());
       onDelete = (deletedId) => dispatch(deleteFilterAsAdmin(deletedId));
+      break;
+    }
+    case 'промокод': {
+      onClose = () => dispatch(cancelSelected());
+      onDelete = (deletedId) => dispatch(deleteDiscountAsAdmin(deletedId));
       break;
     }
     default:
@@ -63,32 +69,37 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 const mapStateToProps = (state, ownProps) => {
   const { entity } = ownProps;
   let deletedId;
-  let selectedId;
+  let selected;
 
   switch (entity) {
-    case 'user': {
-      deletedId = state.Users.deletedId;
-      selectedId = null;
+    case 'пользователя': {
+      deletedId = state.users.deletedId;
+      selected = state.users.searchData;
       break;
     }
-    case 'item': {
-      deletedId = state.AdminItems.deletedId;
-      selectedId = null;
+    case 'товар': {
+      deletedId = state.adminitems.deletedId;
+      selected = null;
       break;
     }
-    case 'category': {
-      deletedId = state.AdminCategories.deletedId;
-      selectedId = null;
+    case 'категорию': {
+      deletedId = state.admincategories.deletedId;
+      selected = null;
       break;
     }
-    case 'filter': {
-      deletedId = state.AdminFilters.deletedId;
-      selectedId = null;
+    case 'тэг': {
+      deletedId = state.adminfilters.deletedId;
+      selected = null;
       break;
     }
-    case 'order': {
-      deletedId = state.StaffOrders.deletedId;
-      selectedId = state.StaffOrders.selectedId;
+    case 'заказ': {
+      deletedId = state.stafforders.deletedId;
+      selected = state.stafforders.selectedId;
+      break;
+    }
+    case 'промокод': {
+      deletedId = state.admindiscounts.deletedId;
+      selected = null;
       break;
     }
     default:
@@ -98,7 +109,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     entity,
     deletedId,
-    selectedId,
+    selected,
   };
 };
 

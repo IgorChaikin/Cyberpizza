@@ -54,12 +54,11 @@ export function loginUser(values) {
   };
 }
 
-export function logoutUser(email) {
+export function logoutUser() {
   const payload = new Promise((resolve, reject) => {
     fetch('/api/auth/logout', {
-      method: 'POST',
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
     })
       .then((result) => {
         resolve(result);
@@ -105,7 +104,7 @@ export default function reducer(state = initialState, action) {
     case REGISTER_USER_FULFILLED: {
       return {
         requestError: null,
-        username: action.payload.email,
+        username: action.payload.username,
         isUser: action.payload.isUser,
         isAuthenticated: true,
       };
@@ -116,9 +115,9 @@ export default function reducer(state = initialState, action) {
     case FETCH_USERNAME_FULFILLED: {
       return {
         ...state,
-        username: action.payload.email,
+        username: action.payload.username,
         isUser: action.payload.isUser,
-        isAuthenticated: !!action.payload.email,
+        isAuthenticated: !!action.payload.username,
       };
     }
     case REGISTER_USER_REJECTED: {

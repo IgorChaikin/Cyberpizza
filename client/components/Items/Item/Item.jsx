@@ -13,7 +13,7 @@ function Item(props) {
           +
         </button>
       </div>
-      <p className="list__item__price">${price.toFixed(2)}</p>
+      <p className="list__item__price">{price.toFixed(2)}р.</p>
       <h3>{title}</h3>
       <p className="list__item__description">{description}</p>
     </article>

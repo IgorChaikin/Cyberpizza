@@ -26,15 +26,15 @@ function AuthForm(props) {
   const initialValues = {
     lastName: '',
     firstName: '',
-    patronymic: '',
-    email: '',
+    // patronymic: '',
+    phone: '',
     password: '',
     confirm: '',
   };
 
   return (
     <main className="auth">
-      <h1>{isRegister ? 'Registration' : 'LogIn'}</h1>
+      <h1>{isRegister ? 'Регистрация' : 'Вход'}</h1>
 
       <div className="decoration decoration_light" />
 
@@ -58,7 +58,7 @@ function AuthForm(props) {
             {isRegister
               ? [
                   <label htmlFor="lastname-id" className="row">
-                    Lastname
+                    Фамилия
                     <input
                       className={`form__input${
                         errors.lastName && touched.lastName ? ' form__input_wrong' : ''
@@ -73,7 +73,7 @@ function AuthForm(props) {
                   </label>,
 
                   <label htmlFor="firstname-id" className="row">
-                    Firstname
+                    Имя
                     <input
                       className={`form__input${
                         errors.firstName && touched.firstName ? ' form__input_wrong' : ''
@@ -86,40 +86,26 @@ function AuthForm(props) {
                       value={values.firstName}
                     />
                   </label>,
-
-                  <label htmlFor="patronymic-id" className="row">
-                    Patronymic
-                    <input
-                      className={`form__input${
-                        errors.patronymic && touched.patronymic ? ' form__input_wrong' : ''
-                      }`}
-                      id="patronymic-id"
-                      type="text"
-                      name="patronymic"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.patronymic}
-                    />
-                  </label>,
                 ]
               : ''}
 
-            <label htmlFor="email-id" className="row">
-              E-mail
+            <label htmlFor="phone-id" className="row">
+              Телефон
               <input
                 className={`form__input${
-                  errors.email && touched.email ? ' form__input_wrong' : ''
+                  errors.phone && touched.phone ? ' form__input_wrong' : ''
                 }`}
-                id="email-id"
-                type="email"
-                name="email"
+                id="phone-id"
+                type="text" // ???
+                name="phone"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.email}
+                value={values.phone}
+                placeholder="+375(__)___-__-__"
               />
             </label>
             <label htmlFor="password-id" className="row">
-              Password
+              Пароль
               <input
                 className={`form__input${
                   errors.password && touched.password ? ' form__input_wrong' : ''
@@ -135,7 +121,7 @@ function AuthForm(props) {
 
             {isRegister ? (
               <label htmlFor="confirm-id" className="row">
-                Confirm password
+                Повторить пароль
                 <input
                   className={`form__input${
                     errors.confirm && touched.confirm ? ' form__input_wrong' : ''
@@ -152,23 +138,23 @@ function AuthForm(props) {
               ''
             )}
             <p className="form__error">
-              {(touched.email && errors.email) ||
+              {(touched.phone && errors.phone) ||
                 (touched.password && errors.password) ||
                 (touched.confirm && errors.confirm) ||
                 (touched.lastName && errors.lastName) ||
                 (touched.firstName && errors.firstName) ||
-                (touched.patronymic && errors.patronymic) ||
+                // (touched.patronymic && errors.patronymic) ||
                 requestError}
             </p>
             <div className="row">
               <Link to={`/${isRegister ? 'login' : 'register'}`}>
                 <button className="auth-button auth-button_login" type="button">
-                  {isRegister ? 'Login' : 'Register'}
+                  {isRegister ? 'Войти' : 'Зарегистрироваться'}
                 </button>
               </Link>
               <Link to="/">
                 <button className="auth-button auth-button_logout" type="button">
-                  Back to site
+                  Вернуться на сайт
                 </button>
               </Link>
               <button
@@ -176,7 +162,7 @@ function AuthForm(props) {
                 type="submit"
                 disabled={isSubmitting || !dirty || !isValid}
               >
-                {isRegister ? 'Register' : 'Login'}
+                {isRegister ? 'Зарегистрироваться' : 'Войти'}
               </button>
             </div>
           </form>

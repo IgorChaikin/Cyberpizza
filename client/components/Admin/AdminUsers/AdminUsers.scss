@@ -1,17 +1,37 @@
 @import '../../../styles/vars';
 
+.button-search {
+  font: $regular-text;
+  color: $white-color;
+  align-self: flex-start;
+  margin: 0 0 1em 1.5em;
+  outline: none;
+  height: 2em;
+  border-radius: 1em;
+  padding: 0 1em;
+  cursor: pointer;
+
+  &:active {
+    transform: translate(0, 10%);
+  }
+}
+
 .search-form {
-  display: flex;
   width: 95%;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  height: 4em;
   border-radius: 1em;
   background-color: $light-color;
   margin: 0 0 1em;
   font: $regular-text;
   padding: 1em;
+
+  .row_bottom {
+    margin-top: 1em;
+    .button-group {
+      .auth-button_logout {
+        margin-right: 1em;
+      }
+    }
+  }
 
   label {
     @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait),
@@ -24,7 +44,6 @@
       }
     }
     font: $regular-text;
-    margin: 0 1em 0 0;
-    flex-grow: 1;
+    margin: 0;
   }
 }

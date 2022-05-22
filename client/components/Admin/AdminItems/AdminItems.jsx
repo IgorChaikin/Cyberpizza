@@ -47,7 +47,7 @@ function AdminItems(props) {
           {item.title}
         </span>
       </td>
-      <td>{item.price?.toFixed(2)}$</td>
+      <td>{item.price?.toFixed(2)}р.</td>
       <td>{item.description}</td>
       <td>
         {filters
@@ -62,7 +62,7 @@ function AdminItems(props) {
           ' '
         ) : (
           <button type="button" id={`${item._id}_EDITITEM`}>
-            Edit
+            Изменить
           </button>
         )}
       </td>
@@ -92,11 +92,11 @@ function AdminItems(props) {
             <thead>
               <tr>
                 <th>Id</th>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Description</th>
-                <th>Tags</th>
-                <th>Category</th>
+                <th>Товар</th>
+                <th>Цена</th>
+                <th>Описание</th>
+                <th>Тэги</th>
+                <th>Категория</th>
                 <th> </th>
                 <th> </th>
               </tr>
@@ -105,14 +105,14 @@ function AdminItems(props) {
           </table>
         ) : (
           <div className="admin-dashboard__placeholder-container">
-            <Placeholder message="There is nothing to show.." />
+            <Placeholder message="Список пуст" />
           </div>
         ),
         isAdding || editedId ? (
           <ItemForm />
         ) : (
           <button className="auth-button auth-button_login" type="button" onClick={onAdding}>
-            Add new
+            Добавить
           </button>
         ),
       ]}

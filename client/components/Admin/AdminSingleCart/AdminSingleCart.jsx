@@ -30,13 +30,15 @@ function AdminSingleCart(props) {
   return (
     <div className="admin-dashboard__container">
       <h2>
-        {selectedCart?.username ? `Cart of ${selectedCart?.username}` : `Anonymous cart`}
+        {selectedCart?.username
+          ? `Корзина пользователя ${selectedCart?.username}`
+          : `Неопознанная корзина`}
         <span className="cart__id">id: {id}</span>
       </h2>
       <div className="main-content">{ordersList}</div>
       <p>
-        <span className="cart__total">Total</span>
-        <span className="cart__price">{selectedCart?.generalPrice.toFixed(2)}$</span>
+        <span className="cart__total">Выручка</span>
+        <span className="cart__price">{selectedCart?.generalPrice.toFixed(2)}р.</span>
       </p>
     </div>
   );

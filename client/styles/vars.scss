@@ -93,6 +93,26 @@ $button-text: bold 2em serif;
   padding: 0 1em;
   cursor: pointer;
 
+  @media (min-width: 1240px) {
+    img {
+      height: 1.5rem;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape),
+    (max-width: 768px) and (orientation: landscape),
+    (min-width: 768px) and (max-width: 1024px) and (orientation: portrait),
+    (max-width: 768px) and (orientation: portrait) {
+    img {
+      height: 0.5rem;
+    }
+  }
+
+  img {
+    margin: 0;
+    padding: 0;
+  }
+
   &:active {
     transform: translate(0, 10%);
   }
@@ -167,6 +187,7 @@ $button-text: bold 2em serif;
   color: $accent-color;
   font: $bold-header-text;
   text-align: center;
+  margin-top: 0;
 }
 label {
   margin-bottom: 1em;

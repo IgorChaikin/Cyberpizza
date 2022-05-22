@@ -2,8 +2,9 @@ import React, { useCallback, useEffect } from 'react';
 
 import './StaffDashboard.scss';
 import PropTypes from 'prop-types';
-import { useRouteMatch } from 'react-router';
 import { Route, Switch, Link } from 'react-router-dom';
+import { useRouteMatch } from 'react-router';
+
 import Placeholder from '../../Utils/Placeholder/Placeholder';
 import DeleteModal from '../../../containers/Utils/DeleteModal';
 import getFormatAddress from '../../../../utils/getFormatAddress';
@@ -34,14 +35,14 @@ function StaffDashboard(props) {
 
   return (
     <div className="admin-dashboard">
-      {deletedId ? <DeleteModal entity="order" /> : ''}
+      {deletedId ? <DeleteModal entity="заказ" /> : ''}
       <header>
         <section>
-          <h2>Current staff</h2>
+          <h2>Сотрудник</h2>
           <p>{username}</p>
         </section>
         <section>
-          <h2>Current shop</h2>
+          <h2>Учреждение</h2>
           <p>{getFormatAddress(shop?.address)}</p>
         </section>
         <section>
@@ -51,7 +52,7 @@ function StaffDashboard(props) {
               className="auth-button auth-button_login"
               onClick={disableCallback}
             >
-              Enabled
+              Доступно
             </button>
           ) : (
             <button
@@ -59,7 +60,7 @@ function StaffDashboard(props) {
               className="auth-button auth-button_logout"
               onClick={enableCallback}
             >
-              Disabled
+              Не доступно
             </button>
           )}
         </section>
@@ -76,7 +77,7 @@ function StaffDashboard(props) {
           <Switch>
             <Route exact path={`${match.url}/`}>
               <div className="admin-dashboard__placeholder-container">
-                <Placeholder message={`Welcome, ${username}`} />
+                <Placeholder message={`Добро пожаловать, ${username}`} />
               </div>
             </Route>
             <Route exact path={`${match.url}/orders/:id`}>

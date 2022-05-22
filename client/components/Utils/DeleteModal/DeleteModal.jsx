@@ -3,23 +3,23 @@ import './DeleteModal.scss';
 import PropTypes from 'prop-types';
 
 function DeleteModal(props) {
-  const { onDelete, onClose, deletedId, selectedId, entity } = props;
+  const { onDelete, onClose, deletedId, selected, entity } = props;
 
   const stopPropagationCallback = useCallback((e) => e.stopPropagation(), []);
   const deleteCallback = useCallback(
-    () => onDelete(deletedId, selectedId),
-    [onDelete, deletedId, selectedId]
+    () => onDelete(deletedId, selected),
+    [onDelete, deletedId, selected]
   );
 
   return (
     <div className="admin-delete-wrapper" onClick={onClose}>
       <div className="admin-delete-modal" onClick={stopPropagationCallback}>
-        <h1> {`Are you sure to delete this ${entity}?`} </h1>
+        <h1> {`Уверены, что хотите удалить ${entity}?`} </h1>
         <button type="button" onClick={deleteCallback}>
-          Yes
+          Да
         </button>
         <button type="button" onClick={onClose}>
-          No
+          Нет
         </button>
       </div>
     </div>
@@ -30,13 +30,13 @@ DeleteModal.propTypes = {
   onDelete: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   deletedId: PropTypes.string,
-  selectedId: PropTypes.string,
+  selected: PropTypes.any,
   entity: PropTypes.func.isRequired,
 };
 
 DeleteModal.defaultProps = {
   deletedId: null,
-  selectedId: null,
+  selected: null,
 };
 
 export default DeleteModal;

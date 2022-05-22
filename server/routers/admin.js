@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { Types } = require('mongoose');
-const { withItemAndSortTemplate } = require('../shared');
+const { withItemAndSortTemplate, withFullNameTemplate, withNamesTemplate } = require('../shared');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const staffId = process.env.STAFF_ID;
@@ -13,48 +13,11 @@ const {
   checkTokenMiddleware,
   checkActiveMiddleware,
   checkRoleMiddleware,
+  userFiltersMiddleware,
 } = require('../middlewares');
 
 const admin = express.Router();
 const { ObjectId } = Types;
-
-const usersTemplate = [
-  {
-    $lookup: {
-      from: 'lastnames',
-      localField: 'lastNameId',
-      foreignField: '_id',
-      as: 'lastNameFromDb',
-    },
-  },
-  {
-    $lookup: {
-      from: 'firstnames',
-      localField: 'firstNameId',
-      foreignField: '_id',
-      as: 'firstNameFromDb',
-    },
-  },
-  {
-    $lookup: {
-      from: 'patronymics',
-      localField: 'patronymicId',
-      foreignField: '_id',
-      as: 'patronymicFromDb',
-    },
-  },
-  { $unwind: { path: '$lastNameFromDb', preserveNullAndEmptyArrays: true } },
-  { $unwind: { path: '$firstNameFromDb', preserveNullAndEmptyArrays: true } },
-  { $unwind: { path: '$patronymicFromDb', preserveNullAndEmptyArrays: true } },
-  {
-    $addFields: {
-      lastName: '$lastNameFromDb.name',
-      firstName: '$firstNameFromDb.name',
-      patronymic: '$patronymicFromDb.name',
-    },
-  },
-  { $project: { lastNameFromDb: 0, firstNameFromDb: 0, patronymicFromDb: 0, password: 0 } },
-];
 
 function getTotal() {
   return (
@@ -111,12 +74,18 @@ function getCarts() {
         from: 'users',
         let: { userId: '$userId' },
         as: 'user',
-        pipeline: [{ $match: { $expr: { $eq: ['$$userId', '$_id'] } } }],
+        pipeline: [
+          { $match: { $expr: { $eq: ['$$userId', '$_id'] } } },
+          ...withNamesTemplate,
+          ...withFullNameTemplate,
+        ],
       },
     },
     { $unwind: { path: '$lastUpdateAggregate', preserveNullAndEmptyArrays: true } },
     { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
-    { $addFields: { lastUpdate: '$lastUpdateAggregate.lastOrderDate', username: '$user.email' } },
+    {
+      $addFields: { lastUpdate: '$lastUpdateAggregate.lastOrderDate', username: '$user.username' },
+    },
     { $project: { lastUpdateAggregate: 0, user: 0 } },
   ]);
 }
@@ -141,11 +110,15 @@ function getSingleCart(cartId) {
         from: 'users',
         let: { userId: '$userId' },
         as: 'user',
-        pipeline: [{ $match: { $expr: { $eq: ['$$userId', '$_id'] } } }],
+        pipeline: [
+          { $match: { $expr: { $eq: ['$$userId', '$_id'] } } },
+          ...withNamesTemplate,
+          ...withFullNameTemplate,
+        ],
       },
     },
     { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
-    { $addFields: { username: '$user.email' } },
+    { $addFields: { username: '$user.username' } },
   ]).then((query) => query[0]);
 }
 
@@ -156,27 +129,32 @@ function getStaff() {
         from: 'users',
         let: { userId: '$userId' },
         as: 'user',
-        pipeline: [{ $match: { $expr: { $eq: ['$$userId', '$_id'] } } }, ...usersTemplate],
+        pipeline: [{ $match: { $expr: { $eq: ['$$userId', '$_id'] } } }, ...withNamesTemplate],
       },
     },
     { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
   ]);
 }
 
-function getUsers() {
-  return User.aggregate(usersTemplate);
+function getUsers(filters, amount) {
+  const aggregationQuery = [{ $limit: amount }, ...withNamesTemplate];
+  if (Object.keys(filters).length > 0) {
+    aggregationQuery.push({ $match: filters });
+  }
+  return User.aggregate(aggregationQuery);
 }
 
 admin.use(checkTokenMiddleware);
 admin.use(checkActiveMiddleware);
 admin.use(checkRoleMiddleware([adminId]));
+admin.use('/users', userFiltersMiddleware);
 
 admin.get('/', (request, response) => {
   return getTotal().then((result) => response.json(result));
 });
 
 admin.get('/users', (request, response) => {
-  return getUsers().then((result) => response.json(result));
+  return getUsers(request.filter, request.amount).then((result) => response.json(result));
 });
 
 admin.get('/roles', (request, response) => {
@@ -207,7 +185,7 @@ admin.put('/users', (request, response) => {
             : Staff.deleteOne({ userId: elem._id })
         )
       )
-  ).then(() => getUsers().then((result) => response.json(result)));
+  ).then(() => getUsers(request.filter, request.amount).then((result) => response.json(result)));
 });
 
 admin.delete('/users/:id', async (request, response) => {
@@ -216,7 +194,7 @@ admin.delete('/users/:id', async (request, response) => {
     await User.deleteOne({ _id: deletedId });
     await Staff.deleteOne({ userId: deletedId });
   }
-  getUsers().then((result) => response.json(result));
+  getUsers(request.filter, request.amount).then((result) => response.json(result));
 });
 
 admin.get('/staff', (request, response) => {
