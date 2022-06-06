@@ -71,8 +71,25 @@ function getDiscounts(cartId) {
     { $sort: { _id: 1 } },
     {
       $lookup: {
+        from: 'carts',
+        let: { cartIds: '$cartIds' },
+        as: 'cart',
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [{ $eq: ['$_id', ObjectId(cartId)] }, { $in: ['$_id', '$$cartIds'] }],
+              },
+            },
+          },
+        ],
+      },
+    },
+    { $unwind: { path: '$cart', preserveNullAndEmptyArrays: true } },
+    {
+      $lookup: {
         from: 'orders',
-        let: { orderIds: '$orderIds' },
+        let: { orderIds: '$orderIds', cart: '$cart' },
         as: 'orders',
         pipeline: [
           {
@@ -81,6 +98,7 @@ function getDiscounts(cartId) {
                 $and: [
                   { $ne: ['$orderStageId', ObjectId(payedId)] },
                   { $in: ['$_id', '$$orderIds'] },
+                  { $in: ['$_id', '$$cart.orderIds'] },
                 ],
               },
             },
@@ -90,6 +108,7 @@ function getDiscounts(cartId) {
     },
     { $addFields: { orderCount: { $size: '$orders' } } },
     { $match: { $expr: { $gt: ['$orderCount', 0] } } },
+    { $project: { cart: 0 } },
   ]);
 }
 
