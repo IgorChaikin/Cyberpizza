@@ -15,9 +15,9 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  orders: state.StaffOrders.changes,
-  stages: state.StaffOrders.stages,
-  isChanged: state.StaffOrders.isChanged,
+  orders: state.stafforders.changes,
+  stages: state.stafforders.stages,
+  isChanged: state.stafforders.isChanged,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StaffOrders);

@@ -17,7 +17,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const { items, editedId } = state.AdminItems;
+  const { items, editedId } = state.adminitems;
   const item = items.find((elem) => elem._id === editedId);
 
   return {
